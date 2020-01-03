@@ -1,25 +1,31 @@
 {
   "name": "message-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Message App by VHM",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "babel-node ./src/server.js",
+    "dev": "nodemon ./src/server.js",
+    "debug": "nodemon ./src/server.js --inspect",
+    "build": "babel index.js -d ES5"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vhm205/message-app.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "VHM - 102",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vhm205/message-app/issues"
   },
   "homepage": "https://github.com/vhm205/message-app#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.8.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "1.7.0"
   }
 }
