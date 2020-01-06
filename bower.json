@@ -1,0 +1,21 @@
+{
+  "name": "message-app",
+  "description": "Message App by VHM",
+  "main": "src/server.js",
+  "authors": [
+    "VHM - 102"
+  ],
+  "license": "",
+  "homepage": "https://github.com/vhm205/message-app",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bower_components": "https://github.com/trungquan17/awesome-chat-third-party-libraries.git"
+  }
+}

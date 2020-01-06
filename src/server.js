@@ -1,21 +1,18 @@
 import express from 'express'
 import connectDB from './config/connectDB'
-import ContactModel from './models/contact.model'
+import configViewEngine from './config/viewEngine';
 
 const app = express()
+
 connectDB()
+configViewEngine(app)
 
 app.get('/', async (_, res) => {
-    try {
-        const item = {
-            userId: '987654321',
-            contactId: '123456789',
-        }
-        const contact = await ContactModel.createNew(item)
-        res.json(contact)
-    } catch (err) {
-        console.error(err);
-    }
+    res.render('main/master')
+})
+
+app.get('/login', async (_, res) => {
+    res.render('auth/loginRegister')
 })
 
 const PORT = process.env.PORT || 1002
