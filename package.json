@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/vhm205/message-app#readme",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "express": "^4.17.1",
     "mongoose": "^5.8.4"
   },

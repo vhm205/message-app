@@ -9,4 +9,10 @@ const ContactSchema = new mongoose.Schema({
     deletedAt: { type: Number, default: null }
 })
 
+ContactSchema.statics = {
+    createNew(item){
+        return this.create(item)
+    }
+}
+
 module.exports = mongoose.model('Contact', ContactSchema)
