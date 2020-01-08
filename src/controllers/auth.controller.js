@@ -1,5 +1,5 @@
 const loginController = (req, res) => {
-    res.render('auth/loginRegister')
+    res.render('auth/master')
 }
 
 
