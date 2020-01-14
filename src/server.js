@@ -1,4 +1,4 @@
-import { config }       from 'dotenv';
+import { config }       from 'dotenv'
 import express          from 'express'
 import connectDB        from './config/connectDB'
 import configViewEngine from './config/viewEngine'
@@ -9,6 +9,10 @@ const app = express()
 config()
 connectDB()
 configViewEngine(app)
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 initRoutes(app)
 
 const PORT = process.env.PORT || 1002
