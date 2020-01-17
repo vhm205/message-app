@@ -19,7 +19,7 @@ body {
   text-rendering: optimizeLegibility;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
-  background-image: url("../images/background/image.jpg");
+  background-image: url("../images/background/j2team.jpg");
   background-size: cover;
   background-repeat: none;
   color: #fff;
@@ -285,8 +285,10 @@ hr {
 
 .login .btn-login,
 .registerBox .btn-register {
-  background-color: #00BBFF;
-  border-color: #00BBFF;
+  /* background-color: #00BBFF; */
+  /* border-color: #00BBFF; */
+  background-color: #81ecec;
+  border-color: #81ecec;
   border-width: 0;
   color: #FFFFFF;
   display: block;
@@ -298,7 +300,8 @@ hr {
 
 .login .btn-login:hover,
 .registerBox .btn-register:hover {
-  background-color: #00A4E4;
+  /* background-color: #00A4E4; */
+  background-color: #70d2d2;
   color: #FFFFFF;
 }
 
@@ -339,7 +342,8 @@ hr {
 
 .big-login,
 .big-register {
-  background-color: #00bbff;
+  /* background-color: #00bbff; */
+  background: #00cec9;
   color: #FFFFFF;
   border-radius: 7px;
   border-width: 2px;
@@ -352,19 +356,24 @@ hr {
 }
 
 .big-login:hover {
-  background-color: #00A4E4;
+  /* background-color: #00A4E4; */
+  background-color: #6ddad8;
   color: #FFFFFF;
 }
 
 .big-register {
   background-color: rgba(0, 0, 0, .0);
-  color: #00bbff;
-  border-color: #00bbff;
+  /* color: #00bbff; */
+  /* border-color: #00bbff; */
+  border-color: #00cec9;
+  color: #00cec9
 }
 
 .big-register:hover {
-  border-color: #00A4E4;
-  color: #00A4E4;
+  /* border-color: #00A4E4; */
+  /* color: #00A4E4; */
+  border-color: #45a7a5;
+  color: #45a7a5;
 }
 
 label {
