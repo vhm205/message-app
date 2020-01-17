@@ -1,6 +1,3 @@
-/**
- * Created by https://trungquandev.com's author on 25/02/2018.
- */
 function showRegisterForm() {
     $('.loginBox').fadeOut('fast', function() {
       $('.registerBox').fadeIn('fast');
@@ -26,15 +23,15 @@ function showRegisterForm() {
   }
   
   function openLoginModal() {
-    showLoginForm();
     setTimeout(function() {
       $('#loginModal').modal('show');
+      showLoginForm();
     }, 230);
   }
   
   function openRegisterModal() {
-    showRegisterForm();
     setTimeout(function() {
       $('#loginModal').modal('show');
+      showRegisterForm();
     }, 230);
   }

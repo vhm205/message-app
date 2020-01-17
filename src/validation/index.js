@@ -1,3 +1,3 @@
-import authValidation from './authValidation';
+import authValidation from './auth.validate';
 
 export const authValidate = authValidation
