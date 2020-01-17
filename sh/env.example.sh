@@ -9,3 +9,4 @@ export CONNECT_DB=***
 
 # Config Enviroment Server
 export PORT=***
+export SECRET_SESSION=***
