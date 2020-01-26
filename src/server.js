@@ -1,6 +1,7 @@
 import { config }       from 'dotenv';
 import express          from 'express';
 import connectFlash     from 'connect-flash';
+import passport         from 'passport';
 import connectDB        from './config/connectDB';
 import configViewEngine from './config/viewEngine';
 import configSession    from './config/session';
@@ -16,6 +17,9 @@ configViewEngine(app)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(connectFlash())
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 initRoutes(app)
 

@@ -14,7 +14,7 @@ const configSession = app => {
             autoRemove: 'native'  
         }),
         cookie: {
-            maxAge: 1000 * Math.pow(60, 2) * 24
+            maxAge: 1000 * Math.pow(60, 2) * 24 // one day
         }
     }))
 }

@@ -18,7 +18,7 @@ const postRegister = async (req, res) => {
         errors.forEach(e => errorsArr.push(e.msg))
 
         req.flash('errors', errorsArr)
-        return res.redirect('/login')
+        return res.redirect('/auth')
     }
     
     try {
@@ -29,17 +29,17 @@ const postRegister = async (req, res) => {
         req.flash('errors', errorsArr)
     }
 
-    res.redirect('/login')
+    res.redirect('/auth')
 }
 
 const verifyAccount = async (req, res) => {
     try {
         let verifySuccess = await auth.verifyAccount(req.params.token)
         req.flash('success', verifySuccess)
-        return res.redirect('/login')
+        return res.redirect('/auth')
     } catch (error) {
         req.flash('errors', error)
-        return res.redirect('/login')
+        return res.redirect('/auth')
     }
 }
 
