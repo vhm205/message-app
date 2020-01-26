@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, min: 3 },
@@ -38,6 +39,9 @@ UserSchema.statics = {
     findByToken(token){
         return this.findOne({ 'local.verifyToken': token })
     },
+    findUserById(id){
+        return this.findById(id)
+    },
     removeById(id){
         return this.findOneAndDelete(id)
     },
@@ -46,6 +50,12 @@ UserSchema.statics = {
             { 'local.verifyToken': token },
             { $set: { 'local.isActive': true, 'local.verifyToken': null } }
         )
+    }
+}
+
+UserSchema.methods = {
+    comparePassword(password){
+        return bcrypt.compare(password, this.local.password)
     }
 }
 

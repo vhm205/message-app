@@ -18,8 +18,10 @@
     <!--Icon loader-->
     <div id="loader"></div>
     
-    <div class="master-success-message alert alert-success">Success example</div>
-
+    <% if(success != '') { %>
+        <div class="master-success-message alert alert-success"> <%- success %> </div>
+    <% } %>
+    
     <%- include('navbar/navbar') %>
 
     <%- content %>
