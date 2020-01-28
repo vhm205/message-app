@@ -8,11 +8,12 @@ initPassportLocal()
 const router = express.Router()
 
 const initRoutes = app => {
-    router.get('/', home.getHome)
-    router.get('/auth', auth.getLogin)
+    router.get('/', auth.checkLoggedIn, home.getHome)
+    router.get('/auth', auth.checkLoggedOut, auth.getLogin)
+    router.get('/logout', auth.checkLoggedIn, auth.getLogout)
     router.get('/verify/:token', auth.verifyAccount)
-    router.post('/register', authValidate.register, authValidate.register, auth.postRegister)
-    router.post('/login', passport.authenticate('local', {
+    router.post('/register', auth.checkLoggedOut, authValidate.register, authValidate.register, auth.postRegister)
+    router.post('/login', auth.checkLoggedOut, passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/auth',
         successFlash: true,
