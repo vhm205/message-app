@@ -3,8 +3,11 @@ import passport from 'passport';
 import { authValidate } from '../validation/index';
 import { home, auth } from "../controllers/index";
 import initPassportLocal from '../controllers/passportController/local';
+import initPassportFacebook from '../controllers/passportController/facebook';
 
 initPassportLocal()
+//initPassportFacebook()
+
 const router = express.Router()
 
 const initRoutes = app => {
@@ -12,12 +15,18 @@ const initRoutes = app => {
     router.get('/auth', auth.checkLoggedOut, auth.getLogin)
     router.get('/logout', auth.checkLoggedIn, auth.getLogout)
     router.get('/verify/:token', auth.verifyAccount)
-    router.post('/register', auth.checkLoggedOut, authValidate.register, authValidate.register, auth.postRegister)
+    router.post('/register', auth.checkLoggedOut, authValidate.register, auth.postRegister)
     router.post('/login', auth.checkLoggedOut, passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/auth',
         successFlash: true,
         failureFlash: true
+    }))
+
+    router.get('/auth/facebook', passport.authenticate('facebook', { scope: ["email"] }))
+    router.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        successRedirect: '/',
+        failureRedirect: '/auth'
     }))
 
     return app.use('/', router)
