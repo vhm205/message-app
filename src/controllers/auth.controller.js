@@ -8,6 +8,11 @@ const getLogin = (req, res) => {
     })
 }
 
+const getLogout = (req, res) => {
+    req.logout()
+    return res.redirect('/auth')
+}
+
 const postRegister = async (req, res) => {
     let errorsArr = []
     let errorsRes = validationResult(req)
@@ -43,9 +48,21 @@ const verifyAccount = async (req, res) => {
     }
 }
 
+const checkLoggedIn = (req, res, next) => {
+    if(!req.isAuthenticated()) return res.redirect('/auth')
+    next()
+}
+
+const checkLoggedOut = (req, res, next) => {
+    if(req.isAuthenticated()) return res.redirect('/')
+    next()
+}
 
 module.exports = {
     getLogin,
+    getLogout,
     postRegister,
-    verifyAccount
+    verifyAccount,
+    checkLoggedIn,
+    checkLoggedOut
 }
