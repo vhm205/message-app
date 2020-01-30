@@ -1,38 +1,37 @@
 import passport from 'passport';
-import passportFacebook from 'passport-facebook';
+import passportGoogle from 'passport-google-oauth20';
 import User from '../../models/user.model';
 import { transErrors, transSuccesses } from '../../../lang/vi';
 
-const FacebookStrategy = passportFacebook.Strategy
+const GoogleStrategy = passportGoogle.Strategy
 
-const initPassportFacebook = () => {
-    passport.use(new FacebookStrategy({
-        clientID: process.env.FB_APP_ID,
-        clientSecret: process.env.FB_APP_SECRET,
-        callbackURL: process.env.FB_CALLBACK_URL,
-        passReqToCallback: true,
-        profileFields: ["displayName", "gender", "photos", "email"]
+const initPassportGoogle = () => {
+    passport.use(new GoogleStrategy({
+        clientID: process.env.GG_APP_ID,
+        clientSecret: process.env.GG_APP_SECRET,
+        callbackURL: process.env.GG_CALLBACK_URL,
+        passReqToCallback: true
     }, async (req, accessToken, _, profile, done) => {
         try {
-            let user = await User.findByFacebookUid(profile.id)
+            let user = await User.findByGoogleUid(profile.id)
             if(user){ 
                 return done(null, user, req.flash('success', transSuccesses.login_success(user.username)))
             }
-
+            
             let newUser = {
                 username: profile.displayName === undefined ? profile.emails[0].value.split('@')[0] : profile.displayName,
                 gender: profile.gender === undefined ? 'male' : profile.gender,
                 local: { isActive: true },
-                facebook: {
+                google: {
                     uid: profile.id,
                     email: profile.emails[0].value,
                     token: accessToken
                 }
             }
 
-            const newUserFacebook = await User.createNew(newUser)
-            
-            return done(null, newUserFacebook, req.flash('success', transSuccesses.login_success(newUserFacebook.username)))
+            const newUserGoogle = await User.createNew(newUser)
+
+            return done(null, newUserGoogle, req.flash('success', transSuccesses.login_success(newUserGoogle.username)))
         } catch (err) {
             done(null, false, req.flash('errors', transErrors.server_error))
             throw new Error(err)
@@ -52,4 +51,4 @@ const initPassportFacebook = () => {
     })
 }
 
-module.exports = initPassportFacebook
+module.exports = initPassportGoogle
