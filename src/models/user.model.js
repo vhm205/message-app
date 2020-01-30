@@ -36,6 +36,9 @@ UserSchema.statics = {
     findByFacebookUid(uid){
         return this.findOne({ 'facebook.uid': uid })
     },
+    findByGoogleUid(uid){
+        return this.findOne({ 'google.uid': uid })
+    },
     findByEmail(email){
         return this.findOne({ 'local.email': email })
     },
