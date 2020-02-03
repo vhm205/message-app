@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" id="btn-close-update-user" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Tài khoản cá nhân</h4>
             </div>
             <div class="modal-body">
@@ -18,7 +18,7 @@
                                 <div class="col-md-3">
                                     <div class="text-center" id="div-update-avatar">
                                         <div id="image-edit-profile">
-                                            <img src="./libraries/images/users/default-avatar-trungquandev-01.jpg" class="avatar img-circle" alt="avatar">
+                                            <img src="./libraries/images/users/<%= user.avatar %>" id="user-modal-avatar" class="avatar img-circle" alt="avatar">
                                         </div>
                                         <h6>Tải lên một ảnh mới...</h6>
                                         <input type="file" class="form-control" id="input-change-avatar" name="avatar"><br>
@@ -27,44 +27,55 @@
                                 </div>
                                 <!-- edit form column -->
                                 <div class="col-md-9 personal-info">
-                                    <div class="alert alert-danger alert-dismissable">
+                                    <div class="alert alert-danger alert-dismissable response-update-error">
                                         <a class="panel-close close" data-dismiss="alert">×</a>
-                                        Update user error example.<br>
+                                        <span></span>
                                         <!-- <script>openProfileModal();</script> -->
                                     </div>
 
-                                    <div class="alert alert-success alert-dismissable">
+                                    <div class="alert alert-success alert-dismissable response-update-success">
                                         <a class="panel-close close" data-dismiss="alert">×</a>
-                                        Update user success example.<br>
-                                        <!-- <script>openProfileModal();</script> -->
+                                        <span></span>
                                     </div>
 
-                                    <h3>Local account.</h3>
-                                    <h3>Facebook account.</h3>
-                                    <h3>Google account.</h3>
-
+                                    <% if(user.local.email) { %>
+                                        <h3>Local account.</h3>
+                                    <% } else if(user.facebook.email) { %>
+                                        <h3>Facebook account.</h3>
+                                    <% } else { %>
+                                        <h3>Google account.</h3>
+                                    <% } %> 
+                                    
                                     <br>
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label">Email:</label>
                                         <div class="col-lg-8">
-                                            <div class="form-control" disabled>trungquandev@trungquandev.com</div>
+                                            <div class="form-control" disabled>
+                                                <% if(user.local.email) { %>
+                                                    <%= user.local.email %>
+                                                <% } else if(user.facebook.email) { %>
+                                                    <%= user.facebook.email %>
+                                                <% } else { %>
+                                                    <%= user.google.email %>
+                                                <% } %> 
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-3 control-label">Username:</label>
                                         <div class="col-md-8">
-                                            <input class="form-control" type="text" name="username" value="Trung Quân">
+                                            <input class="form-control" type="text" id="input-username" name="username" value="<%= user.username %>" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label">Giới tính:</label>
                                         <div class="col-lg-8">
                                             <label class="radio-inline col-lg-2">Nam
-                                                <input type="radio" name="gender" value="male" checked required>
+                                                <input type="radio" id="input-male" name="gender" value="male" <% if(user.gender === 'male'){ %> checked <% } %> required>
                                                 <span class="checkmark"></span>
                                             </label>
                                             <label class="radio-inline col-lg-2">Nữ
-                                                <input type="radio" name="gender" value="female" required>
+                                                <input type="radio" id="input-female" name="gender" value="female" <% if(user.gender === 'female'){ %> checked <% } %> required>
                                                 <span class="checkmark"></span>
                                             </label>
                                         </div>
@@ -72,21 +83,21 @@
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label">Địa chỉ:</label>
                                         <div class="col-lg-8">
-                                            <input class="form-control" type="text" name="address" value="Hà Nội, Việt Nam">
+                                            <input class="form-control" type="text" id="input-address" name="address" value="<%= user.address %>" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label">Số điện thoại:</label>
                                         <div class="col-lg-8">
-                                            <input class="form-control" type="text" name="phone" value="0123456789">
+                                            <input class="form-control" type="number" id="input-phone" name="phone" value="<%= user.phone %>" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-3 control-label"></label>
                                         <div class="col-md-8">
-                                            <input type="submit" class="btn btn-primary custom-background-btn-primary" name="submit" value="Lưu lại">
+                                            <input type="button" id="input-update-user" class="btn btn-primary custom-background-btn-primary" name="btnUpdate" value="Lưu lại">
                                             <span></span>
-                                            <input type="reset" class="btn btn-default custom-background-btn-reset" value="Hủy bỏ">
+                                            <input type="reset" id="input-cancel-user" class="btn btn-default custom-background-btn-reset" value="Hủy bỏ">
                                         </div>
                                     </div>
                                 </div>
@@ -113,19 +124,19 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Mật khẩu cũ</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="password" name="current_password" placeholder="Enter your curent password...">
+                                        <input class="form-control" type="password" name="current_password" placeholder="Enter your curent password..." autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Mật khẩu mới</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="password" name="new_password" placeholder="Enter new password...">
+                                        <input class="form-control" type="password" name="new_password" placeholder="Enter new password..." autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Nhập lại mật khẩu mới</label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="password" name="confirm_new_password" placeholder="Enter confirm new password...">
+                                        <input class="form-control" type="password" name="confirm_new_password" placeholder="Enter confirm new password..." autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -133,7 +144,7 @@
                                     <div class="col-md-8">
                                         <input type="submit" class="btn btn-primary custom-background-btn-primary" value="Lưu lại">
                                         <span></span>
-                                        <input type="reset" class="btn btn-default custom-background-btn-reset" value="Hủy bỏ">
+                                        <input type="reset" class="btn btn-default custom-background-btn-reset" id="input-cancel-user-2" value="Hủy bỏ">
                                     </div>
                                 </div>
                             </form>

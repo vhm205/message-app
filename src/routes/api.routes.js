@@ -1,7 +1,7 @@
 import express from "express";
 import passport from 'passport';
 import { authValidate } from '../validation/index';
-import { home, auth } from "../controllers/index";
+import { home, auth, user } from "../controllers/index";
 import initPassportLocal    from '../controllers/passportController/local';
 import initPassportFacebook from '../controllers/passportController/facebook';
 import initPassportGoogle   from '../controllers/passportController/google';
@@ -36,6 +36,8 @@ const initRoutes = app => {
         successRedirect: '/',
         failureRedirect: '/auth'
     }))
+
+    router.patch('/user/update-avatar', auth.checkLoggedIn, user.updateAvatar)
 
     return app.use('/', router)
 }
