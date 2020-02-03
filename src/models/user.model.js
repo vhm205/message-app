@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
     gender: { type: String, default: "male" },
     phone: { type: Number, default: null },
     address: { type: String, default: null },
-    avatar: { type: String, default: 'avatar-default.jpg' },
+    avatar: { type: String, default: 'avatar-default.png' },
     role: { type: String, default: 'user' },
     local: {
         email: { type: String, trim: true },
@@ -50,6 +50,9 @@ UserSchema.statics = {
     },
     removeById(id){
         return this.findOneAndDelete(id)
+    },
+    updateUser(id, item){
+        return this.findByIdAndUpdate(id, item)
     },
     verify(token){
         return this.findOneAndUpdate(
