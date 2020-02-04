@@ -55,6 +55,19 @@ body {
   color: #fff !important;
 }
 
+.custom-background-btn-cancel{
+  background-color: #f9ca24;
+  border-color: #f9ca24;
+  color: #272727;
+}
+
+.custom-background-btn-cancel:hover,
+.custom-background-btn-cancel:focus{
+  background-color: #f8c714 !important;
+  border-color: #f8c714 !important;
+  color: #000 !important;
+}
+
 textarea:hover,
 input:hover,
 textarea:active,

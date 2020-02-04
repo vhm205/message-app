@@ -2,7 +2,11 @@ export const transValidation = {
     email_incorrect: 'Email không hợp lệ!!',
     gender_incorrect: 'Giới tính không hợp lệ',
     password_incorrect: 'Mật khẩu phải có ít nhất 6 ký tự',
-    password_confirm_incorrect: 'Mật khẩu không trùng khớp'
+    password_confirm_incorrect: 'Mật khẩu không trùng khớp',
+    username_update: 'Username giới hạn 3 - 20 ký tự (không bao gồm các ký tự đặc biệt)',
+    gender_update: 'Oops! Dữ liệu có vấn đề',
+    address_update: 'Địa chỉ giới hạn 3 - 30 ký tự',
+    phone_update: 'Số điện thoại giới hạn 10 - 11 ký tự và bắt đầu bằng số 0',
 }
 
 export const transErrors = {
@@ -24,7 +28,7 @@ export const transSuccesses = {
         return `Xin chào ${username}, chúc bạn một ngày tốt lành`
     },
     active_email_success: 'Kích hoạt tài khoản thành công! bạn đã có thể đăng nhập vào ứng dụng',
-    update_avatar_success: "Cập nhật ảnh đại diện thành công"    
+    user_info_updated: "Cập nhật thông tin người dùng thành công"
 }
 
 export const transMail = {
