@@ -1,6 +1,6 @@
 import express from "express";
 import passport from 'passport';
-import { authValidate } from '../validation/index';
+import { authValidate, userValidate } from '../validation/index';
 import { home, auth, user } from "../controllers/index";
 import initPassportLocal    from '../controllers/passportController/local';
 import initPassportFacebook from '../controllers/passportController/facebook';
@@ -38,6 +38,7 @@ const initRoutes = app => {
     }))
 
     router.patch('/user/update-avatar', auth.checkLoggedIn, user.updateAvatar)
+    router.patch('/user/update-info', auth.checkLoggedIn, userValidate.updateInfo, user.updateInfo)
 
     return app.use('/', router)
 }

@@ -2,6 +2,7 @@ import multer from 'multer';
 import fsExtra from 'fs-extra';
 import { user } from '../services/index';
 import { app } from '../config/app';
+import { validationResult } from 'express-validator';
 import { transErrors, transSuccesses } from '../../lang/vi';
 
 const storageAvatar = multer.diskStorage({
@@ -35,19 +36,19 @@ const updateAvatar = (req, res) => {
         try {
             // Get name of file avatar new
             const newFileName = req.file.filename
-            const item = {
+            const itemUser = {
                 avatar: newFileName,
                 updatedAt: Date.now()
             }
 
             // Update user avatar and Remove avatar old
-            const userUpdate = await user.updateUser(req.user._id, item)
+            const userUpdate = await user.updateUser(req.user._id, itemUser)
             if(userUpdate.avatar !== 'avatar-default.png'){
                 await fsExtra.remove(`${app.avatar_directory}/${userUpdate.avatar}`)
             }
             
             return res.status(200).send({
-                message: transSuccesses.update_avatar_success,
+                message: transSuccesses.user_info_updated,
                 imageUrl: `./libraries/images/users/${newFileName}`
             })
         } catch (err) {
@@ -56,6 +57,31 @@ const updateAvatar = (req, res) => {
     })
 }
 
+const updateInfo = async (req, res) => {
+    let errorsArr = []
+    let errorsRes = validationResult(req)
+
+    if(!errorsRes.isEmpty()){
+        let errors = Object.values(errorsRes.mapped())
+
+        errors.forEach(e => errorsArr.push(e.msg))
+
+        return res.status(500).send(errorsArr)
+    }
+
+    try {
+        const itemUser = Object.assign({}, req.body, { updatedAt: Date.now() })
+        await user.updateUser(req.user._id, itemUser)
+
+        return res.status(200).send({
+            message: transSuccesses.user_info_updated
+        })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+}
+
 module.exports = {
-    updateAvatar
+    updateAvatar, 
+    updateInfo
 }
