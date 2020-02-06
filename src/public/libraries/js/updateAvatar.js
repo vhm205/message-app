@@ -2,6 +2,40 @@ let userInfo = Object.create(null)
 let userAvatar = null
 let originInfo = Object.create(null)
 let originAvatar = null
+let userUpdatePassword = {}
+
+function callLogout() {
+	let timeInterval;
+	const Toast = Swal.mixin({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: 10000,
+		timerProgressBar: true,
+		onBeforeOpen: () => {
+			//Swal.showLoading()
+			timeInterval = setInterval(() => {
+				Swal.getContent().querySelector('strong').textContent = Math.ceil(Swal.getTimerLeft() / 1000)
+			}, 1000)
+		},
+		onOpen: toast => {
+		  toast.addEventListener('mouseenter', Swal.stopTimer)
+		  toast.addEventListener('mouseleave', Swal.resumeTimer)
+		},
+		onClose: () => {
+			clearInterval(timeInterval)
+		}
+	})
+
+	Toast.fire({
+		icon: 'success',
+		html: '<h5>Change password successfully<br />Time left: <strong></strong></h5>'
+	}).then(_ => {
+		$.get('/logout', () => {
+			location.reload()
+		})
+	})
+}
 
 function callUpdateUserAvatar() {
 	$.ajax({
@@ -66,7 +100,41 @@ function callUpdateUserInfo() {
 	})
 }
 
+function callUpdateUserPassword() {
+	$.ajax({
+		url: '/user/update-password',
+		type: 'patch',
+		data: userUpdatePassword
+	}).done(res => {
+		// Display alert update success
+		$('.response-update-password-success').find('span').html(res.message).parent().css('display', 'block')
+		$('.response-update-password-error').css('display', 'none')
+
+		$('#input-reset-user-2').click()
+		callLogout()
+	}).fail(err => {
+		// Split error array
+		const errorArr = err.responseText.replace(/[\[\]&]+/g, '').replace(/[\"&]+/g, '').split(',')
+		const errText = errorArr.map(e => `${e}<br />`)
+
+		// Display alert update error
+		$('.response-update-password-error').find('span').html(errText).parent().css('display', 'block')
+		$('.response-update-password-success').css('display', 'none')
+
+		$('#input-reset-user-2').click()
+	})
+}
+
 function updateUserProfile() {
+	// Create origin value
+	originAvatar = $('#user-modal-avatar').attr('src')
+	originInfo = {
+		username : $('#input-username').val(),
+		address  : $('#input-address').val(),
+		phone 	 : $('#input-phone').val(),
+		gender 	 : $("input[name='gender']:checked").val()
+	}
+
     $('#input-change-avatar').on('change', function() {
         const fileData = $(this).prop('files')[0]
         const typesAccept = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
@@ -108,15 +176,86 @@ function updateUserProfile() {
 		frmData.append('avatar', fileData)
 		userAvatar = frmData
 	})
+
+	$('#input-current-password').bind('change', function() {
+		let currentPassword = $(this).val()
+
+		let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/
+
+		if(!regex.test(currentPassword)){
+			alertify.notify('Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ số và ký tự đặc biệt', 'error', 5)
+			$(this).focus();
+			$(this).val(null);
+			delete userUpdatePassword.currentPassword;
+			return;
+		}
+
+		userUpdatePassword.currentPassword = currentPassword
+	})
+
+	$('#input-new-password').bind('change', function() {
+		let newPassword = $(this).val()
+
+		let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/
+
+		if(!regex.test(newPassword)){
+			alertify.notify('Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ số và ký tự đặc biệt', 'error', 5)
+			$(this).focus();
+			$(this).val(null);
+			delete userUpdatePassword.newPassword;
+			return;
+		}
+
+		userUpdatePassword.newPassword = newPassword
+	})
+
+	$('#input-confirm-password').bind('change', function() {
+		let confirmNewPassword = $(this).val()
+
+		if(!userUpdatePassword.newPassword){
+			alertify.notify('Bạn chưa nhập mật khẩu mới', 'error', 5)
+			$('#input-new-password').focus();
+			$(this).val(null)
+			delete userUpdatePassword.confirmNewPassword;
+			return;
+		}
+
+		if(confirmNewPassword !== userUpdatePassword.newPassword){
+			alertify.notify('Mật khẩu không trùng khớp', 'error', 5)
+			$(this).focus();
+			$(this).val(null)
+			delete userUpdatePassword.confirmNewPassword;
+			return;
+		}
+
+		userUpdatePassword.confirmNewPassword = confirmNewPassword
+	})
 	
-	// Create origin value
-	originAvatar = $('#user-modal-avatar').attr('src')
-	originInfo = {
-		username : $('#input-username').val(),
-		address  : $('#input-address').val(),
-		phone 	 : $('#input-phone').val(),
-		gender 	 : $("input[name='gender']:checked").val()
-	}
+	$('#input-update-password').click(function() {
+		if(!userUpdatePassword.hasOwnProperty('currentPassword') ||
+			!userUpdatePassword.hasOwnProperty('newPassword') ||
+			!userUpdatePassword.hasOwnProperty('confirmNewPassword')){
+			alertify.notify('Bạn cần nhập đầy đủ tất cả các trường', 'error', 5)
+			return;
+		}
+
+		Swal.fire({
+			title: 'Bạn có chắc muốn đổi mật khẩu?',
+			text: 'Nhớ ghi mật khẩu ra giấy kẻo quên <3',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonColor: '#2ECC71',
+			cancelButtonColor: '#ff7675',
+			confirmButtonText: 'Chấp nhận',
+			cancelButtonText: 'Hủy'
+		}).then(result => {
+			if (!result.value) {
+				$('#input-reset-user-2').click()
+				return
+			}
+			callUpdateUserPassword();
+		})
+	})
 
 	$('#input-update-user').click(function() {
 		let username = $('#input-username').val()
@@ -150,11 +289,14 @@ function updateUserProfile() {
 	})
 
 	$('#input-reset-user').click(function() {
-		$('#user-modal-avatar').attr('src', originAvatar)
-		userInfo = Object.create(null)
-		userAvatar = null
+		$('#user-modal-avatar').attr('src', originAvatar);
+		userInfo = Object.create(null);
+		userAvatar = null;
 	})
 
+	$('#input-reset-user-2').click(function() {
+		userUpdatePassword = {}
+	})
 
 	$('#input-cancel, #input-cancel-2').click(function() {
 		$('#btn-close-update-user').click()

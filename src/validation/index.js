@@ -1,5 +1,5 @@
 import authValidation from './auth.validate';
 import userValidation from './user.validate';
 
-export const authValidate = authValidation
-export const userValidate = userValidation
+export const authValid = authValidation
+export const userValid = userValidation

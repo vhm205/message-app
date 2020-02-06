@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { transValidation } from '../../lang/vi';
+import { transValidation, transErrors } from '../../lang/vi';
 
 const updateInfo = [
     check('username', transValidation.username_update)
@@ -17,6 +17,18 @@ const updateInfo = [
         .matches(/^(0)[0-9]{9,10}$/)
 ]
 
+const updatePassword = [
+    check('currentPassword', transValidation.password_incorrect)
+        .isLength({ min: 6 })
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/),
+    check('newPassword', transValidation.password_incorrect)
+        .isLength({ min: 6 })
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/),
+    check('confirmNewPassword', transValidation.password_confirm_incorrect)
+        .custom((value, { req }) => value === req.body.newPassword)
+]
+
 module.exports = {
-    updateInfo
+    updateInfo,
+    updatePassword
 }
