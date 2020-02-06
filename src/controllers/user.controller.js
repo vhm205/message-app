@@ -81,7 +81,32 @@ const updateInfo = async (req, res) => {
     }
 }
 
+const updatePassword = async (req, res) => {
+    let errorsArr = []
+    let errorsRes = validationResult(req)
+
+    if(!errorsRes.isEmpty()){
+        let errors = Object.values(errorsRes.mapped())
+
+        errors.forEach(e => errorsArr.push(e.msg))
+
+        return res.status(500).send(errorsArr)
+    }
+    
+    try {
+        const itemUser = Object.assign({}, req.body, { updatedAt: Date.now() })
+        await user.updatePassword(req.user._id, itemUser)
+
+        return res.status(200).send({
+            message: transSuccesses.user_password_updated
+        })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+}
+
 module.exports = {
     updateAvatar, 
-    updateInfo
+    updateInfo,
+    updatePassword
 }

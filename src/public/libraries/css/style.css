@@ -1290,6 +1290,8 @@ label:focus,
 }
 
 .response-update-error,
-.response-update-success{
+.response-update-success,
+.response-update-password-error,
+.response-update-password-success{
   display: none;
 }

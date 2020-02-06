@@ -4,7 +4,7 @@ import sendMail from '../config/mailer';
 import bcrypt from 'bcrypt';
 import uuidv4 from 'uuid/v4';
 
-const saltBound = 7
+const saltRound = 7
 
 const register = ({ email, gender, password }, protocol, hostname) => {
     return new Promise(async (resolve, reject) => {
@@ -15,7 +15,7 @@ const register = ({ email, gender, password }, protocol, hostname) => {
             return reject(transErrors.email_is_existed)
         }
 
-        let salt = bcrypt.genSaltSync(saltBound)
+        let salt = bcrypt.genSaltSync(saltRound)
         let userItem = {
             username: email.split('@')[0],
             gender: gender,

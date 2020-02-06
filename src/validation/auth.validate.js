@@ -7,9 +7,7 @@ const register = [
     check('password', transValidation.password_incorrect).isLength({ min: 6 })
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/
         ),
-    check('password_confirmation', transValidation.password_confirm_incorrect).custom((value, { req }) => {
-        return value === req.body.password
-    })
+    check('password_confirmation', transValidation.password_confirm_incorrect).custom((value, { req }) => value === req.body.password)
 ]
 
 module.exports = {

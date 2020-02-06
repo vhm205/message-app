@@ -1,6 +1,6 @@
 import express from "express";
 import passport from 'passport';
-import { authValidate, userValidate } from '../validation/index';
+import { authValid, userValid } from '../validation/index';
 import { home, auth, user } from "../controllers/index";
 import initPassportLocal    from '../controllers/passportController/local';
 import initPassportFacebook from '../controllers/passportController/facebook';
@@ -17,7 +17,7 @@ const initRoutes = app => {
     router.get('/auth', auth.checkLoggedOut, auth.getLogin)
     router.get('/logout', auth.checkLoggedIn, auth.getLogout)
     router.get('/verify/:token', auth.verifyAccount)
-    router.post('/register', auth.checkLoggedOut, authValidate.register, auth.postRegister)
+    router.post('/register', auth.checkLoggedOut, authValid.register, auth.postRegister)
     router.post('/login', auth.checkLoggedOut, passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/auth',
@@ -38,7 +38,8 @@ const initRoutes = app => {
     }))
 
     router.patch('/user/update-avatar', auth.checkLoggedIn, user.updateAvatar)
-    router.patch('/user/update-info', auth.checkLoggedIn, userValidate.updateInfo, user.updateInfo)
+    router.patch('/user/update-info', auth.checkLoggedIn, userValid.updateInfo, user.updateInfo)
+    router.patch('/user/update-password', auth.checkLoggedIn, userValid.updatePassword, user.updatePassword)
 
     return app.use('/', router)
 }

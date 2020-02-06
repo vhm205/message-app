@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
     role: { type: String, default: 'user' },
     local: {
         email: { type: String, trim: true },
-        password: { type: String, min: 3 },
+        password: { type: String, min: 6 },
         isActive: { type: Boolean, default: false },
         verifyToken: String
     },
@@ -53,6 +53,9 @@ UserSchema.statics = {
     },
     updateUser(id, item){
         return this.findByIdAndUpdate(id, item)
+    },
+    updatePassword(id, hashedPassword){
+        return this.findByIdAndUpdate(id, { 'local.password': hashedPassword })
     },
     verify(token){
         return this.findOneAndUpdate(

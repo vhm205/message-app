@@ -1,10 +1,10 @@
 export const transValidation = {
     email_incorrect: 'Email không hợp lệ!!',
-    gender_incorrect: 'Giới tính không hợp lệ',
-    password_incorrect: 'Mật khẩu phải có ít nhất 6 ký tự',
+    gender_incorrect: 'Oops! Bạn có vấn đề về giới tính',
+    password_incorrect: 'Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ số và ký tự đặc biệt',
     password_confirm_incorrect: 'Mật khẩu không trùng khớp',
     username_update: 'Username giới hạn 3 - 20 ký tự (không bao gồm các ký tự đặc biệt)',
-    gender_update: 'Oops! Dữ liệu có vấn đề',
+    gender_update: 'Oops! Bạn có vấn đề về giới tính',
     address_update: 'Địa chỉ giới hạn 3 - 30 ký tự',
     phone_update: 'Số điện thoại giới hạn 10 - 11 ký tự và bắt đầu bằng số 0',
 }
@@ -13,11 +13,13 @@ export const transErrors = {
     email_is_existed: 'Email này đã được sử dụng',
     email_is_removed: 'Tài khoản này đã bị xóa khỏi hệ thống, vui lòng liên hệ email: vuhuynhminh9221@gmail.com để được hỗ trợ',
     email_not_active: 'Tài khoản này chưa được kích hoạt, vui lòng kiểm tra email của bạn',
+    email_undefined: 'Tài khoản này không tồn tại',
+    password_not_match: 'Mật khẩu cũ không chính xác',
     token_not_existed: 'Token không tồn tại',
     login_failed: 'Sai tài khoản hoặc mật khẩu',
     server_error: 'Lỗi Server, vui lòng liên hệ admin: <b>vuhuynhminh9221@gmail.com</b> để được hỗ trợ',
     avatar_wrong_type: 'Kiểu file không hợp lệ, chỉ chấp nhận file có định dạng png, jpg, jpeg, gif',
-    avatar_size_limit: "Ảnh upload tối đa 1MB"
+    avatar_size_limit: 'Ảnh upload tối đa 1MB'
 }
 
 export const transSuccesses = {
@@ -28,11 +30,12 @@ export const transSuccesses = {
         return `Xin chào ${username}, chúc bạn một ngày tốt lành`
     },
     active_email_success: 'Kích hoạt tài khoản thành công! bạn đã có thể đăng nhập vào ứng dụng',
-    user_info_updated: "Cập nhật thông tin người dùng thành công"
+    user_info_updated: 'Cập nhật thông tin người dùng thành công',
+    user_password_updated: 'Cập nhật mật khẩu thành công'
 }
 
 export const transMail = {
-    subject: "Xác nhận kích hoạt tài khoản!",
+    subject: 'Xác nhận kích hoạt tài khoản!',
     template: linkVerify => {
         return `
         <h3> Link kích hoạt tài khoản trên ứng dụng Message App từ Admin VHM: </h3>
