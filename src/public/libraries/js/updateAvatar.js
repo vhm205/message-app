@@ -31,9 +31,7 @@ function callLogout() {
 		icon: 'success',
 		html: '<h5>Change password successfully<br />Time left: <strong></strong></h5>'
 	}).then(_ => {
-		$.get('/logout', () => {
-			location.reload()
-		})
+		$.get('/logout', location.reload())
 	})
 }
 
@@ -64,6 +62,12 @@ function callUpdateUserAvatar() {
 
 		$('#input-reset-user').click()
 	})
+}
+
+function reset() {
+	$('#user-modal-avatar').attr('src', originAvatar);
+	userInfo = Object.create(null);
+	userAvatar = null;
 }
 
 function callUpdateUserInfo() {
@@ -288,11 +292,7 @@ function updateUserProfile() {
 		}
 	})
 
-	$('#input-reset-user').click(function() {
-		$('#user-modal-avatar').attr('src', originAvatar);
-		userInfo = Object.create(null);
-		userAvatar = null;
-	})
+	$('#input-reset-user').click(reset)
 
 	$('#input-reset-user-2').click(function() {
 		userUpdatePassword = {}
