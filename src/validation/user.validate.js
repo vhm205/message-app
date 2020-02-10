@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { transValidation, transErrors } from '../../lang/vi';
+import { transValidation } from '../../lang/vi';
 
 const updateInfo = [
     check('username', transValidation.username_update)

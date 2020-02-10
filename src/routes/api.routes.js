@@ -1,7 +1,7 @@
 import express from "express";
 import passport from 'passport';
-import { authValid, userValid } from '../validation/index';
-import { home, auth, user } from "../controllers/index";
+import { authValid, userValid, contactValid } from '../validation/index';
+import { home, auth, user, contact } from "../controllers/index";
 import initPassportLocal    from '../controllers/passportController/local';
 import initPassportFacebook from '../controllers/passportController/facebook';
 import initPassportGoogle   from '../controllers/passportController/google';
@@ -40,6 +40,8 @@ const initRoutes = app => {
     router.patch('/user/update-avatar', auth.checkLoggedIn, user.updateAvatar)
     router.patch('/user/update-info', auth.checkLoggedIn, userValid.updateInfo, user.updateInfo)
     router.patch('/user/update-password', auth.checkLoggedIn, userValid.updatePassword, user.updatePassword)
+
+    router.get('/contact/find-user', auth.checkLoggedIn, contactValid.findUsersContact, contact.findUsersContact)
 
     return app.use('/', router)
 }

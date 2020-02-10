@@ -12,6 +12,14 @@ const ContactSchema = new mongoose.Schema({
 ContactSchema.statics = {
     createNew(item){
         return this.create(item)
+    },
+    findAllByUser(id){
+        return this.find({
+            $or: [
+                { 'userId': id },
+                { 'contactId': id }
+            ]
+        })
     }
 }
 
