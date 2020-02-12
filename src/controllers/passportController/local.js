@@ -12,7 +12,7 @@ const initPassportLocal = () => {
         passReqToCallback: true
     }, async (req, email, password, done) => {
         try {
-            let user = await User.findByEmail(email)
+            const user = await User.findByEmail(email)
             if(!user){ 
                 return done(null, false, req.flash('errors', transErrors.login_failed))
             }
@@ -21,15 +21,14 @@ const initPassportLocal = () => {
                 return done(null, false, req.flash('errors', transErrors.email_not_active))
             }
             
-            let checkPassword = await user.comparePassword(password)
+            const checkPassword = await user.comparePassword(password)
             if(!checkPassword){
                 return done(null, false, req.flash('errors', transErrors.login_failed))
             }
 
-            return done(null, user, req.flash('success', transSuccesses.login_success(user.username)))
-        } catch (err) {
+            done(null, user, req.flash('success', transSuccesses.login_success(user.username)))
+        } catch (err) {            
             done(null, false, req.flash('errors', transErrors.server_error))
-            throw new Error(err)
         }
     }))
 

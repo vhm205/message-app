@@ -1,6 +1,30 @@
 import { contact } from '../services/index';
 import { validationResult } from 'express-validator';
 
+const addRequestContact = async (req, res) => {
+    try {
+        const currentId = req.user._id
+        const contactId = req.body.uid
+        
+        const requestAddFriend = await contact.addRequestContact(currentId, contactId)
+        return res.status(201).send({ success: !!requestAddFriend })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+}
+
+const cancelRequestContact = async (req, res) => {
+    try {
+        const currentId = req.user._id
+        const contactId = req.body.uid
+
+        const requestCancelFriend = await contact.cancelRequestContact(currentId, contactId)
+        return res.status(200).send({ success: !!requestCancelFriend })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+}
+
 const findUsersContact = async (req, res) => {
     let errorsArr = []
     let errorsRes = validationResult(req)
@@ -26,5 +50,7 @@ const findUsersContact = async (req, res) => {
 }
 
 module.exports = {
-    findUsersContact
+    findUsersContact,
+    addRequestContact,
+    cancelRequestContact
 }

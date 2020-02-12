@@ -20,6 +20,32 @@ ContactSchema.statics = {
                 { 'contactId': id }
             ]
         })
+    },
+    checkExists(currentId, contactId){
+        return this.findOne({
+            $or: [
+                {
+                    $and: [
+                        { 'userId': currentId },
+                        { 'contactId': contactId }
+                    ]
+                },
+                {
+                    $and: [
+                        { 'userId': contactId },
+                        { 'contactId': currentId }
+                    ]
+                }
+            ]
+        })
+    },
+    removeRequestContact(currentId, contactId){
+        return this.deleteOne({
+            $and: [
+                { 'userId': currentId },
+                { 'contactId': contactId }
+            ]
+        })
     }
 }
 
