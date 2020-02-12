@@ -12,8 +12,8 @@ const sendMail = (to, subject, content) => {
     })
 
     let options = {
-        to: to,
-        subject: subject,
+        to,
+        subject,
         html: content
     }
 
