@@ -4,7 +4,6 @@ import Contact from '../models/contact.model';
 const addRequestContact = (currentId, contactId) => {
     return new Promise(async (resolve, reject) => {
         const checkExistsContact = await Contact.checkExists(currentId, contactId)
-
         if(checkExistsContact){
             return reject(false)
         }
@@ -13,7 +12,6 @@ const addRequestContact = (currentId, contactId) => {
             userId: currentId,
             contactId: contactId
         }
-
         const newRequestContact = await Contact.createNew(newContactItem)
         resolve(newRequestContact)
     })
@@ -25,6 +23,7 @@ const cancelRequestContact = (currentId, contactId) => {
         if(removeRequestContact.n === 0){
             return reject(false)
         }
+        
         return resolve(true)
     })
 }

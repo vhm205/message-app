@@ -7,6 +7,7 @@ function addRequestContact() {
                 $('#find-user').find(`.user-add-new-contact[data-uid=${targetId}]`).hide()
                 $('#find-user').find(`.user-remove-request-contact[data-uid=${targetId}]`).css('display', 'inline-block')
                 increaseNumberQueueContact('count-request-contact-sent')
+                socket.emit('request-add-contact', { contactId: targetId })
             }
         })
     })
@@ -26,6 +27,7 @@ function cancelRequestContact() {
                 $('#find-user').find(`.user-remove-request-contact[data-uid=${targetId}]`).hide()
                 $('#find-user').find(`.user-add-new-contact[data-uid=${targetId}]`).css('display', 'inline-block')
                 decreaseNumberQueueContact('count-request-contact-sent')
+                socket.emit('request-cancel-contact', { contactId: targetId })
             }
         })
         .fail(err => console.error(err))        

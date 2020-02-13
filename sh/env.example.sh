@@ -10,6 +10,7 @@ export CONNECT_DB=***
 # Config Enviroment Server
 export PORT=***
 export SECRET_SESSION=***
+export KEY_SESSION=***
 
 # Config email account
 export MAIL_USER=***

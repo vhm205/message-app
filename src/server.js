@@ -1,15 +1,22 @@
-import { config }       from 'dotenv';
+require('dotenv').config()
+import http             from 'http';
 import express          from 'express';
 import connectFlash     from 'connect-flash';
 import passport         from 'passport';
-import connectDB        from './config/connectDB';
+import socketio         from 'socket.io';
+import cookieParser     from 'cookie-parser';
+import passportSocketIo from 'passport.socketio';
+import configSocketIo   from './config/socketio';
 import configViewEngine from './config/viewEngine';
-import configSession    from './config/session';
+import connectDB        from './config/connectDB';
 import initRoutes       from './routes/api.routes';
+import initSockets      from './sockets/index';
+import { configSession, sessionStore } from './config/session';
 
-const app = express()
+const app    = express()
+const server = http.createServer(app)
+const io     = socketio(server)
 
-config()
 connectDB()
 configSession(app)
 configViewEngine(app)
@@ -17,14 +24,19 @@ configViewEngine(app)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(connectFlash())
+app.use(cookieParser())
 
 app.use(passport.initialize())
 app.use(passport.session())
 
 initRoutes(app)
 
+configSocketIo(io, passportSocketIo, sessionStore, cookieParser)
+
+initSockets(io)
+
 const PORT = process.env.PORT || 1002
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+server.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
 
 
 // import https            from 'https';
