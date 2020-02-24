@@ -35,7 +35,7 @@ function cancelRequestContact() {
 }
 
 socket.on('response-request-add-contact', user => {
-	const notify = `<span data-uid="${user.id}">
+	const notify = `<span class="notify-readed-false" data-uid="${user.id}">
 						<img class="avatar-small" src="./libraries/images/users/${user.avatar}" alt=""> 
 						<strong>${user.username}</strong> đã gửi cho bạn 1 yêu cầu kết bạn
 					</span><br><br><br>`

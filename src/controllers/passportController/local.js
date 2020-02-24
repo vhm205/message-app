@@ -26,15 +26,15 @@ const initPassportLocal = () => {
                 return done(null, false, req.flash('errors', transErrors.login_failed))
             }
 
-            done(null, user, req.flash('success', transSuccesses.login_success(user.username)))
+            return done(null, user, req.flash('success', transSuccesses.login_success(user.username)))
         } catch (err) {            
-            done(null, false, req.flash('errors', transErrors.server_error))
+            return done(null, false, req.flash('errors', transErrors.server_error))
         }
     }))
 
     // Save userId into session
     passport.serializeUser((user, done) => {
-        done(null, user._id)
+        return done(null, user._id)
     })
 
     // This is called by passport.session()
