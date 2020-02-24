@@ -1,4 +1,3 @@
-require('dotenv').config()
 import http             from 'http';
 import express          from 'express';
 import connectFlash     from 'connect-flash';

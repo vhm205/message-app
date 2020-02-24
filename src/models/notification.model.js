@@ -1,20 +1,51 @@
 const mongoose = require('mongoose')
 
 const NotificationSchema = new mongoose.Schema({
-    sender: {
-        id: String,
-        username: String,
-        avatar: String
-    },
-    receiver: {
-        id: String,
-        username: String,
-        avatar: String
-    },
+    senderId: String,
+    receiverId: String,
     type: String,
-    content: String,
     isReaded: { type: Boolean, default: false },
     createdAt: { type: Number, default: Date.now() }
 })
 
-module.exports = mongoose.model('Notification', NotificationSchema)
+NotificationSchema.statics = {
+	createNew(item){
+		return this.create(item);
+	},
+	removeReqContactNotify(senderId, receiverId, type){
+		return this.deleteOne({
+			$and: [
+				{ 'senderId': senderId },
+				{ 'receiverId': receiverId },
+				{ 'type': type }
+			]
+		})
+	},
+	getByUserIdAndLimit(userId, limit){
+		return this.find({
+			'receiverId': userId
+		}).sort({ 'createdAt': -1 }).limit(limit)
+	}
+}
+
+const NOTIFYCATION_TYPES = {
+	ADD_CONTACT : 'add_contact'
+}
+
+const NOTIFICATION_CONTENTS = {
+	getContent: (notifyType, isReaded, userId, username, avatar) => {
+		if(notifyType === NOTIFYCATION_TYPES.ADD_CONTACT){
+			return `<span data-uid="${userId}" class="${!isReaded ? "notify-readed-false" : ""}">
+						<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="avatar"> 
+						<strong>${username}</strong> đã gửi cho bạn 1 yêu cầu kết bạn
+					</span><br><br><br>`
+		}
+		return "Doesn't match with any notify type"
+	}
+}
+
+module.exports = {
+	notifyModel: mongoose.model('Notification', NotificationSchema),
+	types: NOTIFYCATION_TYPES,
+	contents: NOTIFICATION_CONTENTS
+}
