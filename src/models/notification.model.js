@@ -25,6 +25,14 @@ NotificationSchema.statics = {
 		return this.find({
 			'receiverId': userId
 		}).sort({ 'createdAt': -1 }).limit(limit)
+	},
+	getNotifyUnread(userId){
+		return this.countDocuments({
+			$and: [
+				{ 'receiverId': userId },
+				{ 'isReaded': false }
+			]
+		})
 	}
 }
 
@@ -35,10 +43,10 @@ const NOTIFYCATION_TYPES = {
 const NOTIFICATION_CONTENTS = {
 	getContent: (notifyType, isReaded, userId, username, avatar) => {
 		if(notifyType === NOTIFYCATION_TYPES.ADD_CONTACT){
-			return `<span data-uid="${userId}" class="${!isReaded ? "notify-readed-false" : ""}">
+			return `<div data-uid="${userId}" class="${!isReaded ? "notify-readed-false" : ""}">
 						<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="avatar"> 
-						<strong>${username}</strong> đã gửi cho bạn 1 yêu cầu kết bạn
-					</span><br><br><br>`
+						<strong>${username}</strong> đã gửi cho bạn 1 lời mời kết bạn
+					</div>`
 		}
 		return "Doesn't match with any notify type"
 	}
