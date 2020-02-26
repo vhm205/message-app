@@ -267,7 +267,7 @@ label:focus,
   z-index: 999;
 }
 
-#notifications h3 {
+#popup-mark-all-as-read {
   display: block;
   color: #333;
   background: #FFF;
@@ -321,20 +321,21 @@ label:focus,
 }
 
 .noti_content {
-  position: relative;
   height: 200px;
   background-color: #fff;
   overflow: auto;
 }
 
-.noti_content>span {
-  position: absolute;
+.noti_content>div {
   max-width: 95%;
-  margin-top: 5px;
-  margin-left: 7px;
+  margin: 5px 0 0 7px;
   color: #333;
   padding: 5px;
   /* border-bottom:3px solid rgba(255,255,255,0.5); */
+}
+.noti_content>div:hover{
+	cursor: pointer;
+	background-color: #ECEFF1;
 }
 
 .seeAll {
@@ -436,6 +437,33 @@ label:focus,
 .list-attachs li:hover {
   cursor: pointer;
   background-color: #eceff1;
+}
+.list-notification li > div{
+	width: 100%;
+	padding: 20px;
+	border-radius: 10px;
+	border-bottom: none;
+	margin-bottom: 10px;
+	transition: 200ms ease;
+}
+.list-notification li{
+	border-radius: 10px;
+	list-style: none;
+	cursor: pointer;
+}
+.list-notification li > div:hover{
+	background-color: #E1E1E1;
+}
+.modal-mark-all-read{
+	display: flex;
+	justify-content: right;
+	height: 40px;
+	font-size: 16px;
+}
+.modal-see-more-notify {
+    text-align: center;
+	margin-top: 20px;
+	font-size: 16px;
 }
 
 .navbar-brand>img {
@@ -1303,3 +1331,4 @@ label:focus,
 .notify-readed-false{
 	background-color: #EAEAEA;
 }
+
