@@ -17,7 +17,9 @@
 </head>
 <body onload="spinLoaded()">
     <!--Icon loader-->
-    <div id="loader"></div>
+	<div class="loader">
+		<div class="loader-main"></div>
+	</div>
     
     <% if(success != '') { %>
         <div class="master-success-message alert alert-success"> <%- success %> </div>
@@ -48,6 +50,7 @@
     <script src="./libraries/js/calculate.js"></script>
     <script src="./libraries/js/requestContact.js"></script>
     <script src="./libraries/js/findUsers.js"></script>
+    <script src="./libraries/js/readMoreNotif.js"></script>
 
     <%- include('contact/contactModal') %>
     
