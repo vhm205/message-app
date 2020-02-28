@@ -1,7 +1,7 @@
 import express from "express";
 import passport from 'passport';
 import { authValid, userValid, contactValid } from '../validation/index';
-import { home, auth, user, contact } from "../controllers/index";
+import { home, auth, user, contact, notification } from "../controllers/index";
 import initPassportLocal    from '../controllers/passportController/local';
 import initPassportFacebook from '../controllers/passportController/facebook';
 import initPassportGoogle   from '../controllers/passportController/google';
@@ -43,7 +43,9 @@ const initRoutes = app => {
 
     router.get('/contact/find-user', auth.checkLoggedIn, contactValid.findUsersContact, contact.findUsersContact)
     router.post('/contact/add-request-contact', auth.checkLoggedIn, contact.addRequestContact)
-    router.delete('/contact/cancel-request-contact', auth.checkLoggedIn, contact.cancelRequestContact)
+	router.delete('/contact/cancel-request-contact', auth.checkLoggedIn, contact.cancelRequestContact)
+	
+	router.get('/notification/read-more', auth.checkLoggedIn, notification.readMoreNotif)
 
     return app.use('/', router)
 }

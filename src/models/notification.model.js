@@ -26,13 +26,18 @@ NotificationSchema.statics = {
 			'receiverId': userId
 		}).sort({ 'createdAt': -1 }).limit(limit)
 	},
-	getNotifyUnread(userId){
+	getNotifUnread(userId){
 		return this.countDocuments({
 			$and: [
 				{ 'receiverId': userId },
 				{ 'isReaded': false }
 			]
 		})
+	},
+	readMoreNotif(userId, skip, limit){
+		return this.find({
+			'receiverId': userId
+		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit) 
 	}
 }
 

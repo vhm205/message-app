@@ -50,20 +50,20 @@ function enableEmojioneArea(chatId) {
 }
 
 function spinLoaded() {
-  $('#loader').css('display', 'none');
+  $('.loader').css('display', 'none');
 }
 
 function spinLoading() {
-  $('#loader').css('display', 'block');
+  $('.loader').css('display', 'block');
 }
 
 function ajaxLoading() {
   $(document)
     .ajaxStart(function() {
-      spinLoading();
+		spinLoading();
     })
     .ajaxStop(function() {
-      spinLoaded();
+		spinLoaded();
     });
 }
 
