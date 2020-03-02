@@ -55,7 +55,9 @@ UserSchema.statics = {
         return this.findByIdAndUpdate(id, item)
     },
     updatePassword(id, hashedPassword){
-        return this.findByIdAndUpdate(id, { 'local.password': hashedPassword })
+        return this.findByIdAndUpdate(id, {
+			$set: { 'local.password': hashedPassword }
+		})
     },
     verify(token){
         return this.findOneAndUpdate(

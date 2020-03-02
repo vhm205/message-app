@@ -46,6 +46,7 @@ const initRoutes = app => {
 	router.delete('/contact/cancel-request-contact', auth.checkLoggedIn, contact.cancelRequestContact)
 	
 	router.get('/notification/read-more', auth.checkLoggedIn, notification.readMoreNotif)
+	router.patch('/notification/mark-all-as-read', auth.checkLoggedIn, notification.markAllAsRead)
 
     return app.use('/', router)
 }

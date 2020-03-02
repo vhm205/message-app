@@ -49,10 +49,10 @@ socket.on('response-request-add-contact', user => {
 	$('.noti_content').prepend(notify) 
 	// Modal notification
 	$('.list-notification').prepend(`<li>${notify}</li>`) 
-	
+
 	increaseNumberQueueContact('count-request-contact-received', true)
-	increaseNumberQueueContact('noti_contact_counter', null)
-	increaseNumberQueueContact('noti_counter', null)
+	increaseNumberQueueContact('noti_contact_counter', false)
+	increaseNumberQueueContact('noti_counter', false)
 })
 
 socket.on('response-request-cancel-contact', user => {
@@ -62,6 +62,6 @@ socket.on('response-request-cancel-contact', user => {
 	$('.list-notification > li').find(`div[data-uid=${user.id}]`).parent().remove()
 
 	decreaseNumberQueueContact('count-request-contact-received', true)
-	decreaseNumberQueueContact('noti_contact_counter', null)
-	decreaseNumberQueueContact('noti_counter', null)
+	decreaseNumberQueueContact('noti_contact_counter', false)
+	decreaseNumberQueueContact('noti_counter', false)
 })
