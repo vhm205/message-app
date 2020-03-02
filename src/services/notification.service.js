@@ -50,8 +50,21 @@ const readMoreNotif = (userId, skip) => {
 	})
 }
 
+const markAllAsRead = (userId, targetUsers) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			await notifyModel.markAllAsRead(userId, targetUsers)
+			resolve(true)
+		} catch (err) {
+			console.error(err);
+			reject(false)
+		}
+	})
+}
+
 module.exports = {
 	getNotifications,
 	getNotifyUnRead,
-	readMoreNotif
+	readMoreNotif,
+	markAllAsRead
 }

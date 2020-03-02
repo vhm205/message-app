@@ -31,7 +31,7 @@ function callLogout() {
 		icon: 'success',
 		html: '<h5>Change password successfully<br />Time left: <strong></strong></h5>'
 	}).then(_ => {
-		$.get('/logout', location.reload())
+		$.get('/logout', () => location.reload())
 	})
 }
 
