@@ -28,7 +28,7 @@ const register = ({ email, gender, password }, protocol, hostname) => {
 
         let newUser = await User.createNew(userItem)
         let linkVerify = `${protocol}://${hostname}/verify/${newUser.local.verifyToken}`
-        
+
         sendMail(email, transMail.subject, transMail.template(linkVerify))
             .then(_ => {
                 resolve(transSuccesses.createdDone(newUser.local.email))

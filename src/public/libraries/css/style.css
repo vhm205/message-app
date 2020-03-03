@@ -289,9 +289,8 @@ label:focus,
   border-color: transparent transparent #FFF;
   margin: -20px 0px 0px 0px;
 }
-
 .noti_contact_counter {
-  display: none;
+  display: block;
   position: absolute;
   background: #E1141E;
   color: #FFF;
@@ -1330,6 +1329,9 @@ label:focus,
 
 .notify-readed-false{
 	background-color: #EAEAEA;
+}
+.d-none{
+	display: none;
 }
 
 

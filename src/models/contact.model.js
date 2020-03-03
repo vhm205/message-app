@@ -12,7 +12,8 @@ const ContactSchema = new mongoose.Schema({
 ContactSchema.statics = {
     createNew(item){
         return this.create(item)
-    },
+	},
+	
     findAllByUser(id){
         return this.find({
             $or: [
@@ -20,7 +21,8 @@ ContactSchema.statics = {
                 { 'contactId': id }
             ]
         })
-    },
+	},
+	
     checkExists(currentId, contactId){
         return this.findOne({
             $or: [
@@ -38,7 +40,8 @@ ContactSchema.statics = {
                 }
             ]
         })
-    },
+	},
+	
     removeRequestContact(currentId, contactId){
         return this.deleteOne({
             $and: [
@@ -46,7 +49,71 @@ ContactSchema.statics = {
                 { 'contactId': contactId }
             ]
         })
-    }
+	},
+
+	getContacts(currentId, limit){
+		return this.find({
+			$and: [
+				{
+					$or: [
+						{ 'userId': currentId },
+						{ 'contactId': currentId }
+					]
+				},
+				{ 'status': true }
+			]
+		}).sort({ 'createdAt': -1 }).limit(limit)
+	},
+
+	getContactsSent(currentId, limit){
+		return this.find({
+			$and: [
+				{ 'userId' : currentId },
+				{ 'status': false }
+			]
+		}).sort({ 'createdAt': -1 }).limit(limit)
+	},
+
+	getContactsReceived(currentId, limit){
+		return this.find({
+			$and: [
+				{ 'contactId' : currentId },
+				{ 'status': false }
+			]
+		}).sort({ 'createdAt': -1 }).limit(limit)
+	},
+
+	countAllContacts(currentId){
+		return this.countDocuments({
+			$and: [
+				{
+					$or: [
+						{ 'userId': currentId },
+						{ 'contactId': currentId }
+					]
+				},
+				{ 'status': true }
+			]
+		})
+	},
+
+	countAllContactsSend(currentId){
+		return this.countDocuments({
+			$and: [
+				{ 'userId' : currentId },
+				{ 'status': false }
+			]
+		})
+	},
+	
+	countAllContactsReceived(currentId){
+		return this.countDocuments({
+			$and: [
+				{ 'contactId' : currentId },
+				{ 'status': false }
+			]
+		})
+	}
 }
 
 module.exports = mongoose.model('Contact', ContactSchema)

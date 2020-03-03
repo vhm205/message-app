@@ -12,6 +12,7 @@ NotificationSchema.statics = {
 	createNew(item){
 		return this.create(item);
 	},
+	
 	removeReqContactNotify(senderId, receiverId, type){
 		return this.deleteOne({
 			$and: [
@@ -21,11 +22,13 @@ NotificationSchema.statics = {
 			]
 		})
 	},
+
 	getByUserIdAndLimit(userId, limit){
 		return this.find({
 			'receiverId': userId
 		}).sort({ 'createdAt': -1 }).limit(limit)
 	},
+
 	getNotifUnread(userId){
 		return this.countDocuments({
 			$and: [
@@ -34,11 +37,13 @@ NotificationSchema.statics = {
 			]
 		})
 	},
+
 	readMoreNotif(userId, skip, limit){
 		return this.find({
 			'receiverId': userId
 		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit) 
 	},
+
 	markAllAsRead(userId, targetUsers){
 		return this.updateMany({
 			$and: [
