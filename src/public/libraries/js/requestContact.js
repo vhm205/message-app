@@ -9,6 +9,10 @@ function addRequestContact() {
                 $('#find-user').find(`.user-remove-request-contact[data-uid=${targetId}]`).css('display', 'inline-block')
 				increaseNumberQueueContact('count-request-contact-sent', true)
 
+				// DOM HTML of user found it, Then append tab request contact sent
+				const userInfoHtml = $('#find-user ul').find(`li[data-uid=${targetId}]`).get(0).outerHTML
+				$('#request-contact-sent ul').prepend(userInfoHtml)
+
 				// Send request add contact realtime
                 socket.emit('request-add-contact', { contactId: targetId })
             }
@@ -32,6 +36,9 @@ function cancelRequestContact() {
                 $('#find-user').find(`.user-add-new-contact[data-uid=${targetId}]`).css('display', 'inline-block')
 				decreaseNumberQueueContact('count-request-contact-sent', true)
 
+				// Remove user in request contact sent
+				$('#request-contact-sent ul').find(`li[data-uid=${targetId}]`).remove()
+
 				// Send request cancel contact realtime
                 socket.emit('request-cancel-contact', { contactId: targetId })
             }
@@ -42,17 +49,39 @@ function cancelRequestContact() {
 
 socket.on('response-request-add-contact', user => {
 	const notify = `<div class="notify-readed-false" data-uid="${user.id}">
-						<img class="avatar-small" src="./libraries/images/users/${user.avatar}" alt=""> 
+						<img class="avatar-small" src="./libraries/images/users/${user.avatar}" alt="Notify"> 
 						<strong>${user.username}</strong> đã gửi cho bạn 1 lời mời kết bạn
 					</div>`;
 	// Popup notification
 	$('.noti_content').prepend(notify) 
 	// Modal notification
-	$('.list-notification').prepend(`<li>${notify}</li>`) 
+	$('.list-notification').prepend(`<li>${notify}</li>`)
 
 	increaseNumberQueueContact('count-request-contact-received', true)
 	increaseNumberQueueContact('noti_contact_counter', false)
 	increaseNumberQueueContact('noti_counter', false)
+
+	const userInfoHtml = `<li class="_contactList" data-uid="${user.id}">
+							<div class="contactPanel">
+								<div class="user-avatar">
+									<img src="./libraries/images/users/${user.avatar}" alt="Avatar Sender">
+								</div>
+								<div class="user-name">
+									<p> ${user.username} </p>
+								</div>
+								<br>
+								<div class="user-address">
+									<span>&nbsp ${user.address}</span>
+								</div>
+								<div class="user-acccept-contact-received" data-uid="${user.id}">
+									Chấp nhận
+								</div>
+								<div class="user-reject-request-contact-received action-danger" data-uid="${user.id}">
+									Xóa yêu cầu
+								</div>
+							</div>
+						</li>`
+	$('#request-contact-received ul').prepend(userInfoHtml)
 })
 
 socket.on('response-request-cancel-contact', user => {
@@ -60,6 +89,9 @@ socket.on('response-request-cancel-contact', user => {
 	$('.noti_content').find(`div[data-uid=${user.id}]`).remove()
 	// Modal notification
 	$('.list-notification > li').find(`div[data-uid=${user.id}]`).parent().remove()
+
+	// Remove user in request contact received
+	$('#request-contact-received ul').find(`li[data-uid=${user.id}]`).remove()
 
 	decreaseNumberQueueContact('count-request-contact-received', true)
 	decreaseNumberQueueContact('noti_contact_counter', false)

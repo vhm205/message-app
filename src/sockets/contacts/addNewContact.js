@@ -11,7 +11,8 @@ const addNewContact = io => {
 			const responseInfo = {
 				id: socket.request.user._id,
 				username: socket.request.user.username,
-				avatar: socket.request.user.avatar
+				avatar: socket.request.user.avatar,
+				address: socket.request.user.address
 			}
 
 			// Check client is online, then send response

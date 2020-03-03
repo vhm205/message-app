@@ -3,3 +3,4 @@ node_modules/
 sh/env.sh
 src/public/libraries/bower_components
 _config.yml
+.swp
