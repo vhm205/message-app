@@ -459,12 +459,14 @@ label:focus,
 	height: 40px;
 	font-size: 16px;
 }
-.modal-see-more-notify {
+.modal-see-more-notify,
+.modal-see-more-contacts,
+.modal-see-more-contacts-sent,
+.modal-see-more-contacts-received {
     text-align: center;
 	margin-top: 30px;
 	font-size: 16px;
 }
-
 .navbar-brand>img {
   margin: -12px 0px 0px 7px;
   width: 150px;
@@ -1335,7 +1337,10 @@ label:focus,
 }
 
 
-.read-more-loader{
+.read-more-loader,
+.read-more-contacts-loader,
+.read-more-contacts-sent-loader,
+.read-more-contacts-received-loader{
 	display: none;
 	left: 50%;
     transform: translateX(-50%);

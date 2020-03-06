@@ -5,7 +5,7 @@ const addRequestContact = async (req, res) => {
     try {
         const currentId = req.user._id
         const contactId = req.body.uid
-        
+
         const requestAddFriend = await contact.addRequestContact(currentId, contactId)
         return res.status(201).send({ success: !!requestAddFriend })
     } catch (err) {
@@ -49,8 +49,53 @@ const findUsersContact = async (req, res) => {
     }
 }
 
+const readMoreContacts = async (req, res) => {
+	try {
+		// Get skip from query url
+		const skipNumberContact = +req.query.skip;
+
+		// Get new notifications
+		const moreContacts = await contact.readMoreContacts(req.user._id, skipNumberContact)
+
+		return res.status(200).send(moreContacts)
+	} catch (err) {
+		return res.status(500).send(err)
+	}
+}
+
+const readMoreContactsSent = async (req, res) => {
+	try {
+		// Get skip from query url
+		const skipNumberContactSent = +req.query.skip;
+
+		// Get new notifications
+		const moreContactsSent = await contact.readMoreContactsSent(req.user._id, skipNumberContactSent)
+
+		return res.status(200).send(moreContactsSent)
+	} catch (err) {
+		return res.status(500).send(err)
+	}
+}
+
+const readMoreContactsReceived = async (req, res) => {
+	try {
+		// Get skip from query url
+		const skipNumberContactReceived = +req.query.skip;
+
+		// Get new notifications
+		const moreContactsReceived = await contact.readMoreContactsReceived(req.user._id, skipNumberContactReceived)
+
+		return res.status(200).send(moreContactsReceived)
+	} catch (err) {
+		return res.status(500).send(err)
+	}
+}
+
 module.exports = {
     findUsersContact,
     addRequestContact,
-    cancelRequestContact
+	cancelRequestContact,
+	readMoreContacts,
+	readMoreContactsSent,
+	readMoreContactsReceived
 }

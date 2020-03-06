@@ -13,16 +13,14 @@ ContactSchema.statics = {
     createNew(item){
         return this.create(item)
 	},
-	
-    findAllByUser(id){
+    findAllByUser(currentId){
         return this.find({
             $or: [
-                { 'userId': id },
-                { 'contactId': id }
+                { 'userId': currentId },
+                { 'contactId': currentId }
             ]
         })
 	},
-	
     checkExists(currentId, contactId){
         return this.findOne({
             $or: [
@@ -41,7 +39,6 @@ ContactSchema.statics = {
             ]
         })
 	},
-	
     removeRequestContact(currentId, contactId){
         return this.deleteOne({
             $and: [
@@ -50,7 +47,6 @@ ContactSchema.statics = {
             ]
         })
 	},
-
 	getContacts(currentId, limit){
 		return this.find({
 			$and: [
@@ -64,7 +60,6 @@ ContactSchema.statics = {
 			]
 		}).sort({ 'createdAt': -1 }).limit(limit)
 	},
-
 	getContactsSent(currentId, limit){
 		return this.find({
 			$and: [
@@ -73,7 +68,6 @@ ContactSchema.statics = {
 			]
 		}).sort({ 'createdAt': -1 }).limit(limit)
 	},
-
 	getContactsReceived(currentId, limit){
 		return this.find({
 			$and: [
@@ -82,7 +76,6 @@ ContactSchema.statics = {
 			]
 		}).sort({ 'createdAt': -1 }).limit(limit)
 	},
-
 	countAllContacts(currentId){
 		return this.countDocuments({
 			$and: [
@@ -96,7 +89,6 @@ ContactSchema.statics = {
 			]
 		})
 	},
-
 	countAllContactsSend(currentId){
 		return this.countDocuments({
 			$and: [
@@ -105,7 +97,6 @@ ContactSchema.statics = {
 			]
 		})
 	},
-	
 	countAllContactsReceived(currentId){
 		return this.countDocuments({
 			$and: [
@@ -113,6 +104,35 @@ ContactSchema.statics = {
 				{ 'status': false }
 			]
 		})
+	},
+	readMoreContacts(currentId, skip, limit){
+		return this.find({
+			$and: [
+				{
+					$or: [
+						{ 'userId': currentId },
+						{ 'contactId': currentId }
+					]
+				},
+				{ 'status': true }
+			]
+		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit)
+	},
+	readMoreContactsSent(currentId, skip, limit){
+		return this.find({
+			$and: [
+				{ 'userId' : currentId },
+				{ 'status': false }
+			]
+		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit)
+	},
+	readMoreContactsReceived(currentId, skip, limit){
+		return this.find({
+			$and: [
+				{ 'contactId' : currentId },
+				{ 'status': false }
+			]
+		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit)
 	}
 }
 
