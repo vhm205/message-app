@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt')
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, min: 3 },
-    gender: { type: String, default: "male" },
-    phone: { type: String, default: null },
-    address: { type: String, default: null },
+    gender: { type: String, default: 'male' },
+    phone: { type: String, default: '' },
+    address: { type: String, default: '' },
     avatar: { type: String, default: 'avatar-default.png' },
     role: { type: String, default: 'user' },
     local: {
@@ -47,6 +47,9 @@ UserSchema.statics = {
     },
     findUserById(id){
         return this.findById(id)
+	},
+	findNormalUserById(id){
+        return this.findById(id, { _id: 1, username: 1, address: 1, avatar: 1 })
     },
     removeById(id){
         return this.findOneAndDelete(id)

@@ -6,7 +6,7 @@ let userUpdatePassword = {}
 
 function callLogout() {
 	let timeInterval;
-	const Toast = Swal.mixin({
+	Swal.mixin({
 		toast: true,
 		position: 'top-end',
 		showConfirmButton: false,
@@ -25,9 +25,7 @@ function callLogout() {
 		onClose: () => {
 			clearInterval(timeInterval)
 		}
-	})
-
-	Toast.fire({
+	}).fire({
 		icon: 'success',
 		html: '<h5>Change password successfully<br />Time left: <strong></strong></h5>'
 	}).then(_ => {
@@ -44,30 +42,23 @@ function callUpdateUserAvatar() {
 		processData: false,
 		data: userAvatar
 	}).done(res => {
-		// Display alert update success
-		$('.response-update-success').find('span').text(res.message).parent().css('display', 'block')
+		// Alert message update success
+		alertify.notify('Cập nhật ảnh đại diện thành công!', 'success', 5)
 		$('.response-update-error').css('display', 'none')
 
 		// Update origin avatar to avatar new
 		$('#avatar-navbar').attr('src', res.imageUrl)
 		originAvatar = res.imageUrl
 
-		// Set again avatar modal
+		// Reset avatar modal
 		$('#user-modal-avatar').attr('src', originAvatar)
 		userAvatar = null
 	}).fail(err => {
 		// Display alert update error
 		$('.response-update-error').find('span').text(err.responseText).parent().css('display', 'block')
-		$('.response-update-success').css('display', 'none')
 
-		$('#input-reset-user').click()
+		$('#input-reset-user').trigger('click')
 	})
-}
-
-function reset() {
-	$('#user-modal-avatar').attr('src', originAvatar);
-	userInfo = Object.create(null);
-	userAvatar = null;
 }
 
 function callUpdateUserInfo() {
@@ -76,9 +67,8 @@ function callUpdateUserInfo() {
 		type: 'patch',
 		data: userInfo
 	}).done(res => {
-		// Update username info on Navbar And Close Modal
+		// Update username info on Navbar
 		$('#navbar-username').text(userInfo.username)
-		$('#btn-close-update-user').click()
 		$('.response-update-error').css('display', 'none')
 
 		alertify.notify(res.message, 'success', 5)
@@ -98,9 +88,8 @@ function callUpdateUserInfo() {
 
 		// Display alert update error
 		$('.response-update-error').find('span').html(errText).parent().css('display', 'block')
-		$('.response-update-success').css('display', 'none')
 
-		$('#input-reset-user').click()
+		$('#input-reset-user').trigger('click')
 	})
 }
 
@@ -114,7 +103,7 @@ function callUpdateUserPassword() {
 		$('.response-update-password-success').find('span').html(res.message).parent().css('display', 'block')
 		$('.response-update-password-error').css('display', 'none')
 
-		$('#input-reset-user-2').click()
+		$('#input-reset-user-2').trigger('click')
 		callLogout()
 	}).fail(err => {
 		// Split error array
@@ -125,7 +114,7 @@ function callUpdateUserPassword() {
 		$('.response-update-password-error').find('span').html(errText).parent().css('display', 'block')
 		$('.response-update-password-success').css('display', 'none')
 
-		$('#input-reset-user-2').click()
+		$('#input-reset-user-2').trigger('click')
 	})
 }
 
@@ -147,18 +136,18 @@ function updateUserProfile() {
         if($.inArray(fileData.type, typesAccept) === -1){
             alertify.notify('Kiểu file không hợp lệ, chỉ chấp nhận file có định dạng png, jpg, jpeg, gif', 'error', 8)
             $(this).val(null)
-            return
+            return;
         }
 
         if(fileData.size > limit){
             alertify.notify('Ảnh upload tối đa 1MB', 'error', 5)
             $(this).val(null)
-            return
+            return;
         }
       
         if(typeof FileReader === undefined){
             alertify.notify('Trình duyệt của bạn không hỗ trợ FileReader', 'warning', 5)
-            return
+            return;
 		}
 		
 		// Create preview Avatar
@@ -255,7 +244,7 @@ function updateUserProfile() {
 		}).then(result => {
 			if (!result.value) {
 				$('#input-reset-user-2').click()
-				return
+				return;
 			}
 			callUpdateUserPassword();
 		})
@@ -292,14 +281,23 @@ function updateUserProfile() {
 		}
 	})
 
-	$('#input-reset-user').click(reset)
+	$('#input-reset-user').click(function() {
+		$('#user-modal-avatar').attr('src', originAvatar)
+		userAvatar = null
+
+		userInfo = Object.create(null)
+		$('#input-username').val(originInfo.username)
+		$('#input-address').val(originInfo.address)
+		$('#input-phone').val(originInfo.phone)
+		$(`input[value='${originInfo.gender}']`).trigger('click')
+	})
 
 	$('#input-reset-user-2').click(function() {
 		userUpdatePassword = {}
 	})
 
 	$('#input-cancel, #input-cancel-2').click(function() {
-		$('#btn-close-update-user').click()
+		$('#btn-close-update-user').trigger('click')
 	})
 }
 

@@ -6,14 +6,14 @@ const LIMIT_NUMBER_TAKEN = 2
 const getNotifContents = notifications => {
 	// Find user by sender id and get info of sender
 	const getContents = notifications.map(async notify => {
-		let sender = await UserModel.findUserById(notify.senderId)
+		let sender = await UserModel.findNormalUserById(notify.senderId)
 		return contents.getContent(notify.type, notify.isReaded, sender._id, sender.username, sender.avatar)
 	})
 
 	return Promise.all(getContents)
 }
 
-const getNotifications = (userId) => {
+const getNotifications = userId => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			// Get all notify and limit
