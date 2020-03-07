@@ -18,8 +18,20 @@ const cancelRequestContact = async (req, res) => {
         const currentId = req.user._id
         const contactId = req.body.uid
 
-        const requestCancelFriend = await contact.cancelRequestContact(currentId, contactId)
-        return res.status(200).send({ success: !!requestCancelFriend })
+        const removeReq = await contact.cancelRequestContact(currentId, contactId)
+        return res.status(200).send({ success: !!removeReq })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+}
+
+const removeRequestContactReceived = async (req, res) => {
+    try {
+        const currentId = req.user._id
+        const contactId = req.body.uid
+
+        const removeReq = await contact.removeRequestContactReceived(currentId, contactId)
+        return res.status(200).send({ success: !!removeReq })
     } catch (err) {
         return res.status(500).send(err)
     }
@@ -95,6 +107,7 @@ module.exports = {
     findUsersContact,
     addRequestContact,
 	cancelRequestContact,
+	removeRequestContactReceived,
 	readMoreContacts,
 	readMoreContactsSent,
 	readMoreContactsReceived

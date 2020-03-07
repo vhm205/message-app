@@ -211,8 +211,8 @@ label:focus,
 .contactPanel .user-remove-contact,
 .contactPanel .user-remove-request-contact,
 .contactPanel .user-acccept-contact-received,
-.contactPanel .user-remove-request-sent,
-.contactPanel .user-reject-request-contact-received {
+.contactPanel .user-remove-request-contact,
+.contactPanel .user-remove-request-contact-received {
   box-sizing: border-box;
   display: inline-flex;
   flex-shrink: 0;
@@ -1428,4 +1428,8 @@ label:focus,
 		transform: rotate(360deg);
 		filter: hue-rotate(360deg);
 	}
+}
+
+.d-important{
+	display: inline-block !important;
 }

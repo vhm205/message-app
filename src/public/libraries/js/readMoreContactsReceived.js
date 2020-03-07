@@ -13,31 +13,33 @@ $(document).ready(function() {
 
 			let moreContactReceived = '';
 			data.map(function(contact){
-				moreContactReceived += `<li class="_contactList" data-uid="${contact._id}">
-									<div class="contactPanel">
-										<div class="user-avatar">
-											<img src="./libraries/images/users/${contact.avatar}" alt="">
-										</div>
-										<div class="user-name">
-											<p>
-												${contact.username}
-											</p>
-										</div>
-										<br>
-										<div class="user-address">
-											<span>&nbsp ${contact.address}</span>
-										</div>
-										<div class="user-acccept-contact-received" data-uid="${contact._id}">
-											Chấp nhận
-										</div>
-										<div class="user-reject-request-contact-received action-danger" data-uid="${contact._id}">
-											Xóa yêu cầu
-										</div>
-									</div>
-								</li>`
+				moreContactReceived += `
+				<li class="_contactList" data-uid="${contact._id}">
+					<div class="contactPanel">
+						<div class="user-avatar">
+							<img src="./libraries/images/users/${contact.avatar}" alt="">
+						</div>
+						<div class="user-name">
+							<p>
+								${contact.username}
+							</p>
+						</div>
+						<br>
+						<div class="user-address">
+							<span>&nbsp ${contact.address}</span>
+						</div>
+						<div class="user-acccept-contact-received" data-uid="${contact._id}">
+							Chấp nhận
+						</div>
+						<div class="user-remove-request-contact-received action-danger" data-uid="${contact._id}">
+							Xóa yêu cầu
+						</div>
+					</div>
+				</li>`
 			})
 
 			$('#request-contact-received ul').append(moreContactReceived)
+			removeRequestContactReceived()
 
 			$('.read-more-contacts-received-loader').css('display', 'none')
 			$(this).css('display', 'block')

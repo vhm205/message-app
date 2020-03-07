@@ -43,7 +43,8 @@ const initRoutes = app => {
 
     router.get('/contact/find-user', auth.checkLoggedIn, contactValid.findUsersContact, contact.findUsersContact)
     router.post('/contact/add-request-contact', auth.checkLoggedIn, contact.addRequestContact)
-	router.delete('/contact/cancel-request-contact', auth.checkLoggedIn, contact.cancelRequestContact)
+	router.delete('/contact/remove-request-contact', auth.checkLoggedIn, contact.cancelRequestContact)
+	router.delete('/contact/remove-request-contact-received', auth.checkLoggedIn, contact.removeRequestContactReceived)
 	router.get('/contact/read-more-contacts', auth.checkLoggedIn, contact.readMoreContacts)
 	router.get('/contact/read-more-contacts-sent', auth.checkLoggedIn, contact.readMoreContactsSent)
 	router.get('/contact/read-more-contacts-received', auth.checkLoggedIn, contact.readMoreContactsReceived)

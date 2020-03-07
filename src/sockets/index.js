@@ -1,9 +1,11 @@
 import addNewContact from './contacts/addNewContact';
-import cancelRequestContact from './contacts/cancelRequestContact';
+import removeRequestContact from './contacts/removeRequestContact';
+import removeRequestContactReceived from './contacts/removeRequestContactReceived';
 
 const initSockets = io => {
 	addNewContact(io)
-	cancelRequestContact(io)
+	removeRequestContact(io)
+	removeRequestContactReceived(io)
 }
 
 module.exports = initSockets;

@@ -10,7 +10,7 @@ function callFindUsers(e) {
         $.get(`/contact/find-user?keyword=${keyword}`, function(data) {
             $('#find-user').find('ul').html(data)
             addRequestContact()
-            cancelRequestContact()
+            removeRequestContact()
         })
         .catch(err => alertify.notify(err.responseJSON[0], 'warning'))
     }

@@ -44,6 +44,20 @@ const cancelRequestContact = (userId, contactId) => {
     })
 }
 
+const removeRequestContactReceived = (userId, contactId) => {
+    return new Promise(async (resolve, reject) => {
+        const removeRequestContact = await ContactModel.removeRequestContactReceived(userId, contactId)
+        if(removeRequestContact.n === 0){
+            return reject(false)
+		}
+		
+		// Remove notify in DB
+		// await notifyModel.removeReqContactNotify(userId, contactId, types.ADD_CONTACT)
+        
+        return resolve(true)
+    })
+}
+
 const findUsersContact = (userId, keyword) => {
     return new Promise(async (resolve, _) => {
         let deprecatedUserId = [userId];
@@ -203,6 +217,7 @@ module.exports = {
     findUsersContact,
     addRequestContact,
 	cancelRequestContact,
+	removeRequestContactReceived,
 	countAllContacts,
 	countAllContactsSend,
 	countAllContactsReceived,

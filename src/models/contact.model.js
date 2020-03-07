@@ -47,6 +47,14 @@ ContactSchema.statics = {
             ]
         })
 	},
+	removeRequestContactReceived(currentId, contactId){
+		return this.deleteOne({
+			$and: [
+				{ 'contactId': currentId },
+				{ 'userId': contactId }
+			]
+		})
+	},
 	getContacts(currentId, limit){
 		return this.find({
 			$and: [

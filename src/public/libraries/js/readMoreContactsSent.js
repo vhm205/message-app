@@ -27,7 +27,7 @@ $(document).ready(function() {
 										<div class="user-address">
 											<span>&nbsp ${contact.address}</span>
 										</div>
-										<div class="user-remove-request-sent action-danger" data-uid="${contact._id}">
+										<div class="user-remove-request-contact d-important action-danger" data-uid="${contact._id}">
 											Hủy yêu cầu
 										</div>
 									</div>
@@ -35,6 +35,7 @@ $(document).ready(function() {
 			})
 
 			$('#request-contact-sent ul').append(moreContactSent)
+			removeRequestContact()
 
 			$('.read-more-contacts-sent-loader').css('display', 'none')
 			$(this).css('display', 'block')
