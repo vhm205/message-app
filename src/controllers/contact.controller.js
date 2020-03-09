@@ -37,6 +37,18 @@ const removeRequestContactReceived = async (req, res) => {
     }
 }
 
+const acceptRequestContactReceived = async (req, res) => {
+    try {
+        const currentId = req.user._id
+        const contactId = req.body.uid
+
+        const acceptReq = await contact.acceptRequestContactReceived(currentId, contactId)
+        return res.status(200).send({ success: !!acceptReq })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+}
+
 const findUsersContact = async (req, res) => {
     let errorsArr = []
     let errorsRes = validationResult(req)
@@ -108,6 +120,7 @@ module.exports = {
     addRequestContact,
 	cancelRequestContact,
 	removeRequestContactReceived,
+	acceptRequestContactReceived,
 	readMoreContacts,
 	readMoreContactsSent,
 	readMoreContactsReceived
