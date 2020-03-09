@@ -55,7 +55,8 @@ NotificationSchema.statics = {
 }
 
 const NOTIFYCATION_TYPES = {
-	ADD_CONTACT : 'add_contact'
+	ADD_CONTACT : 'add_contact',
+	ACCEPT_CONTACT : 'accept_contact'
 }
 
 const NOTIFICATION_CONTENTS = {
@@ -64,6 +65,12 @@ const NOTIFICATION_CONTENTS = {
 			return `<div data-uid="${userId}" class="${!isReaded ? "notify-readed-false" : ""}">
 						<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="avatar"> 
 						<strong>${username}</strong> đã gửi cho bạn 1 lời mời kết bạn
+					</div>`
+		}
+		if(notifyType === NOTIFYCATION_TYPES.ACCEPT_CONTACT){
+			return `<div class="notify-readed-false" data-uid="${userId}">
+						<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notify"> 
+						<strong>${username}</strong> đã chấp nhận lời mời kết bạn
 					</div>`
 		}
 		return "Doesn't match with any notify type"

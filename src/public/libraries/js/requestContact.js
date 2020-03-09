@@ -79,10 +79,11 @@ function removeRequestContactReceived() {
 }
 
 socket.on('response-request-add-contact', user => {
-	const notify = `<div class="notify-readed-false" data-uid="${user.id}">
-						<img class="avatar-small" src="./libraries/images/users/${user.avatar}" alt="Notify"> 
-						<strong>${user.username}</strong> đã gửi cho bạn 1 lời mời kết bạn
-					</div>`;
+	const notify = `
+		<div class="notify-readed-false" data-uid="${user.id}">
+			<img class="avatar-small" src="./libraries/images/users/${user.avatar}" alt="Notify"> 
+			<strong>${user.username}</strong> đã gửi cho bạn 1 lời mời kết bạn
+		</div>`;
 	// Popup notification
 	$('.noti_content').prepend(notify) 
 	// Modal notification
@@ -105,7 +106,7 @@ socket.on('response-request-add-contact', user => {
 			<div class="user-address">
 				<span>&nbsp ${user.address}</span>
 			</div>
-			<div class="user-acccept-contact-received" data-uid="${user.id}">
+			<div class="user-accept-request-contact-received" data-uid="${user.id}">
 				Chấp nhận
 			</div>
 			<div class="user-remove-request-contact-received action-danger" data-uid="${user.id}">
@@ -115,6 +116,7 @@ socket.on('response-request-add-contact', user => {
 	</li>`
 	$('#request-contact-received ul').prepend(userInfoHtml)
 	removeRequestContactReceived()
+	acceptRequestContactReceived()
 })
 
 socket.on('response-remove-request-contact', user => {

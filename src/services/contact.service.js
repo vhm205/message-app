@@ -2,7 +2,7 @@ import UserModel from '../models/user.model';
 import ContactModel from '../models/contact.model';
 import { types, notifyModel } from '../models/notification.model';
 
-const LIMIT_NUMBER_TAKEN = 1
+const LIMIT_NUMBER_TAKEN = 2
 
 const addRequestContact = (userId, contactId) => {
     return new Promise(async (resolve, reject) => {
@@ -53,6 +53,25 @@ const removeRequestContactReceived = (userId, contactId) => {
 		
 		// Remove notify in DB
 		// await notifyModel.removeReqContactNotify(userId, contactId, types.ADD_CONTACT)
+        
+        return resolve(true)
+    })
+}
+
+const acceptRequestContactReceived = (userId, contactId) => {
+    return new Promise(async (resolve, reject) => {
+		const acceptRequestContact = await ContactModel.acceptRequestContactReceived(userId, contactId)		
+        if(acceptRequestContact.nModified === 0){
+            return reject(false)
+		}
+		
+		// Create notify in DB
+		const notifyItem = {
+			senderId: userId,
+			receiverId: contactId,
+			type: types.ACCEPT_CONTACT
+		}
+		await notifyModel.createNew(notifyItem);
         
         return resolve(true)
     })
@@ -218,6 +237,7 @@ module.exports = {
     addRequestContact,
 	cancelRequestContact,
 	removeRequestContactReceived,
+	acceptRequestContactReceived,
 	countAllContacts,
 	countAllContactsSend,
 	countAllContactsReceived,

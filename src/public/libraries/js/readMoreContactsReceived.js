@@ -28,7 +28,7 @@ $(document).ready(function() {
 						<div class="user-address">
 							<span>&nbsp ${contact.address}</span>
 						</div>
-						<div class="user-acccept-contact-received" data-uid="${contact._id}">
+						<div class="user-accept-request-contact-received" data-uid="${contact._id}">
 							Chấp nhận
 						</div>
 						<div class="user-remove-request-contact-received action-danger" data-uid="${contact._id}">
@@ -40,6 +40,7 @@ $(document).ready(function() {
 
 			$('#request-contact-received ul').append(moreContactReceived)
 			removeRequestContactReceived()
+			acceptRequestContactReceived()
 
 			$('.read-more-contacts-received-loader').css('display', 'none')
 			$(this).css('display', 'block')
