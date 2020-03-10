@@ -39,6 +39,26 @@ ContactSchema.statics = {
             ]
         })
 	},
+	removeContact(currentId, contactId){
+		return this.deleteOne({
+			$or: [
+                {
+                    $and: [
+                        { 'userId': currentId },
+                        { 'contactId': contactId },
+                        { 'status': true },
+                    ]
+                },
+                {
+                    $and: [
+                        { 'userId': contactId },
+                        { 'contactId': currentId },
+                        { 'status': true },
+                    ]
+                }
+            ]
+		})
+	},
     removeRequestContact(currentId, contactId){
         return this.deleteOne({
             $and: [
