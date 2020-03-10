@@ -22,6 +22,7 @@ function acceptRequestContactReceived() {
 				`)
 				$('#contacts ul').prepend(userInfo.get(0).outerHTML)
 				$(userInfo).remove()
+				removeContact()
 
 				// Notification in modal contact list
 				increaseNumberQueueContact('count-contacts', true)
@@ -85,6 +86,7 @@ socket.on('response-accept-request-contact-received', user => {
 	$('#request-contact-sent ul').find(`li[data-uid=${user.id}]`).remove()
 	$('#find-user ul').find(`li[data-uid=${user.id}]`).remove()
 	$('#contacts ul').prepend(userInfoHtml)
+	removeContact()
 })
 
 $(document).ready(function() {

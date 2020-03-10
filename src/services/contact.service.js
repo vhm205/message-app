@@ -30,12 +30,19 @@ const addRequestContact = (userId, contactId) => {
     })
 }
 
+const removeContact = (userId, contactId) => {
+    return new Promise(async (resolve, reject) => {
+		const rmContact = await ContactModel.removeContact(userId, contactId)		
+        if(rmContact.deletedCount === 0) return reject(false);
+
+        return resolve(true)
+    })
+}
+
 const cancelRequestContact = (userId, contactId) => {
     return new Promise(async (resolve, reject) => {
         const removeRequestContact = await ContactModel.removeRequestContact(userId, contactId)
-        if(removeRequestContact.n === 0){
-            return reject(false)
-		}
+        if(removeRequestContact.n === 0) return reject(false);
 		
 		// Remove notify in DB
 		await notifyModel.removeReqContactNotify(userId, contactId, types.ADD_CONTACT)
@@ -47,9 +54,7 @@ const cancelRequestContact = (userId, contactId) => {
 const removeRequestContactReceived = (userId, contactId) => {
     return new Promise(async (resolve, reject) => {
         const removeRequestContact = await ContactModel.removeRequestContactReceived(userId, contactId)
-        if(removeRequestContact.n === 0){
-            return reject(false)
-		}
+        if(removeRequestContact.n === 0) return reject(false);
 		
 		// Remove notify in DB
 		// await notifyModel.removeReqContactNotify(userId, contactId, types.ADD_CONTACT)
@@ -61,9 +66,7 @@ const removeRequestContactReceived = (userId, contactId) => {
 const acceptRequestContactReceived = (userId, contactId) => {
     return new Promise(async (resolve, reject) => {
 		const acceptRequestContact = await ContactModel.acceptRequestContactReceived(userId, contactId)		
-        if(acceptRequestContact.nModified === 0){
-            return reject(false)
-		}
+        if(acceptRequestContact.nModified === 0) return reject(false);
 		
 		// Create notify in DB
 		const notifyItem = {
@@ -236,6 +239,7 @@ module.exports = {
     findUsersContact,
     addRequestContact,
 	cancelRequestContact,
+	removeContact,
 	removeRequestContactReceived,
 	acceptRequestContactReceived,
 	countAllContacts,
