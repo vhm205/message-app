@@ -1,4 +1,4 @@
-import { notify, contact } from '../services/index';
+import { notify, contact, message } from '../services/index';
 
 const getHome = async (req, res) => {
 	const { _id } = req.user
@@ -23,11 +23,17 @@ const getHome = async (req, res) => {
 	const countAllContactsSend = await contact.countAllContactsSend(_id)
 	const countAllContactsReceived = await contact.countAllContactsReceived(_id)
 
+	// Get All Conversation of current user
+	const { userConversations, groupConversations, allConversations } = await message.getAllConversations(_id)
+
     res.render('main/home/home', {
         errors: req.flash('errors'),
         success: req.flash('success'),
 		notifyUnread: countNotifyUnread,
 		notifications: getNotify,
+		userConversations,
+		groupConversations,
+		allConversations,
 		contacts: getContacts,
 		contactsSent: getContactsSent,
 		contactsReceived: getContactsReceived,

@@ -49,7 +49,7 @@ UserSchema.statics = {
         return this.findById(id)
 	},
 	findNormalUserById(id){
-        return this.findById(id, { _id: 1, username: 1, address: 1, avatar: 1 })
+        return this.findById(id, { _id: 1, username: 1, address: 1, avatar: 1, createdAt: 1 })
     },
     removeById(id){
         return this.findOneAndDelete(id)
