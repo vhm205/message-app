@@ -2,7 +2,7 @@ import UserModel from '../models/user.model';
 import ContactModel from '../models/contact.model';
 import { types, notifyModel } from '../models/notification.model';
 
-const LIMIT_NUMBER_TAKEN = 2
+const LIMIT_NUMBER_TAKEN = 10
 
 const addRequestContact = (userId, contactId) => {
     return new Promise(async (resolve, reject) => {
