@@ -9,7 +9,7 @@ const ChatGroupSchema = new mongoose.Schema({
         { userId: String }
     ],
     createdAt: { type: Number, default: Date.now() },
-    updatedAt: { type: Number, default: null },
+    updatedAt: { type: Number, default: Date.now() },
     deletedAt: { type: Number, default: null }
 })
 

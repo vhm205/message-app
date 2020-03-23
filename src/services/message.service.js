@@ -9,10 +9,13 @@ const getAllConversations = userId => {
 		try {
 			const contacts = await ContactModel.getContacts(userId, LIMIT_CONVERSATION_TAKEN)
 			const userConversationsPromise = contacts.map(async contact => {
-				if(contact.contactId == userId){
-					return await UserModel.findNormalUserById(contact.userId)
-				}
-				return await UserModel.findNormalUserById(contact.contactId)
+				let userInfo = (contact.contactId == userId) ? 
+				await UserModel.findNormalUserById(contact.userId) : 
+				await UserModel.findNormalUserById(contact.contactId)
+
+				// Assign updatedAt field of contact into userInfo
+				userInfo.updatedAt = contact.updatedAt
+				return userInfo;
 			})
 
 			// Get contact of current user
@@ -24,8 +27,8 @@ const getAllConversations = userId => {
 			// Merge two arrays above into one
 			const allConversations = [...userConversations, ...groupConversations]
 
-			// Sort it! DESCENDING by createdAt
-			allConversations.sort((a, b) => b.createdAt - a.createdAt)
+			// Sort it! DESCENDING by updatedAt
+			allConversations.sort((a, b) => b.updatedAt - a.updatedAt)
 
 			resolve({
 				userConversations,
