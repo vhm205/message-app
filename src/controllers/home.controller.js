@@ -4,7 +4,7 @@ const getHome = async (req, res) => {
 	const { _id } = req.user
 
 	// Get 10 notify one time
-	const getNotify = await notify.getNotifications(_id)
+	const getNotif = await notify.getNotifications(_id)
 
 	// Get amount notifications unread
 	const countNotifyUnread = await notify.getNotifyUnRead(_id)
@@ -30,7 +30,7 @@ const getHome = async (req, res) => {
         errors: req.flash('errors'),
         success: req.flash('success'),
 		notifyUnread: countNotifyUnread,
-		notifications: getNotify,
+		notifications: getNotif,
 		userConversations,
 		groupConversations,
 		allConversations,

@@ -84,7 +84,7 @@ ContactSchema.statics = {
 				{ 'userId': contactId },
 				{ 'status': false }
 			]
-		}, { 'status': true })
+		}, { 'status': true, 'updatedAt': Date.now() })
 	},
 	getContacts(currentId, limit){
 		return this.find({
@@ -97,7 +97,7 @@ ContactSchema.statics = {
 				},
 				{ 'status': true }
 			]
-		}).sort({ 'createdAt': -1 }).limit(limit)
+		}).sort({ 'updatedAt': -1 }).limit(limit)
 	},
 	getContactsSent(currentId, limit){
 		return this.find({
@@ -155,7 +155,7 @@ ContactSchema.statics = {
 				},
 				{ 'status': true }
 			]
-		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit)
+		}).sort({ 'updatedAt': -1 }).skip(skip).limit(limit)
 	},
 	readMoreContactsSent(currentId, skip, limit){
 		return this.find({
