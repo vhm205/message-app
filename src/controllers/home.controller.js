@@ -1,4 +1,5 @@
 import { notify, contact, message } from '../services/index';
+import { bufferToBase64 } from '../helpers/clientHelpers';
 
 const getHome = async (req, res) => {
 	const { _id } = req.user
@@ -24,16 +25,20 @@ const getHome = async (req, res) => {
 	const countAllContactsReceived = await contact.countAllContactsReceived(_id)
 
 	// Get All Conversation of current user
-	const { userConversations, groupConversations, allConversations } = await message.getAllConversations(_id)
+	const { userConversations, 
+					groupConversations, 
+					allConversations, 
+					allConversationWithMess } = await message.getAllConversations(_id)
 
-    res.render('main/home/home', {
-        errors: req.flash('errors'),
-        success: req.flash('success'),
+	res.render('main/home/home', {
+		errors: req.flash('errors'),
+		success: req.flash('success'),
 		notifyUnread: countNotifyUnread,
 		notifications: getNotif,
 		userConversations,
 		groupConversations,
 		allConversations,
+		allConversationWithMess,
 		contacts: getContacts,
 		contactsSent: getContactsSent,
 		contactsReceived: getContactsReceived,
@@ -41,8 +46,9 @@ const getHome = async (req, res) => {
 		countAllContactsSend: countAllContactsSend,
 		countAllContactsReceived: countAllContactsReceived,
 		totalContactSendAndReceived: countAllContactsSend + countAllContactsReceived,
+		bufferToBase64: bufferToBase64,
 		user: req.user
-    })
+	})
 }
 
 module.exports = { getHome }

@@ -1,6 +1,7 @@
 import ContactModel from '../models/contact.model';
 import UserModel from '../models/user.model';
 import ChatGroupModel from '../models/chatGroup.model';
+import { messageModel, messageType, conversationType } from '../models/message.model';
 
 const LIMIT_CONVERSATION_TAKEN = 10
 
@@ -30,10 +31,22 @@ const getAllConversations = userId => {
 			// Sort it! DESCENDING by updatedAt
 			allConversations.sort((a, b) => b.updatedAt - a.updatedAt)
 
+			// Get conversation with messages
+			const allConversationsWithMessPromise = allConversations.map(async conversation => {
+				let getMessages = await messageModel.getMessages(userId, conversation._id, LIMIT_CONVERSATION_TAKEN)
+
+				conversation = conversation.toObject()
+				conversation.messages = getMessages
+				return conversation
+			})
+			const allConversationWithMess = await Promise.all(allConversationsWithMessPromise)
+			allConversationWithMess.sort((a, b) => b.updatedAt - a.updatedAt)
+
 			resolve({
 				userConversations,
 				groupConversations,
-				allConversations
+				allConversations,
+				allConversationWithMess
 			})
 		} catch (error) {
 			console.error(err);

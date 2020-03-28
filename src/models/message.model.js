@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const MessageSchema = new mongoose.Schema({
+		senderId: String,
+		receiverId: String,
+		messageType: String,
+		conversationType: String,
     sender: {
         id: String,
         username: String,
@@ -22,4 +26,40 @@ const MessageSchema = new mongoose.Schema({
     deletedAt: { type: Number, default: null }
 })
 
-module.exports = mongoose.model('Message', MessageSchema)
+MessageSchema.statics = {
+	getMessages(senderId, receiverId, limit){
+		return this.find({
+			$or: [
+				{
+					$and: [
+						{'senderId': senderId},
+						{'receiverId': receiverId},
+					]
+				},
+				{
+					$and: [
+						{'senderId': receiverId},
+						{'receiverId': senderId},
+					]
+				}
+			]
+		}).sort({ 'createdAt': 1 }).limit(limit)
+	}
+}
+
+const CONVERSATION_TYPE = {
+	PERSONAL: 'personal',
+	GROUP: 'group'
+}
+
+const MESSAGE_TYPE = {
+	TEXT: 'text',
+	IMAGE: 'image',
+	FILE: 'file'
+}
+
+module.exports = {
+	messageModel: mongoose.model('Message', MessageSchema),
+	conversationType: CONVERSATION_TYPE,
+	messageType: MESSAGE_TYPE
+}
