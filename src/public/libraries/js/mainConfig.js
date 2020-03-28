@@ -153,6 +153,14 @@ function changeTypeChat() {
 	})
 }
 
+function changeScreenChat() {
+	$('.room-chat').off('click').on('click', function(e){
+		$('.room-chat li').removeClass('active')
+		$(this).find('li').addClass('active')
+		$(this).tab('show')
+	})
+}
+
 $(document).ready(function() {
   // Hide số thông báo trên đầu icon mở modal contact
   showModalContacts();
@@ -182,5 +190,10 @@ $(document).ready(function() {
 
   flashMasterNotify();
 
-  changeTypeChat()
+	changeTypeChat();
+	
+	changeScreenChat();
+
+	// Active first contact
+	$('#all-chat a:first-child li').addClass('active')
 });
