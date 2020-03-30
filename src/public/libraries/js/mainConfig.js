@@ -14,15 +14,16 @@ function nineScrollLeft() {
   });
 }
 
-function nineScrollRight() {
-  $('.right .chat').niceScroll({
+function nineScrollRight(conversationId) {
+	const chatContent = $(`.right .chat[data-chat=${conversationId}]`)
+  chatContent.niceScroll({
     smoothscroll: true,
     horizrailenabled: false,
     cursorcolor: '#ECECEC',
     cursorwidth: '7px',
     scrollspeed: 50
   });
-  $('.right .chat').scrollTop($('.right .chat')[0].scrollHeight);
+  chatContent.scrollTop(chatContent[0].scrollHeight);
 }
 
 function enableEmojioneArea(chatId) {
@@ -85,25 +86,31 @@ function configNotification() {
 }
 
 function gridPhotos(layoutNumber) {
-  let countRows = Math.ceil($('#imagesModal').find('div.all-images>img').length / layoutNumber);
-  let layoutStr = new Array(countRows).fill(layoutNumber).join("");
-  $('#imagesModal').find('div.all-images').photosetGrid({
-    highresLinks: true,
-    rel: 'withhearts-gallery',
-    gutter: '2px',
-    layout: layoutStr,
-    onComplete: function() {
-      $('.all-images').css({
-        'visibility': 'visible'
-      });
-      $('.all-images a').colorbox({
-        photo: true,
-        scalePhotos: true,
-        maxHeight: '90%',
-        maxWidth: '90%'
-      });
-    }
-  });
+	$('.show-images').off('click').on('click', function(e){
+		e.preventDefault()
+
+		let modalImageId = $($(this).attr('href'))
+
+		let countRows = Math.ceil(modalImageId.find('.all-images>img').length / layoutNumber);
+		let layoutStr = new Array(countRows).fill(layoutNumber).join("");
+		modalImageId.find('.all-images').photosetGrid({
+			highresLinks: true,
+			rel: 'withhearts-gallery',
+			gutter: '2px',
+			layout: layoutStr,
+			onComplete: function() {
+				modalImageId.find('.all-images').css({
+					'visibility': 'visible'
+				});
+				modalImageId.find('.all-images a').colorbox({
+					photo: true,
+					scalePhotos: true,
+					maxHeight: '90%',
+					maxWidth: '90%'
+				});
+			}
+		});
+	})
 }
 
 function addFriendsToGroup() {
@@ -158,6 +165,9 @@ function changeScreenChat() {
 		$('.room-chat li').removeClass('active')
 		$(this).find('li').addClass('active')
 		$(this).tab('show')
+
+		// Cấu hình thanh cuộn chat khi click vào user bên leftSide
+		nineScrollRight($(this).find('li').data('chat'));
 	})
 }
 
@@ -170,7 +180,6 @@ $(document).ready(function() {
 
   // Cấu hình thanh cuộn
   nineScrollLeft();
-  nineScrollRight();
 
   // Bật emoji, tham số truyền vào là id của box nhập nội dung tin nhắn
   enableEmojioneArea("17071995");
