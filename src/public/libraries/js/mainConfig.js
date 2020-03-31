@@ -168,6 +168,7 @@ function changeScreenChat() {
 
 		// Cấu hình thanh cuộn chat khi click vào user bên leftSide
 		nineScrollRight($(this).find('li').data('chat'));
+		gridPhotos(5);
 	})
 }
 
@@ -189,7 +190,7 @@ $(document).ready(function() {
 
   // Hiển thị hình ảnh grid slide trong modal tất cả ảnh, tham số truyền vào là số ảnh được hiển thị trên 1 hàng.
   // Tham số chỉ được phép trong khoảng từ 1 đến 5
-  gridPhotos(5);
+  // gridPhotos(5);
 
   // Thêm người dùng vào danh sách liệt kê trước khi tạo nhóm trò chuyện
   addFriendsToGroup();

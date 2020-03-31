@@ -29,7 +29,7 @@ const getAllConversations = userId => {
 			const allConversations = [...userConversations, ...groupConversations]
 
 			// Sort it! DESCENDING by updatedAt
-			allConversations.sort((a, b) => b.updatedAt - a.updatedAt)
+			// allConversations.sort((a, b) => b.updatedAt - a.updatedAt)
 
 			// Get conversation with messages
 			const allConversationsWithMessPromise = allConversations.map(async conversation => {
@@ -42,12 +42,7 @@ const getAllConversations = userId => {
 			const allConversationWithMess = await Promise.all(allConversationsWithMessPromise)
 			allConversationWithMess.sort((a, b) => b.updatedAt - a.updatedAt)
 
-			resolve({
-				userConversations,
-				groupConversations,
-				allConversations,
-				allConversationWithMess
-			})
+			resolve(allConversationWithMess)
 		} catch (error) {
 			console.error(err);
 			reject(err)
