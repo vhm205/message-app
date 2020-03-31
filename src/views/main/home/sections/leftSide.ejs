@@ -12,7 +12,8 @@
 		<div class="tab-content">
 			<div class="tab-pane active" id="all-chat">
 				<ul class="people no-padding-start">
-					<% allConversations.forEach(function(conversation){ %>
+					<% allConversationWithMess.forEach(function(conversation){ %>
+						<% let lastMessage = getLastIndex(conversation.messages) %>
 						<% if(conversation.members){ %>
 							<a href="#uid_<%= conversation._id %>" class="room-chat" data-target="#to_<%= conversation._id %>">
 								<li class="person group-chat" data-chat="<%= conversation._id %>">
@@ -29,8 +30,20 @@
 											<% } %>
 										</span> 
 									</span>
-									<span class="time">Hai giờ trước</span>
-									<span class="preview">Chào cả nhóm</span>
+									<span class="time">
+										<%= convertTimstampToHumanTime(lastMessage.createdAt) %>
+									</span>
+									<span class="preview">
+										<% if(lastMessage.messageType === 'text'){ %>
+											<%= lastMessage.text %>
+										<% } %>
+										<% if(lastMessage.messageType === 'image'){ %>
+											Hình ảnh
+										<% } %>
+										<% if(lastMessage.messageType === 'file'){ %>
+											File đính kèm
+										<% } %>
+									</span>
 								</li>
 							</a>
 						<% } else{ %>
@@ -47,8 +60,20 @@
 											<%= conversation.username %>
 										<% } %>
 									</span>
-									<span class="time">Một phút trước</span>
-									<span class="preview">Xin chào</span>
+									<span class="time">
+										<%= convertTimstampToHumanTime(lastMessage.createdAt) %>
+									</span>
+									<span class="preview">
+										<% if(lastMessage.messageType === 'text'){ %>
+											<%= lastMessage.text %>
+										<% } %>
+										<% if(lastMessage.messageType === 'image'){ %>
+											Hình ảnh
+										<% } %>
+										<% if(lastMessage.messageType === 'file'){ %>
+											File đính kèm
+										<% } %>
+									</span>
 								</li>
 							</a>
 						<% } %>
@@ -70,7 +95,9 @@
 			</div>
 			<div class="tab-pane" id="user-chat">
 				<ul class="people no-padding-start">
-					<% userConversations.forEach(function(conversation){ %>
+					<% allConversationWithMess.forEach(function(conversation){ %>
+						<% if(!conversation.members){ %>
+						<% let lastMessage = getLastIndex(conversation.messages) %>
 						<a href="#uid_<%= conversation._id %>" class="room-chat" data-target="#to_<%= conversation._id %>">
 							<li class="person" data-chat="<%= conversation._id %>">
 								<div class="left-avatar">
@@ -84,10 +111,23 @@
 										<%= conversation.username %>
 									<% } %>
 								</span>
-								<span class="time">Một phút trước</span>
-								<span class="preview">Xin chào</span>
+								<span class="time">
+									<%= convertTimstampToHumanTime(lastMessage.createdAt) %>
+								</span>
+								<span class="preview">
+									<% if(lastMessage.messageType === 'text'){ %>
+										<%= lastMessage.text %>
+									<% } %>
+									<% if(lastMessage.messageType === 'image'){ %>
+										Hình ảnh
+									<% } %>
+									<% if(lastMessage.messageType === 'file'){ %>
+										File đính kèm
+									<% } %>
+								</span>
 							</li>
 						</a>
+						<% } %>
 					<% }) %>
 				</ul>
 				<div class="read-more-user-chat">
@@ -106,7 +146,9 @@
 			</div>
 			<div class="tab-pane" id="group-chat">
 				<ul class="people no-padding-start">
-					<% groupConversations.forEach(function(conversation){ %>
+					<% allConversationWithMess.forEach(function(conversation){ %>
+						<% if(conversation.members){ %>
+						<% let lastMessage = getLastIndex(conversation.messages) %>
 						<a href="#uid_<%= conversation._id %>" class="room-chat" data-target="#to_<%= conversation._id %>">
 							<li class="person group-chat" data-chat="<%= conversation._id %>">
 								<div class="left-avatar">
@@ -122,10 +164,23 @@
 										<% } %>
 									</span> 
 								</span>
-								<span class="time">Hai giờ trước</span>
-								<span class="preview">Chào cả nhóm</span>
+								<span class="time">
+									<%= convertTimstampToHumanTime(lastMessage.createdAt) %>
+								</span>
+								<span class="preview">
+									<% if(lastMessage.messageType === 'text'){ %>
+										<%= lastMessage.text %>
+									<% } %>
+									<% if(lastMessage.messageType === 'image'){ %>
+										Hình ảnh
+									<% } %>
+									<% if(lastMessage.messageType === 'file'){ %>
+										File đính kèm
+									<% } %>
+								</span>
 							</li>
 						</a>
+						<% } %>
 					<% }) %>
 				</ul>
 				<div class="read-more-group-chat">
