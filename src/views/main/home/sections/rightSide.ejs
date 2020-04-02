@@ -27,20 +27,20 @@
 								<% if(message.messageType === 'text') { %>
 									<div class="bubble <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
-										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" />
+										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" title="<%= message.sender.name %>" />
 										<%= message.text %>
 									</div>
 								<% } %>
 								<% if(message.messageType === 'image') { %>
 									<div class="bubble bubble-image-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>" data-mess-id="<%= message._id %>">
-										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" />
+										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" title="<%= message.sender.name %>" />
 										<img src="data:<%= message.file.contentType %>; base64, <%= bufferToBase64(message.file.data) %>" class="show-image-chat">
 									</div>
 								<% } %>
 								<% if(message.messageType === 'file') { %>
-									<div class="bubble me bubble-image-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
+									<div class="bubble bubble-image-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
-										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" />
+										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" title="<%= message.sender.name %>" />
 										<a href="data:<%= message.file.contentType %>; base64, <%= message.file.data %>" 
 										download="<%= message.file.fileName %>">
 												<%= message.file.fileName %>
@@ -51,7 +51,7 @@
 							</div>
 						</div>
 						<div class="write" data-chat="<%= conversation._id %>">
-								<input type="text" class="write-chat" data-chat="<%= conversation._id %>">
+								<input type="text" class="write-chat input-chat-group" data-chat="<%= conversation._id %>">
 								<div class="icons">
 										<a href="#" class="icon-chat" data-chat="<%= conversation._id %>"><i class="fa fa-smile-o"></i></a>
 										<label for="image-chat">
@@ -96,22 +96,19 @@
 									<div class="bubble 
 									<% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
-										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" />
 										<%= message.text %>
 									</div>
 								<% } %>
 								<% if(message.messageType === 'image') { %>
 									<div class="bubble bubble-image-file
 									<% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>" data-mess-id="<%= message._id %>">
-										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" />
 										<img src="data:<%= message.file.contentType %>; base64, <%= bufferToBase64(message.file.data) %>" class="show-image-chat">
 									</div>
 								<% } %>
 								<% if(message.messageType === 'file') { %>
-									<div class="bubble me bubble-image-file 
+									<div class="bubble bubble-image-file 
 									<% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
-										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" />
 										<a href="data:<%= message.file.contentType %>; base64, <%= message.file.data %>" 
 										download="<%= message.file.fileName %>">
 												<%= message.file.fileName %>
@@ -143,7 +140,6 @@
 				<% } %>
 			<% }); %>
 		</div>
-    
 
     <!-- Trường hợp tài khoản chưa có bạn bè thì hiện màn hình dưới. -->
     <!-- <div class="right active-chat" data-chat="person-default">

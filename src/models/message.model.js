@@ -7,12 +7,12 @@ const MessageSchema = new mongoose.Schema({
 		conversationType: String,
     sender: {
         id: String,
-        username: String,
+        name: String,
         avatar: String
     },
     receiver: {
         id: String,
-        username: String,
+        name: String,
         avatar: String
     },
     text: String,
@@ -27,7 +27,7 @@ const MessageSchema = new mongoose.Schema({
 })
 
 MessageSchema.statics = {
-	getMessages(senderId, receiverId, limit){
+	getMessagesInPersonal(senderId, receiverId, limit){
 		return this.find({
 			$or: [
 				{
@@ -44,6 +44,9 @@ MessageSchema.statics = {
 				}
 			]
 		}).sort({ 'createdAt': 1 }).limit(limit)
+	},
+	getMessagesInGroup(receiverId, limit){
+		return this.find({'receiverId': receiverId}).sort({ 'createdAt': 1 }).limit(limit)
 	}
 }
 

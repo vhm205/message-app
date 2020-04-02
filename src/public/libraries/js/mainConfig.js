@@ -27,7 +27,8 @@ function nineScrollRight(conversationId) {
 }
 
 function enableEmojioneArea(chatId) {
-  $('.write-chat[data-chat="' + chatId + '"]').emojioneArea({
+	const writeChat = $(`.write-chat[data-chat="${chatId}"]`)
+  writeChat.emojioneArea({
     standalone: false,
     pickerPosition: 'top',
     filtersPosition: 'bottom',
@@ -39,11 +40,14 @@ function enableEmojioneArea(chatId) {
     shortnames: false,
     events: {
       keyup: function(editor, event) {
-        $('.write-chat').val(this.getText());
-      }
+        writeChat.val(this.getText());
+			},
+			focus: function(){
+				chatText(chatId)
+			}
     },
   });
-  $('.icon-chat').bind('click', function(event) {
+  $('.icon-chat').on('click', function(event) {
     event.preventDefault();
     $('.emojionearea-button').click();
     $('.emojionearea-editor').focus();
@@ -166,9 +170,11 @@ function changeScreenChat() {
 		$(this).find('li').addClass('active')
 		$(this).tab('show')
 
+		const chatId = $(this).find('li').data('chat')
 		// Cấu hình thanh cuộn chat khi click vào user bên leftSide
-		nineScrollRight($(this).find('li').data('chat'));
-		gridPhotos(5);
+		nineScrollRight(chatId);
+		// Bật emoji, tham số truyền vào là id của box nhập nội dung tin nhắn
+		enableEmojioneArea(chatId);
 	})
 }
 
@@ -182,15 +188,12 @@ $(document).ready(function() {
   // Cấu hình thanh cuộn
   nineScrollLeft();
 
-  // Bật emoji, tham số truyền vào là id của box nhập nội dung tin nhắn
-  enableEmojioneArea("17071995");
-
   // Icon loading khi chạy ajax
   ajaxLoading();
 
   // Hiển thị hình ảnh grid slide trong modal tất cả ảnh, tham số truyền vào là số ảnh được hiển thị trên 1 hàng.
   // Tham số chỉ được phép trong khoảng từ 1 đến 5
-  // gridPhotos(5);
+  gridPhotos(5);
 
   // Thêm người dùng vào danh sách liệt kê trước khi tạo nhóm trò chuyện
   addFriendsToGroup();
@@ -205,5 +208,5 @@ $(document).ready(function() {
 	changeScreenChat();
 
 	// Active first contact
-	$('#all-chat a:first-child li').addClass('active')
+	$('#all-chat a:first-child li').trigger('click')
 });
