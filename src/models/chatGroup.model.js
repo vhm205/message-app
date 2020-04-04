@@ -14,6 +14,18 @@ const ChatGroupSchema = new mongoose.Schema({
 })
 
 ChatGroupSchema.statics = {
+	createNew(item){
+		return this.create(item)
+	},
+	updateChatGroupById(id, newMessageAmount){
+		return this.findByIdAndUpdate(id, {
+			'messageAmount': newMessageAmount,
+			'updatedAt': Date.now()
+		})
+	},
+	getChatGroupById(id){
+		return this.findById(id)
+	},
 	getChatGroup(currentId, limit){
 		return this.find({
 			'members': {

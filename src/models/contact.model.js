@@ -10,63 +10,81 @@ const ContactSchema = new mongoose.Schema({
 })
 
 ContactSchema.statics = {
-    createNew(item){
-        return this.create(item)
+	createNew(item){
+		return this.create(item)
 	},
-    findAllByUser(currentId){
-        return this.find({
-            $or: [
-                { 'userId': currentId },
-                { 'contactId': currentId }
-            ]
-        })
+	findAllByUser(currentId){
+		return this.find({
+			$or: [
+				{ 'userId': currentId },
+				{ 'contactId': currentId }
+			]
+		})
 	},
-    checkExists(currentId, contactId){
-        return this.findOne({
-            $or: [
-                {
-                    $and: [
-                        { 'userId': currentId },
-                        { 'contactId': contactId }
-                    ]
-                },
-                {
-                    $and: [
-                        { 'userId': contactId },
-                        { 'contactId': currentId }
-                    ]
-                }
-            ]
-        })
+	checkExists(currentId, contactId){
+		return this.findOne({
+			$or: [
+				{
+					$and: [
+						{ 'userId': currentId },
+						{ 'contactId': contactId }
+					]
+				},
+				{
+					$and: [
+						{ 'userId': contactId },
+						{ 'contactId': currentId }
+					]
+				}
+			]
+		})
+	},
+	updateContactWhenHasMessage(currentId, contactId){
+		return this.updateOne({
+			$or: [
+				{
+					$and: [
+						{ 'userId': currentId },
+						{ 'contactId': contactId }
+					]
+				},
+				{
+					$and: [
+						{ 'userId': contactId },
+						{ 'contactId': currentId }
+					]
+				}
+			]
+		}, { 'updatedAt': Date.now() })
 	},
 	removeContact(currentId, contactId){
 		return this.deleteOne({
 			$or: [
-                {
-                    $and: [
-                        { 'userId': currentId },
-                        { 'contactId': contactId },
-                        { 'status': true },
-                    ]
-                },
-                {
-                    $and: [
-                        { 'userId': contactId },
-                        { 'contactId': currentId },
-                        { 'status': true },
-                    ]
-                }
-            ]
+				{
+					$and: [
+						{ 'userId': currentId },
+						{ 'contactId': contactId },
+						{ 'status': true },
+					]
+				},
+				{
+					$and: [
+						{ 'userId': contactId },
+						{ 'contactId': currentId },
+						{ 'status': true },
+					]
+				}
+			]
 		})
 	},
-    removeRequestContact(currentId, contactId){
-        return this.deleteOne({
-            $and: [
-                { 'userId': currentId },
-                { 'contactId': contactId },
-                { 'status': false }
-            ]
-        })
+	removeRequestContact(currentId, contactId){
+		return this.deleteOne({
+			$and: [
+				{ 'userId': currentId },
+				{ 'contactId': contactId },
+				{ 'status': false }
+			]
+		})
 	},
 	removeRequestContactReceived(currentId, contactId){
 		return this.deleteOne({

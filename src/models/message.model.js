@@ -27,6 +27,9 @@ const MessageSchema = new mongoose.Schema({
 })
 
 MessageSchema.statics = {
+	createNew(item){
+		return this.create(item)
+	},
 	getMessagesInPersonal(senderId, receiverId, limit){
 		return this.find({
 			$or: [

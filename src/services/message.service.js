@@ -1,9 +1,11 @@
-import ContactModel from '../models/contact.model';
 import UserModel from '../models/user.model';
+import ContactModel from '../models/contact.model';
 import ChatGroupModel from '../models/chatGroup.model';
-import { messageModel } from '../models/message.model';
+import { messageModel, conversationType, messageType } from '../models/message.model';
+import { transErrors } from '../../lang/vi';
+import { app } from '../config/app';
 
-const LIMIT_CONVERSATION_TAKEN = 10
+const LIMIT_CONVERSATION_TAKEN = 10;
 
 const getAllConversations = userId => {
 	return new Promise(async (resolve, reject) => {
@@ -45,13 +47,77 @@ const getAllConversations = userId => {
 			allConversationWithMess.sort((a, b) => b.updatedAt - a.updatedAt)
 
 			resolve(allConversationWithMess)
-		} catch (error) {
+		} catch (err) {
 			console.error(err);
-			reject(err)
+			return reject(err)
+		}
+	})
+}
+
+const addNewMessage = (sender, receiverId, text, isChatGroup) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			if(isChatGroup === 'true'){
+				// Check group chat is exists
+				const getGroupReceiver = await ChatGroupModel.getChatGroupById(receiverId)
+				if(!getGroupReceiver) return reject(transErrors.group_not_found)
+
+				const receiver = {
+					id: getGroupReceiver._id,
+					name: getGroupReceiver.name,
+					avatar: app.avatar_group_chat
+				}
+				const messageItem = {
+					senderId: sender.id,
+					receiverId: receiver.id,
+					messageType: messageType.TEXT,
+					conversationType: conversationType.GROUP,
+					sender: sender,
+					receiver: receiver,
+					text: text,
+					createdAt: Date.now()
+				}
+				// Add new message to group chat
+				const newMessage = await messageModel.createNew(messageItem)
+				// Update Message Amount in Chat Group Model
+				await ChatGroupModel.updateChatGroupById(receiverId, getGroupReceiver.messageAmount + 1)
+
+				return resolve(newMessage)
+			}
+
+			// Check user receiver is exists
+			const getUserReceiver = await UserModel.findNormalUserById(receiverId)
+			if(!getUserReceiver) return reject(transErrors.personal_not_found)
+
+			const receiver = {
+				id: getUserReceiver._id,
+				name: getUserReceiver.username,
+				avatar: getUserReceiver.avatar
+			}
+			const messageItem = {
+				senderId: sender.id,
+				receiverId: receiver.id,
+				messageType: messageType.TEXT,
+				conversationType: conversationType.PERSONAL,
+				sender: sender,
+				receiver: receiver,
+				text: text,
+				createdAt: Date.now()
+			}
+			// Add new message
+			const newMessage = await messageModel.createNew(messageItem);
+			// Update Contact When has the new message
+			await ContactModel.updateContactWhenHasMessage(sender.id, receiverId);
+
+			return resolve(newMessage);
+		} catch (err) {
+			console.error(err);
+			return reject(err);
 		}
 	})
 }
 
 module.exports = {
-	getAllConversations
+	getAllConversations,
+	addNewMessage
 }

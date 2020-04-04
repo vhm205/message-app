@@ -40,7 +40,10 @@ function enableEmojioneArea(chatId) {
     shortnames: false,
     events: {
       keyup: function(editor, event) {
-        writeChat.val(this.getText());
+				writeChat.val(this.getText());
+				if(event.keyCode === 13){
+					setTimeout(() => this.setText(''));
+				}
 			},
 			focus: function(){
 				chatText(chatId)
