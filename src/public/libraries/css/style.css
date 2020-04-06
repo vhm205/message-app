@@ -1471,3 +1471,8 @@ label:focus,
 	width: 100%;
 	height: 100%;
 }
+
+.number-members,
+.number-messages{
+	color: #2c3e50 !important;
+}

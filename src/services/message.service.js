@@ -6,6 +6,7 @@ import { transErrors } from '../../lang/vi';
 import { app } from '../config/app';
 
 const LIMIT_CONVERSATION_TAKEN = 10;
+const LIMIT_MESSAGE_TAKEN = 15;
 
 const getAllConversations = userId => {
 	return new Promise(async (resolve, reject) => {
@@ -37,10 +38,10 @@ const getAllConversations = userId => {
 			const allConversationsWithMessPromise = allConversations.map(async conversation => {
 				conversation = conversation.toObject()
 				let getMessages = conversation.members ? 
-				await messageModel.getMessagesInGroup(conversation._id, LIMIT_CONVERSATION_TAKEN) :
-				await messageModel.getMessagesInPersonal(userId, conversation._id, LIMIT_CONVERSATION_TAKEN);
-
-				conversation.messages = getMessages;
+				await messageModel.getMessagesInGroup(conversation._id, LIMIT_MESSAGE_TAKEN) :
+				await messageModel.getMessagesInPersonal(userId, conversation._id, LIMIT_MESSAGE_TAKEN);
+				
+				conversation.messages = getMessages.reverse();
 				return conversation;
 			})
 			const allConversationWithMess = await Promise.all(allConversationsWithMessPromise)

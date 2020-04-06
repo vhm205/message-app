@@ -138,7 +138,7 @@ function addFriendsToGroup() {
 }
 
 function cancelCreateGroup() {
-  $('#cancel-group-chat').bind('click', function() {
+  $('#cancel-group-chat').on('click', function() {
     $('#groupChatModal .list-user-added').hide();
     if ($('ul#friends-added>li').length) {
       $('ul#friends-added>li').each(function(index) {
@@ -169,16 +169,25 @@ function changeTypeChat() {
 
 function changeScreenChat() {
 	$('.room-chat').off('click').on('click', function(e){
-		$('.room-chat li').removeClass('active')
-		$(this).find('li').addClass('active')
-		$(this).tab('show')
-
 		const chatId = $(this).find('li').data('chat')
+
+		$('.room-chat li').removeClass('active')
+		$(`.person[data-chat=${chatId}]`).addClass('active')
+		$(this).tab('show') 
+
 		// Cấu hình thanh cuộn chat khi click vào user bên leftSide
 		nineScrollRight(chatId);
 		// Bật emoji, tham số truyền vào là id của box nhập nội dung tin nhắn
 		enableEmojioneArea(chatId);
 	})
+}
+
+function convertToEmoij() {
+	$(".convert-emoji").each(function() {
+		const original = $(this).html();
+		const converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
 }
 
 $(document).ready(function() {
@@ -204,11 +213,15 @@ $(document).ready(function() {
   // Action hủy việc tạo nhóm trò chuyện
   cancelCreateGroup();
 
+	// Convert emoji unicode to image
+	convertToEmoij();
+
   flashMasterNotify();
 
 	changeTypeChat();
 	
 	changeScreenChat();
+
 
 	// Active first contact
 	$('#all-chat a:first-child li').trigger('click')
