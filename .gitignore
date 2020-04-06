@@ -1,5 +1,7 @@
 node_modules/
 .env
-src/public/libraries/bower_components
 _config.yml
 .swp
+
+src/public/libraries/bower_components
+src/public/libraries/emojione
