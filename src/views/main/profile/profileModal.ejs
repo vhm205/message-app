@@ -40,9 +40,9 @@
 
                                     <% if(user.local.email) { %>
                                         <h3>Local account.</h3>
-                                    <% } else if(user.facebook.email) { %>
+                                    <% } else if(user.facebook) { %>
                                         <h3>Facebook account.</h3>
-                                    <% } else { %>
+                                    <% } else if(user.google) { %>
                                         <h3>Google account.</h3>
                                     <% } %> 
                                     
@@ -53,9 +53,9 @@
                                             <div class="form-control" disabled>
                                                 <% if(user.local.email) { %>
                                                     <%= user.local.email %>
-                                                <% } else if(user.facebook.email) { %>
+                                                <% } else if(user.facebook) { %>
                                                     <%= user.facebook.email %>
-                                                <% } else { %>
+                                                <% } else if(user.google) { %>
                                                     <%= user.google.email %>
                                                 <% } %> 
                                             </div>

@@ -1,6 +1,7 @@
 import passport from 'passport';
 import passportFacebook from 'passport-facebook';
-import User from '../../models/user.model';
+import UserModel from '../../models/user.model';
+import ChatGroupModel from '../../models/chatGroup.model';
 import { transErrors, transSuccesses } from '../../../lang/vi';
 
 const FacebookStrategy = passportFacebook.Strategy
@@ -14,7 +15,7 @@ const initPassportFacebook = () => {
         profileFields: ["displayName", "gender", "photos", "email"]
     }, async (req, accessToken, _, profile, done) => {
         try {
-            let user = await User.findByFacebookUid(profile.id)
+            let user = await UserModel.findByFacebookUid(profile.id)
             if(user){ 
                 return done(null, user, req.flash('success', transSuccesses.login_success(user.username)))
             }
@@ -30,7 +31,7 @@ const initPassportFacebook = () => {
                 }
             }
 
-            const newUserFacebook = await User.createNew(newUser)
+            const newUserFacebook = await UserModel.createNew(newUser)
             
             return done(null, newUserFacebook, req.flash('success', transSuccesses.login_success(newUserFacebook.username)))
         } catch (err) {
@@ -45,10 +46,18 @@ const initPassportFacebook = () => {
     })
 
     // This is called by passport.session()
-    passport.deserializeUser((id, done) => {
-        User.findUserById(id)
-            .then(user => done(null, user))
-            .catch(error => done(error, null))
+    passport.deserializeUser(async (id, done) => {
+			try {
+				let user = await UserModel.findUserById(id)
+				let getChatGroup = await ChatGroupModel.getGroupByUserId(user._id)
+
+				user = user.toObject()
+				user.chatGroupIds = getChatGroup
+
+				done(null, user)
+			} catch (error) {
+				done(error, null)
+			}
     })
 }
 
