@@ -46,6 +46,7 @@ function enableEmojioneArea(chatId) {
 				}
 			},
 			focus: function(){
+				$(`.person[data-chat=${chatId}]`).find('.time, .preview').removeClass('active')
 				chatText(chatId)
 			}
     },

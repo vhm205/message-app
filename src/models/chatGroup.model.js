@@ -32,6 +32,13 @@ ChatGroupSchema.statics = {
 				$elemMatch: { 'userId': currentId }
 			}
 		}).limit(limit)
+	},
+	getGroupByUserId(currentId){
+		return this.find({
+			'members': {
+				$elemMatch: { 'userId': currentId }
+			}
+		}, { _id: 1 })
 	}
 }
 

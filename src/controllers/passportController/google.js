@@ -1,6 +1,7 @@
 import passport from 'passport';
 import passportGoogle from 'passport-google-oauth20';
-import User from '../../models/user.model';
+import UserModel from '../../models/user.model';
+import ChatGroupModel from '../../models/chatGroup.model';
 import { transErrors, transSuccesses } from '../../../lang/vi';
 
 const GoogleStrategy = passportGoogle.Strategy
@@ -13,7 +14,7 @@ const initPassportGoogle = () => {
         passReqToCallback: true
     }, async (req, accessToken, _, profile, done) => {
         try {
-            let user = await User.findByGoogleUid(profile.id)
+            let user = await UserModel.findByGoogleUid(profile.id)
             if(user){ 
                 return done(null, user, req.flash('success', transSuccesses.login_success(user.username)))
             }
@@ -29,7 +30,7 @@ const initPassportGoogle = () => {
                 }
             }
 
-            const newUserGoogle = await User.createNew(newUser)
+            const newUserGoogle = await UserModel.createNew(newUser)
 
             return done(null, newUserGoogle, req.flash('success', transSuccesses.login_success(newUserGoogle.username)))
         } catch (err) {
@@ -44,10 +45,18 @@ const initPassportGoogle = () => {
     })
 
     // This is called by passport.session()
-    passport.deserializeUser((id, done) => {
-        User.findUserById(id)
-            .then(user => done(null, user))
-            .catch(error => done(error, null))
+    passport.deserializeUser(async (id, done) => {
+			try {
+				let user = await UserModel.findUserById(id)
+				let getChatGroup = await ChatGroupModel.getGroupByUserId(user._id)
+
+				user = user.toObject()
+				user.chatGroupIds = getChatGroup
+
+				done(null, user)
+			} catch (error) {
+				done(error, null)
+			}
     })
 }
 
