@@ -41,7 +41,7 @@ function chatText(chatId) {
 				userLeft.find('.time').text(moment(createdAt).locale('vi').startOf('seconds').fromNow());
 				userLeft.find('.preview').text(emojione.toImage(messageOfMe.text()));
 				
-				// Move conversation to the top (click + .namespace)
+				// Move conversation to the top (event + .namespace)
 				userLeft.on('moveTop.moveConversationToTop', function(){
 					$(this).closest('ul').prepend($(this).parent());
 					userLeft.off('moveTop.moveConversationToTop');
@@ -49,7 +49,13 @@ function chatText(chatId) {
 				userLeft.trigger('moveTop.moveConversationToTop');
 
 				// Handle realtime chat message 
-				socket.emit('add-new-message', { message: data.message })
+				socket.emit('add-new-message', { message: data.message });
+
+				// Remove typing image
+				$(`.chat[data-chat=${chatId}]`).find('.bubble-typing-gif').remove();
+
+				// Turn off typing
+				typingOff(chatId);
 			}).fail(err => alertify.notify(err.responseJSON[0], 'error', 5))
 		}
 	})
@@ -90,7 +96,7 @@ socket.on('response-add-new-message', response => {
 		userLeft.find('.time, .preview').addClass('active');
 	}
 
-	// Move conversation to the top (click + .namespace)
+	// Move conversation to the top (event + .namespace)
 	userLeft.on('moveTop.moveConversationToTop', function(){
 		$(this).closest('ul').prepend($(this).parent());
 		userLeft.off('moveTop.moveConversationToTop');
