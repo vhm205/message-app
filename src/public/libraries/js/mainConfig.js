@@ -41,13 +41,25 @@ function enableEmojioneArea(chatId) {
     events: {
       keyup: function(editor, event) {
 				writeChat.val(this.getText());
+
+				// Is chating
+				typingOn(chatId);
+
 				if(event.keyCode === 13){
 					setTimeout(() => this.setText(''));
 				}
 			},
 			focus: function(){
-				$(`.person[data-chat=${chatId}]`).find('.time, .preview').removeClass('active')
-				chatText(chatId)
+				$(`.person[data-chat=${chatId}]`).find('.time, .preview').removeClass('active');
+				chatText(chatId);
+
+				// After 3 seconds, off typing
+				setTimeout(() => {
+					typingOff(chatId);
+				}, 3000);
+			},
+			blur: function() {
+				typingOff(chatId);
 			}
     },
   });

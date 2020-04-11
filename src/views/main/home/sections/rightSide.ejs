@@ -46,21 +46,22 @@
 									<div class="convert-emoji bubble <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
 										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" title="<%= message.sender.name %>" />
-										<%= message.text %>
+										<span title="<%= new Date(message.createdAt).toLocaleString() %>">
+											<%= message.text %>
+										</span>
 									</div>
 								<% } %>
 								<% if(message.messageType === 'image') { %>
 									<div class="bubble bubble-image-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>" data-mess-id="<%= message._id %>">
 										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" title="<%= message.sender.name %>" />
-										<img src="data:<%= message.file.contentType %>; base64, <%= bufferToBase64(message.file.data) %>" class="show-image-chat">
+										<img src="data:<%= message.file.contentType %>; base64, <%= bufferToBase64(message.file.data) %>" class="show-image-chat" title="<%= new Date(message.createdAt).toLocaleString() %>">
 									</div>
 								<% } %>
 								<% if(message.messageType === 'file') { %>
 									<div class="bubble bubble-image-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
 										<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small" title="<%= message.sender.name %>" />
-										<a href="data:<%= message.file.contentType %>; base64, <%= message.file.data %>" 
-										download="<%= message.file.fileName %>">
+										<a href="data:<%= message.file.contentType %>; base64, <%= message.file.data %>" download="<%= message.file.fileName %>" title="<%= new Date(message.createdAt).toLocaleString() %>">
 												<%= message.file.fileName %>
 										</a>
 									</div>
@@ -112,21 +113,22 @@
 							<% conversation.messages.forEach(function(message){ %>
 								<% if(message.messageType === 'text') { %>
 									<div class="convert-emoji bubble <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>" data-mess-id="<%= message._id %>">
-										<%= message.text %>
+										<span title="<%= new Date(message.createdAt).toLocaleString() %>">
+											<%= message.text %>
+										</span>
 									</div>
 								<% } %>
 								<% if(message.messageType === 'image') { %>
 									<div class="bubble bubble-image-file
 									<% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>" data-mess-id="<%= message._id %>">
-										<img src="data:<%= message.file.contentType %>; base64, <%= bufferToBase64(message.file.data) %>" class="show-image-chat">
+										<img src="data:<%= message.file.contentType %>; base64, <%= bufferToBase64(message.file.data) %>" class="show-image-chat" title="<%= new Date(message.createdAt).toLocaleString() %>">
 									</div>
 								<% } %>
 								<% if(message.messageType === 'file') { %>
 									<div class="bubble bubble-image-file 
 									<% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
-										<a href="data:<%= message.file.contentType %>; base64, <%= message.file.data %>" 
-										download="<%= message.file.fileName %>">
+										<a href="data:<%= message.file.contentType %>; base64, <%= message.file.data %>" download="<%= message.file.fileName %>" title="<%= new Date(message.createdAt).toLocaleString() %>">
 											<%= message.file.fileName %>
 										</a>
 									</div>

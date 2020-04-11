@@ -3,6 +3,7 @@ import removeRequestContact from './contacts/removeRequestContact';
 import removeRequestContactReceived from './contacts/removeRequestContactReceived';
 import acceptRequestContactReceived from './contacts/acceptRequestContactReceived';
 import removeContact from './contacts/removeContact';
+import typingMessage from './chat/typingMessage';
 import chatText from './chat/chatText';
 
 const initSockets = io => {
@@ -11,6 +12,7 @@ const initSockets = io => {
 	removeRequestContactReceived(io)
 	acceptRequestContactReceived(io)
 	removeContact(io)
+	typingMessage(io)
 	chatText(io)
 }
 
