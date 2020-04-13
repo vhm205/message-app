@@ -22,7 +22,8 @@ function nineScrollRight(conversationId) {
     cursorcolor: '#ECECEC',
     cursorwidth: '7px',
     scrollspeed: 50
-  });
+	});
+	chatContent.getNiceScroll().resize();
   chatContent.scrollTop(chatContent[0].scrollHeight);
 }
 
@@ -110,9 +111,12 @@ function gridPhotos(layoutNumber) {
 		e.preventDefault()
 
 		let modalImageId = $($(this).attr('href'))
+		
+		console.log(modalImageId.find('.all-images').css('visibility'), modalImageId.find('.all-images img').length);
 
-		let countRows = Math.ceil(modalImageId.find('.all-images>img').length / layoutNumber);
+		let countRows = Math.ceil(modalImageId.find('.all-images img').length / layoutNumber);
 		let layoutStr = new Array(countRows).fill(layoutNumber).join("");
+
 		modalImageId.find('.all-images').photosetGrid({
 			highresLinks: true,
 			rel: 'withhearts-gallery',
@@ -192,6 +196,8 @@ function changeScreenChat() {
 		nineScrollRight(chatId);
 		// Bật emoji, tham số truyền vào là id của box nhập nội dung tin nhắn
 		enableEmojioneArea(chatId);
+		// Chat image message
+		chatImage(chatId);
 	})
 }
 

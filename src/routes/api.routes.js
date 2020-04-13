@@ -55,6 +55,7 @@ const initRoutes = app => {
 	router.patch('/notification/mark-all-as-read', auth.checkLoggedIn, notification.markAllAsRead)
 
 	router.post('/message/add-new-message', auth.checkLoggedIn, messageValid.checkMessage, message.addNewMessage)
+	router.post('/message/add-new-image', auth.checkLoggedIn, message.addNewImage)
 
 	return app.use('/', router)
 }

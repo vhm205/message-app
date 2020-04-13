@@ -22,6 +22,8 @@ export const transErrors = {
     server_error: 'Lỗi Server, vui lòng liên hệ admin: <b>vuhuynhminh9221@gmail.com</b> để được hỗ trợ',
     avatar_wrong_type: 'Kiểu file không hợp lệ, chỉ chấp nhận file có định dạng png, jpg, jpeg, gif',
 		avatar_size_limit: 'Ảnh upload tối đa 1MB',
+    image_message_wrong_type: 'Kiểu file không hợp lệ, chỉ chấp nhận file có định dạng png, jpg, jpeg, gif',
+		image_message_size_limit: 'Ảnh upload tối đa 1MB',
 		group_not_found: 'Group chat không tồn tại',
 		personal_not_found: 'Người dùng không tồn tại',
 }

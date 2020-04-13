@@ -6,20 +6,20 @@ const MessageSchema = new mongoose.Schema({
 		messageType: String,
 		conversationType: String,
     sender: {
-        id: String,
-        name: String,
-        avatar: String
+			id: String,
+			name: String,
+			avatar: String
     },
     receiver: {
-        id: String,
-        name: String,
-        avatar: String
+			id: String,
+			name: String,
+			avatar: String
     },
     text: String,
     file: {
-        data: Buffer,
-        contentType: String,
-        fileName: String
+			data: Buffer,
+			contentType: String,
+			fileName: String
     },
     createdAt: { type: Number, default: Date.now() },
     updatedAt: { type: Number, default: null },
