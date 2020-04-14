@@ -5,6 +5,7 @@ import acceptRequestContactReceived from './contacts/acceptRequestContactReceive
 import removeContact from './contacts/removeContact';
 import typingMessage from './chat/typingMessage';
 import chatText from './chat/chatText';
+import chatImage from './chat/chatImage';
 
 const initSockets = io => {
 	addNewContact(io)
@@ -14,6 +15,7 @@ const initSockets = io => {
 	removeContact(io)
 	typingMessage(io)
 	chatText(io)
+	chatImage(io)
 }
 
 module.exports = initSockets;

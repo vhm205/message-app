@@ -1,0 +1,34 @@
+import { pushSocketIdToArray, removeSocketIdToArray, emitNotifyToArray } from '../../helpers/socketHelpers';
+
+const chatImage = io => {
+	let clients = {}
+	
+	io.on('connection', socket => {
+		const { _id, chatGroupIds } = socket.request.user
+		clients = pushSocketIdToArray(clients, _id, socket)
+		// Add Group id into socket
+		chatGroupIds.map(groupId => clients = pushSocketIdToArray(clients, groupId._id, socket))
+
+		socket.on('add-new-image-message', data => {
+			const { conversationType, receiverId } = data.message
+
+			const response = {
+				conversationType: conversationType === 'group' ? 'group' : 'personal',
+				message: data.message
+			}
+			
+			// Check client is online, then send response
+			if(clients[receiverId]){
+				emitNotifyToArray(clients, io, receiverId, 'response-add-new-image-message', response)
+			}
+		})
+
+		socket.on('disconnect', () => {
+			clients = removeSocketIdToArray(clients, _id, socket)
+			// Remove Group id in socket
+			chatGroupIds.map(groupId => clients = removeSocketIdToArray(clients, groupId._id, socket))
+		})
+	})
+}
+
+module.exports = chatImage;
