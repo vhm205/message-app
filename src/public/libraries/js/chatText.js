@@ -1,8 +1,8 @@
 function chatText(chatId) {
 	$('.emojionearea').off('keyup').on('keyup', function(e) {
 		if(e.which === 13){
-			const inputChat = $(`.write-chat[data-chat="${chatId}"]`)
-			const text = inputChat.val()
+			const inputChat = $(`.write-chat[data-chat="${chatId}"]`);
+			const text = inputChat.val();
 
 			if(!text || !inputChat) return;
 
@@ -18,8 +18,8 @@ function chatText(chatId) {
 				const { _id, sender, text, createdAt } = data.message;
 
 				const messageOfMe = $(`<div class="me bubble" data-mess-id="${_id}"></div>`);
-				messageOfMe.text(text);
 				// Convert emoji unicode to image
+				messageOfMe.text(text);
 				const convertEmoji = emojione.toImage(messageOfMe.html());
 				
 				if(dataSendMessage.isChatGroup){
@@ -69,10 +69,10 @@ socket.on('response-add-new-message', response => {
 	// Convert emoji unicode to image
 	messageOfYou.text(text);
 	const convertEmoji = emojione.toImage(messageOfYou.html());
-	const isGroupChat = response.conversationType === 'group';
-	const chatId = isGroupChat ? receiverId : senderId;
+	const isChatGroup = response.conversationType === 'group';
+	const chatId = isChatGroup ? receiverId : senderId;
 	
-	if(isGroupChat){
+	if(isChatGroup){
 		// Add small avatar beside the message
 		messageOfYou.html(`<img src="./libraries/images/users/${sender.avatar}" class="avatar-small" title="${sender.name}" /> ${convertEmoji}`);
 

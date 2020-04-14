@@ -111,8 +111,7 @@ function gridPhotos(layoutNumber) {
 		e.preventDefault()
 
 		let modalImageId = $($(this).attr('href'))
-		
-		console.log(modalImageId.find('.all-images').css('visibility'), modalImageId.find('.all-images img').length);
+		let originHtml = modalImageId.find('.modal-body').html()
 
 		let countRows = Math.ceil(modalImageId.find('.all-images img').length / layoutNumber);
 		let layoutStr = new Array(countRows).fill(layoutNumber).join("");
@@ -134,6 +133,10 @@ function gridPhotos(layoutNumber) {
 				});
 			}
 		});
+
+		modalImageId.on('hidden.bs.modal', function () {
+			$(this).find('.modal-body').html(originHtml)
+		})
 	})
 }
 
@@ -240,7 +243,6 @@ $(document).ready(function() {
 	changeTypeChat();
 	
 	changeScreenChat();
-
 
 	// Active first contact
 	$('#all-chat a:first-child li').trigger('click')
