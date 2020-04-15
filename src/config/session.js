@@ -16,7 +16,7 @@ const configSession = app => {
         resave: true,
         store: sessionStore,
         cookie: {
-            maxAge: 1000 * 60**2 // * 24 one day
+            maxAge: 1000 * 60**2 * 24 // one day
         }
     }))
 }

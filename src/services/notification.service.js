@@ -1,7 +1,7 @@
 import { contents, notifyModel } from '../models/notification.model';
 import UserModel from '../models/user.model';
 
-const LIMIT_NUMBER_TAKEN = 5
+const LIMIT_NUMBER_TAKEN = 10
 
 const getNotifContents = notifications => {
 	// Find user by sender id and get info of sender

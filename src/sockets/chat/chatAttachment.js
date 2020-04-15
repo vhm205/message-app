@@ -4,16 +4,16 @@ import {
 	emitNotifyToArray 
 } from '../../helpers/socketHelpers';
 
-const chatText = io => {
+const chatAttachment = io => {
 	let clients = {}
-	
+
 	io.on('connection', socket => {
 		const { _id, chatGroupIds } = socket.request.user
 		clients = pushSocketIdToArray(clients, _id, socket)
 		// Add Group id into socket
 		chatGroupIds.map(groupId => clients = pushSocketIdToArray(clients, groupId._id, socket))
 
-		socket.on('add-new-message', data => {
+		socket.on('add-new-attachment-message', data => {
 			const { conversationType, receiverId } = data.message
 
 			const response = {
@@ -23,7 +23,7 @@ const chatText = io => {
 			
 			// Check client is online, then send response
 			if(clients[receiverId]){
-				emitNotifyToArray(clients, io, receiverId, 'response-add-new-message', response)
+				emitNotifyToArray(clients, io, receiverId, 'response-add-new-attachment-message', response)
 			}
 		})
 
@@ -35,4 +35,4 @@ const chatText = io => {
 	})
 }
 
-module.exports = chatText;
+module.exports = chatAttachment;
