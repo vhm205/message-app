@@ -6,7 +6,7 @@ import { transErrors } from '../../lang/vi';
 import { app } from '../config/app';
 
 const LIMIT_CONVERSATION_TAKEN = 10;
-const LIMIT_MESSAGE_TAKEN = 15;
+const LIMIT_MESSAGE_TAKEN = 10;
 
 const getAllConversations = userId => {
 	return new Promise(async (resolve, reject) => {
@@ -189,8 +189,80 @@ const addNewImage = (sender, receiverId, image, isChatGroup) => {
 	})
 }
 
+const addNewAttachment = (sender, receiverId, attachment, isChatGroup) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			if(isChatGroup === 'true'){
+				// Check group chat is exists
+				const getGroupReceiver = await ChatGroupModel.getChatGroupById(receiverId)
+				if(!getGroupReceiver) return reject(transErrors.group_not_found)
+
+				const receiver = {
+					id: getGroupReceiver._id,
+					name: getGroupReceiver.name,
+					avatar: app.avatar_group_chat
+				}
+				const messageItem = {
+					senderId: sender.id,
+					receiverId: receiver.id,
+					messageType: messageType.FILE,
+					conversationType: conversationType.GROUP,
+					sender: sender,
+					receiver: receiver,
+					file: {
+						data: attachment.attachmentBuff,
+						contentType: attachment.contentType,
+						fileName: attachment.fileName
+					},
+					createdAt: Date.now()
+				}
+				// Add new message to group chat
+				const newMessage = await messageModel.createNew(messageItem)
+				// Update Message Amount in Chat Group Model
+				await ChatGroupModel.updateChatGroupById(receiverId, getGroupReceiver.messageAmount + 1)
+
+				return resolve(newMessage)
+			}
+
+			// Check user receiver is exists
+			const getUserReceiver = await UserModel.findNormalUserById(receiverId)
+			if(!getUserReceiver) return reject(transErrors.personal_not_found)
+
+			const receiver = {
+				id: getUserReceiver._id,
+				name: getUserReceiver.username,
+				avatar: getUserReceiver.avatar
+			}
+			const messageItem = {
+				senderId: sender.id,
+				receiverId: receiver.id,
+				messageType: messageType.FILE,
+				conversationType: conversationType.PERSONAL,
+				sender: sender,
+				receiver: receiver,
+				file: {
+					data: attachment.attachmentBuff,
+					contentType: attachment.contentType,
+					fileName: attachment.fileName
+				},
+				createdAt: Date.now()
+			}
+			// Add new message
+			const newMessage = await messageModel.createNew(messageItem);
+			// Update Contact When has the new message
+			await ContactModel.updateContactWhenHasMessage(sender.id, receiverId);
+
+			return resolve(newMessage);
+		} catch (err) {
+			console.error(err);
+			return reject(err);
+		}
+	})
+}
+
 module.exports = {
 	getAllConversations,
 	addNewMessage,
+	addNewAttachment,
 	addNewImage
 }

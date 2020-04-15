@@ -1,4 +1,8 @@
-import { pushSocketIdToArray, removeSocketIdToArray, emitNotifyToArray } from '../../helpers/socketHelpers';
+import { 
+	pushSocketIdToArray, 
+	removeSocketIdToArray, 
+	emitNotifyToArray 
+} from '../../helpers/socketHelpers';
 
 const typingMessage = io => {
 	let clients = {}

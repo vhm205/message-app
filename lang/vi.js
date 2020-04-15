@@ -24,6 +24,7 @@ export const transErrors = {
 		avatar_size_limit: 'Ảnh upload tối đa 1MB',
     image_message_wrong_type: 'Kiểu file không hợp lệ, chỉ chấp nhận file có định dạng png, jpg, jpeg, gif',
 		image_message_size_limit: 'Ảnh upload tối đa 1MB',
+		attachment_message_size_limit: 'Tệp đính kèm tối đa 1MB',
 		group_not_found: 'Group chat không tồn tại',
 		personal_not_found: 'Người dùng không tồn tại',
 }
