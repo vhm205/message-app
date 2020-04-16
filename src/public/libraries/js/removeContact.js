@@ -30,6 +30,12 @@ function removeContact() {
 
 					// Send request cancel contact realtime
 					socket.emit('remove-contact', { contactId: targetId })
+
+					// Delete left side & right side, Everything about contact
+					$(`.person[data-chat=${targetId}]`).parent().remove()
+					$(`.all-image-modal #imagesModal_${targetId}`).remove()
+					$(`.all-attachment-modal #attachsModal_${targetId}`).remove()
+					$(`#screen-chat div[data-chat=${targetId}]`).remove()
 				}
 			})
 			.fail(err => console.error(err))
@@ -40,8 +46,15 @@ function removeContact() {
 socket.on('response-remove-contact', user => {
 	// Notification in modal contact list
 	decreaseNumberQueueContact('count-contacts', true)
+
 	// Remove contact from list contact
 	$('#contacts ul').find(`li[data-uid=${user.id}]`).remove()
+
+	// Delete left side & right side, Everything about contact
+	$(`.person[data-chat=${user.id}]`).parent().remove()
+	$(`.all-image-modal #imagesModal_${user.id}`).remove()
+	$(`.all-attachment-modal #attachsModal_${user.id}`).remove()
+	$(`#screen-chat div[data-chat=${user.id}]`).remove()
 })
 
 $(document).ready(function() {

@@ -49,7 +49,6 @@ const getAllConversations = userId => {
 
 			resolve(allConversationWithMess)
 		} catch (err) {
-			console.error(err);
 			return reject(err)
 		}
 	})

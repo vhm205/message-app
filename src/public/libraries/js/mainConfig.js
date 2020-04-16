@@ -16,31 +16,31 @@ function nineScrollLeft() {
 
 function nineScrollRight(conversationId) {
 	const chatContent = $(`.right .chat[data-chat=${conversationId}]`)
-  chatContent.niceScroll({
-    smoothscroll: true,
-    horizrailenabled: false,
-    cursorcolor: '#ECECEC',
-    cursorwidth: '7px',
-    scrollspeed: 50
+	chatContent.niceScroll({
+		smoothscroll: true,
+		horizrailenabled: false,
+		cursorcolor: '#ECECEC',
+		cursorwidth: '7px',
+		scrollspeed: 50
 	});
 	chatContent.getNiceScroll().resize();
-  chatContent.scrollTop(chatContent[0].scrollHeight);
+	chatContent.scrollTop(chatContent[0].scrollHeight);
 }
 
 function enableEmojioneArea(chatId) {
 	const writeChat = $(`.write-chat[data-chat="${chatId}"]`)
-  writeChat.emojioneArea({
-    standalone: false,
-    pickerPosition: 'top',
-    filtersPosition: 'bottom',
-    tones: false,
-    autocomplete: false,
-    inline: true,
-    hidePickerOnBlur: true,
-    search: false,
-    shortnames: false,
-    events: {
-      keyup: function(editor, event) {
+	writeChat.emojioneArea({
+		standalone: false,
+		pickerPosition: 'top',
+		filtersPosition: 'bottom',
+		tones: false,
+		autocomplete: false,
+		inline: true,
+		hidePickerOnBlur: true,
+		search: false,
+		shortnames: false,
+		events: {
+			keyup: function(editor, event) {
 				writeChat.val(this.getText());
 
 				// Is chating
@@ -62,13 +62,13 @@ function enableEmojioneArea(chatId) {
 			blur: function() {
 				typingOff(chatId);
 			}
-    },
-  });
-  $('.icon-chat').on('click', function(event) {
-    event.preventDefault();
-    $('.emojionearea-button').click();
-    $('.emojionearea-editor').focus();
-  });
+		},
+	});
+	$('.icon-chat').on('click', function(event) {
+		event.preventDefault();
+		$('.emojionearea-button').click();
+		$('.emojionearea-editor').focus();
+	});
 }
 
 function spinLoaded() {
@@ -195,6 +195,7 @@ function changeScreenChat() {
 		$(`.person[data-chat=${chatId}]`).addClass('active')
 		$(this).tab('show') 
 
+		gridPhotos(5);
 		// Cấu hình thanh cuộn chat khi click vào user bên leftSide
 		nineScrollRight(chatId);
 		// Bật emoji, tham số truyền vào là id của box nhập nội dung tin nhắn
@@ -219,32 +220,32 @@ function bufferToBase64(buffer) {
 }
 
 $(document).ready(function() {
-  // Hide số thông báo trên đầu icon mở modal contact
-  showModalContacts();
+	// Hide số thông báo trên đầu icon mở modal contact
+	showModalContacts();
 
-  // Bật tắt popup notification
-  configNotification();
+	// Bật tắt popup notification
+	configNotification();
 
-  // Cấu hình thanh cuộn
-  nineScrollLeft();
+	// Cấu hình thanh cuộn
+	nineScrollLeft();
 
-  // Icon loading khi chạy ajax
-  ajaxLoading();
+	// Icon loading khi chạy ajax
+	ajaxLoading();
 
-  // Hiển thị hình ảnh grid slide trong modal tất cả ảnh, tham số truyền vào là số ảnh được hiển thị trên 1 hàng.
-  // Tham số chỉ được phép trong khoảng từ 1 đến 5
-  gridPhotos(5);
+	// Hiển thị hình ảnh grid slide trong modal tất cả ảnh, tham số truyền vào là số ảnh được hiển thị trên 1 hàng.
+	// Tham số chỉ được phép trong khoảng từ 1 đến 5
+	// gridPhotos(5);
 
-  // Thêm người dùng vào danh sách liệt kê trước khi tạo nhóm trò chuyện
-  addFriendsToGroup();
+	// Thêm người dùng vào danh sách liệt kê trước khi tạo nhóm trò chuyện
+	addFriendsToGroup();
 
-  // Action hủy việc tạo nhóm trò chuyện
-  cancelCreateGroup();
+	// Action hủy việc tạo nhóm trò chuyện
+	cancelCreateGroup();
 
 	// Convert emoji unicode to image
 	convertToEmoij();
 
-  flashMasterNotify();
+	flashMasterNotify();
 
 	changeTypeChat();
 	

@@ -64,10 +64,10 @@ const removeRequestContactReceived = (userId, contactId) => {
 }
 
 const acceptRequestContactReceived = (userId, contactId) => {
-    return new Promise(async (resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		const acceptRequestContact = await ContactModel.acceptRequestContactReceived(userId, contactId)		
-        if(acceptRequestContact.nModified === 0) return reject(false);
-		
+		if(acceptRequestContact.nModified === 0) return reject(false);
+
 		// Create notify in DB
 		const notifyItem = {
 			senderId: userId,
@@ -75,9 +75,9 @@ const acceptRequestContactReceived = (userId, contactId) => {
 			type: types.ACCEPT_CONTACT
 		}
 		await notifyModel.createNew(notifyItem);
-        
-        return resolve(true)
-    })
+			
+		return resolve(true)
+	})
 }
 
 const findUsersContact = (userId, keyword) => {
@@ -236,8 +236,8 @@ const readMoreContactsReceived = (userId, skip) => {
 }
 
 module.exports = {
-    findUsersContact,
-    addRequestContact,
+	findUsersContact,
+	addRequestContact,
 	cancelRequestContact,
 	removeContact,
 	removeRequestContactReceived,
