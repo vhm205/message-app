@@ -40,6 +40,7 @@ $(document).ready(function() {
 
 			$('#contacts ul').append(moreContact)
 			removeContact()
+			talkWithContact()
 
 			$('.read-more-contacts-loader').css('display', 'none')
 			$(this).css('display', 'block')
