@@ -1,16 +1,16 @@
 import express from "express";
 import passport from 'passport';
 import { authValid, userValid, contactValid, messageValid } from '../validation/index';
-import { home, auth, user, contact, notification, message } from "../controllers/index";
+import { home, auth, user, contact, notification, message, group } from "../controllers/index";
 import initPassportLocal    from '../controllers/passportController/local';
 import initPassportFacebook from '../controllers/passportController/facebook';
 import initPassportGoogle   from '../controllers/passportController/google';
 
-initPassportLocal()
-initPassportFacebook()
-initPassportGoogle()
+initPassportLocal();
+initPassportFacebook();
+initPassportGoogle();
 
-const router = express.Router()
+const router = express.Router();
 
 const initRoutes = app => {
 	router.get('/', auth.checkLoggedIn, home.getHome)
@@ -57,6 +57,9 @@ const initRoutes = app => {
 	router.post('/message/add-new-message', auth.checkLoggedIn, messageValid.checkMessage, message.addNewMessage)
 	router.post('/message/add-new-image', auth.checkLoggedIn, message.addNewImage)
 	router.post('/message/add-new-attachment', auth.checkLoggedIn, message.addNewAttachment)
+
+	router.get('/group/find-user', auth.checkLoggedIn, contactValid.findUsersContact, group.findUsersContact)
+	router.post('/group/add-new-group', auth.checkLoggedIn, group.addNewChatGroup)
 
 	return app.use('/', router)
 }

@@ -169,7 +169,6 @@ function acceptRequestContactReceived() {
 				socket.emit('accept-request-contact-received', { contactId: targetId })
 			}
 		})
-		.fail(err => console.error(err))
 	})
 }
 

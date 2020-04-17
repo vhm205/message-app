@@ -2,7 +2,7 @@ import UserModel from '../models/user.model';
 import ContactModel from '../models/contact.model';
 import { types, notifyModel } from '../models/notification.model';
 
-const LIMIT_NUMBER_TAKEN = 10
+const LIMIT_NUMBER_TAKEN = 10;
 
 const addRequestContact = (userId, contactId) => {
     return new Promise(async (resolve, reject) => {
@@ -92,8 +92,7 @@ const findUsersContact = (userId, keyword) => {
         deprecatedUserId = [...new Set(deprecatedUserId)]
 
         // Find All User except for those who have already made friends
-        const allUsers = await UserModel.findAllUserForAddContact(deprecatedUserId, keyword)        
-        resolve(allUsers)
+        resolve(await UserModel.findAllUserForAddContact(deprecatedUserId, keyword))
     })
 }
 
