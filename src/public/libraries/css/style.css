@@ -1262,7 +1262,7 @@ label:focus,
   border-color: #576574 !important;
 }
 
-.add-user {
+.add-user-to-group {
   box-sizing: border-box;
   display: inline-flex;
   flex-shrink: 0;
