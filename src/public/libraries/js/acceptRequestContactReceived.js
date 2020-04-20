@@ -7,8 +7,27 @@ function talkWithContact() {
 }
 
 function templateLeftSideChat(conversation) {
-	if(conversation.username.length > 15) {
-		conversation.username = conversation.username.substr(0, 15) + '...';
+	if(conversation.groupname){
+		return `
+			<a href="#uid_${conversation.id}" class="room-chat" data-target="#to_${conversation.id}">
+				<li class="person group-chat" data-chat="${conversation.id}">
+					<div class="left-avatar">
+						<!-- <div class="dot"></div> -->
+						<img src="${conversation.avatar}" alt="Thumb - Group">
+					</div>
+					<span class="name">
+						<span class="group-chat-name">
+							${conversation.groupname.length > 15 ? 
+								conversation.groupname.substr(0, 15) + '...' :
+								conversation.groupname
+							}
+						</span> 
+					</span>
+					<span class="time"></span>
+					<span class="preview convert-emoji"></span>
+				</li>
+			</a>
+		`;
 	}
 
 	return `
@@ -18,7 +37,12 @@ function templateLeftSideChat(conversation) {
 					<div class="dot"></div>
 					<img src="${conversation.avatar}" alt="Thumb - Contact">
 				</div>
-				<span class="name">${conversation.username}</span>
+				<span class="name">
+					${conversation.username.length > 15 ? 
+						conversation.username.substr(0, 15) + '...' :
+						conversation.username
+					}
+				</span>
 				<span class="time"></span>
 				<span class="preview convert-emoji"></span>
 			</li>

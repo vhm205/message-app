@@ -28,6 +28,7 @@ const addNewChatGroup = async (req, res) => {
 		const { name, amount, members } = req.body
 
 		const addNewGroupChat = await group.addNewChatGroup(currentUserId, name, amount, members);
+		return res.status(200).send(addNewGroupChat)
 	} catch (err) {
 		return res.status(500).send(err)
 	}
