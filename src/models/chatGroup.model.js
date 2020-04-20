@@ -6,7 +6,7 @@ const ChatGroupSchema = new mongoose.Schema({
     messageAmount: { type: Number, default: 0 },
     userId: String,
     members: [
-        { userId: String }
+		{ _id: false, userId: String }
     ],
     createdAt: { type: Number, default: Date.now() },
     updatedAt: { type: Number, default: Date.now() },
@@ -22,6 +22,12 @@ ChatGroupSchema.statics = {
 			'messageAmount': newMessageAmount,
 			'updatedAt': Date.now()
 		})
+	},
+	checkExists(currentId, name){
+		return this.findOne({
+			'name': name,
+			'userId': currentId
+		}, { _id: 1 })
 	},
 	getChatGroupById(id){
 		return this.findById(id)

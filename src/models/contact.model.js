@@ -21,6 +21,20 @@ ContactSchema.statics = {
 			]
 		})
 	},
+	findContactsHaveBeenFriends(currentId){
+		return this.find({
+			$and: [
+				{
+					$or: [
+						{ 'userId': currentId },
+						{ 'contactId': currentId }
+					]
+				},
+				{ 'status': true }
+			]
+			
+		})
+	},
 	checkExists(currentId, contactId){
 		return this.findOne({
 			$or: [

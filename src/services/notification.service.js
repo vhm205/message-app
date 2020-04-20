@@ -1,4 +1,4 @@
-import { contents, notifyModel } from '../models/notification.model';
+import { contents, types, notifyModel } from '../models/notification.model';
 import UserModel from '../models/user.model';
 
 const LIMIT_NUMBER_TAKEN = 10

@@ -11,8 +11,7 @@ const NotificationSchema = new mongoose.Schema({
 NotificationSchema.statics = {
 	createNew(item){
 		return this.create(item);
-	},
-	
+	},	
 	removeReqContactNotify(senderId, receiverId, type){
 		return this.deleteOne({
 			$and: [
@@ -22,13 +21,11 @@ NotificationSchema.statics = {
 			]
 		})
 	},
-
 	getByUserIdAndLimit(userId, limit){
 		return this.find({
 			'receiverId': userId
 		}).sort({ 'createdAt': -1 }).limit(limit)
 	},
-
 	getNotifUnread(userId){
 		return this.countDocuments({
 			$and: [
@@ -37,13 +34,11 @@ NotificationSchema.statics = {
 			]
 		})
 	},
-
 	readMoreNotif(userId, skip, limit){
 		return this.find({
 			'receiverId': userId
 		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit) 
 	},
-
 	markAllAsRead(userId, targetUsers){
 		return this.updateMany({
 			$and: [
@@ -56,23 +51,31 @@ NotificationSchema.statics = {
 
 const NOTIFYCATION_TYPES = {
 	ADD_CONTACT : 'add_contact',
-	ACCEPT_CONTACT : 'accept_contact'
+	ACCEPT_CONTACT : 'accept_contact',
+	ADD_GROUP: 'add_group'
 }
 
 const NOTIFICATION_CONTENTS = {
-	getContent: (notifyType, isReaded, userId, username, avatar) => {
+	getContent: (notifyType, isReaded, userId, username, avatar, groupname = '') => {
 		if(notifyType === NOTIFYCATION_TYPES.ADD_CONTACT){
 			return `
 				<div data-uid="${userId}" class="${!isReaded ? "notify-readed-false" : ""}">
-					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Avatar"> 
+					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notifycation"> 
 					<strong>${username}</strong> đã gửi cho bạn 1 lời mời kết bạn
 				</div>`
 		}
 		if(notifyType === NOTIFYCATION_TYPES.ACCEPT_CONTACT){
 			return `
 				<div class="notify-readed-false" data-uid="${userId}">
-					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Avatar"> 
+					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notifycation"> 
 					<strong>${username}</strong> đã chấp nhận lời mời kết bạn
+				</div>`
+		}
+		if(notifyType === NOTIFYCATION_TYPES.ADD_GROUP){
+			return `
+				<div class="notify-readed-false" data-uid="${userId}">
+					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notifycation"> 
+					<strong>${username}</strong> đã thêm bạn vào một nhóm chat
 				</div>`
 		}
 		return "Doesn't match with any notify type"

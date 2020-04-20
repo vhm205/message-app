@@ -21,10 +21,26 @@ function createGroupChat() {
 			members: listUserId
 		}
 
-		$.post("/group/add-new-group", data, function(data, textStatus) {
-			console.log(data, textStatus);
+		$.post("/group/add-new-group", data, function(data) {
+			const { _id, name, messageAmount, userAmount, members } = data
+			const conversation = {
+				id: _id,
+				groupname: name,
+				avatar: './libraries/images/users/group-avatar-trungquandev.png'
+			}
+			const leftSideChatHtml = templateLeftSideChat(conversation)
+			// Append contact into left side chat & right side chat
+			$('#all-chat .people').prepend(leftSideChatHtml)
+			$('#group-chat .people').prepend(leftSideChatHtml)
+
+			// Everything done!!
+			$('#friends-added').html('').parent().css('display', 'none')
+			$('#group-chat-friends').html('')
+			$('#name-group-chat').val('')
+			$('#input-search-contact-to-add-group-chat').val('')
+			$('#groupChatModal').modal('hide')
 		}).fail(err => {
-			console.error(err);
+			alertify.notify(err.responseText, 'error', 5)
 		})
 	})
 }
