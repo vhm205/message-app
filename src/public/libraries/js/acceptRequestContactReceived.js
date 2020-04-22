@@ -6,30 +6,7 @@ function talkWithContact() {
 	})
 }
 
-function templateLeftSideChat(conversation) {
-	if(conversation.groupname){
-		return `
-			<a href="#uid_${conversation.id}" class="room-chat" data-target="#to_${conversation.id}">
-				<li class="person group-chat" data-chat="${conversation.id}">
-					<div class="left-avatar">
-						<!-- <div class="dot"></div> -->
-						<img src="${conversation.avatar}" alt="Thumb - Group">
-					</div>
-					<span class="name">
-						<span class="group-chat-name">
-							${conversation.groupname.length > 15 ? 
-								conversation.groupname.substr(0, 15) + '...' :
-								conversation.groupname
-							}
-						</span> 
-					</span>
-					<span class="time"></span>
-					<span class="preview convert-emoji"></span>
-				</li>
-			</a>
-		`;
-	}
-
+function templateLeftSideChatPersonal(conversation) {
 	return `
 		<a href="#uid_${conversation.id}" class="room-chat" data-target="#to_${conversation.id}">
 			<li class="person" data-chat="${conversation.id}">
@@ -50,9 +27,31 @@ function templateLeftSideChat(conversation) {
 	`;
 }
 
-function templateRightSideChat(conversation) {
+function templateLeftSideChatGroup(conversation) {
 	return `
-	<div class="right tab-pane active" data-chat="${conversation.id}" id="to_${conversation.id}">
+		<a href="#uid_${conversation.id}" class="room-chat" data-target="#to_${conversation.id}">
+			<li class="person group-chat" data-chat="${conversation.id}">
+				<div class="left-avatar">
+					<img src="${conversation.avatar}" alt="Thumb - Group">
+				</div>
+				<span class="name">
+					<span class="group-chat-name">
+						${conversation.groupname.length > 15 ? 
+							conversation.groupname.substr(0, 15) + '...' :
+							conversation.groupname
+						}
+					</span> 
+				</span>
+				<span class="time"></span>
+				<span class="preview convert-emoji"></span>
+			</li>
+		</a>
+	`;
+}
+
+function templateRightSideChatPersonal(conversation) {
+	return `
+	<div class="right tab-pane" data-chat="${conversation.id}" id="to_${conversation.id}">
 		<div class="top">
 			<span>To: <span class="name">${conversation.username}</span></span>
 			<span class="chat-menu-right">
@@ -87,6 +86,65 @@ function templateRightSideChat(conversation) {
 					<i class="fa fa-paperclip"></i>
 				</label>
 				<a href="#streamModal" id="video-chat-${conversation.id}" class="video-chat" data-chat="${conversation.id}" data-toggle="modal">
+					<i class="fa fa-video-camera"></i>
+				</a>
+				<input type="hidden" id="peer-id" value="">
+			</div>
+		</div>
+	</div>
+	`;
+}
+
+function templateRightSideChatGroup(conversation) {
+	return `
+	<div class="right tab-pane" data-chat="${conversation.id}" id="to_${conversation.id}">
+		<div class="top">
+			<span>To: <span class="name">${conversation.groupname}</span></span>
+			<span class="chat-menu-right">
+				<a href="#attachsModal_${conversation.id}" class="show-attachs" data-toggle="modal"> Tệp đính kèm <i class="fa fa-paperclip"></i>
+				</a>
+			</span>
+			<span class="chat-menu-right">
+				<a href="javascript:void(0)">&nbsp;</a>
+			</span>
+			<span class="chat-menu-right">
+				<a href="#imagesModal_${conversation.id}" class="show-images" data-toggle="modal"> Hình ảnh <i class="fa fa-photo"></i> </a>
+			</span>
+			<span class="chat-menu-right">
+				<a href="javascript:void(0)">&nbsp;</a>
+			</span>
+			<span class="chat-menu-right">
+				<a href="javascript:void(0)" class="show-modal-number-members" data-toggle="modal">
+					<span class="number-members">${conversation.userAmount}</span>
+					<i class="fa fa-users"></i>
+				</a>
+			</span>
+			<span class="chat-menu-right">
+				<a href="javascript:void(0)">&nbsp;</a>
+			</span>
+			<span class="chat-menu-right">
+				<a href="javascript:void(0)">
+					<span class="number-messages">${conversation.messageAmount}</span>
+					<i class="fa fa-comments-o"></i>
+				</a>
+			</span>
+		</div>
+		<div class="content-chat">
+			<div class="chat" data-chat="${conversation.id}"></div>
+		</div>
+		<div class="write" data-chat="${conversation.id}">
+			<input type="text" class="write-chat input-chat-group" data-chat="${conversation.id}">
+			<div class="icons">
+				<a href="#" class="icon-chat" data-chat="${conversation.id}"><i class="fa fa-smile-o"></i></a>
+				<label for="image-chat-${conversation.id}">
+					<input type="file" id="image-chat-${conversation.id}" name="my-image-chat" class="image-chat input-chat-group" data-chat="${conversation.id}" accept="image/*">
+					<i class="fa fa-photo"></i>
+				</label>
+				<label for="attach-chat-${conversation.id}">
+					<input type="file" id="attach-chat-${conversation.id}" name="my-attach-chat" class="attach-chat input-chat-group" data-chat="${conversation.id}">
+					<i class="fa fa-paperclip"></i>
+				</label>
+				<a href="#streamModal" id="video-chat" class="video-chat input-chat-group" data-chat="${conversation.id}" data-toggle="modal">
 					<i class="fa fa-video-camera"></i>
 				</a>
 				<input type="hidden" id="peer-id" value="">
@@ -165,22 +223,23 @@ function acceptRequestContactReceived() {
 					username: username,
 					avatar: avatarSrc
 				}
-				const leftSideChatHtml = templateLeftSideChat(conversation)
-				const rightSideChatHtml = templateRightSideChat(conversation)
+				const leftSideChatHtml = templateLeftSideChatPersonal(conversation)
+				const rightSideChatHtml = templateRightSideChatPersonal(conversation)
 				const modalImageHtml = templateModalImage(targetId)
 				const modalAttachmentHtml = templateModalAttachment(targetId)
 
 				// Append contact into left side chat & right side chat
 				$('#all-chat .people').prepend(leftSideChatHtml)
 				$('#user-chat .people').prepend(leftSideChatHtml)
+				$('#screen-chat').prepend(rightSideChatHtml)
 				$('.all-image-modal').append(modalImageHtml)
 				$('.all-attachment-modal').append(modalAttachmentHtml)
-				$('#screen-chat').prepend(rightSideChatHtml)
-				$(`.person[data-chat=${targetId}]`).addClass('active').trigger('click')
 
 				changeScreenChat()
 				removeContact()
 				talkWithContact()
+
+				$(`.person[data-chat=${targetId}]`).addClass('active').trigger('click')
 
 				// Notification in modal contact list
 				increaseNumberQueueContact('count-contacts', true)
@@ -249,17 +308,17 @@ socket.on('response-accept-request-contact-received', user => {
 		username: user.username,
 		avatar: `./libraries/images/users/${user.avatar}`
 	}
-	const leftSideChatHtml = templateLeftSideChat(conversation)
-	const rightSideChatHtml = templateRightSideChat(conversation)
+	const leftSideChatHtml = templateLeftSideChatPersonal(conversation)
+	const rightSideChatHtml = templateRightSideChatPersonal(conversation)
 	const modalImageHtml = templateModalImage(user.id)
 	const modalAttachmentHtml = templateModalAttachment(user.id)
 
 	// Append contact into left side chat & right side chat
 	$('#all-chat .people').prepend(leftSideChatHtml)
 	$('#user-chat .people').prepend(leftSideChatHtml)
+	$('#screen-chat').prepend(rightSideChatHtml)
 	$('.all-image-modal').append(modalImageHtml)
 	$('.all-attachment-modal').append(modalAttachmentHtml)
-	$('#screen-chat').prepend(rightSideChatHtml)
 
 	changeScreenChat()
 	removeContact()

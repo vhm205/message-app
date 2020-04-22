@@ -18,11 +18,11 @@ socket.on('response-user-typing', response => {
 	`;
 	$(`.chat[data-chat=${chatId}]`).find('.bubble-typing-gif').remove()
 
-	if(isGroupChat){
-		if(senderId !== currentUserId){
+	if (isGroupChat) {
+		if (senderId !== currentUserId) {
 			$(`.chat[data-chat=${chatId}]`).append(htmlMessageTyping);
 		}
-	} else{
+	} else {
 		$(`.chat[data-chat=${chatId}]`).append(htmlMessageTyping);
 	}
 
@@ -35,13 +35,13 @@ socket.on('response-user-not-typing', response => {
 	const chatId = isGroupChat ? receiverId : senderId;
 	const currentUserId = $('#dropdown-navbar-user').data('uid');
 
-	if(isGroupChat){
-		if(senderId !== currentUserId){
+	if (isGroupChat) {
+		if (senderId !== currentUserId) {
 			$(`.chat[data-chat=${chatId}]`).find('.bubble-typing-gif').remove()
 		}
-	} else{
+	} else {
 		$(`.chat[data-chat=${chatId}]`).find('.bubble-typing-gif').remove()
 	}
-	
+
 	nineScrollRight(chatId);
 })

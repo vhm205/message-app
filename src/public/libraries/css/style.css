@@ -752,6 +752,7 @@ label:focus,
   cursor: pointer;
   background-color: #fff;
   list-style: none;
+  height: 75px;
 }
 
 .left .people .person:after {
@@ -810,13 +811,13 @@ label:focus,
 
 .left .people .person.active,
 .left .people .person:hover {
-  margin-top: -1px;
-  margin-left: -1px;
-  padding-top: 13px;
+  /* margin-top: -1px;
+  margin-left: -1px; */
+  /* padding-top: 13px; */
+  /* padding-left: calc(10% + 1px); */
   border: 0;
   background-color: #eceff1;
   width: calc(100% + 2px);
-  padding-left: calc(10% + 1px);
 }
 
 .left .people .person.active span,

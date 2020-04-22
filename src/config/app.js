@@ -7,5 +7,5 @@ export const app = {
 	image_message_size: 1048576,
     attachment_message_directory: "src/public/libraries/images/chat/message",
 	attachment_message_size: 1048576,
-	avatar_group_chat: 'group-avatar-trungquandev.png'
+	avatar_group_chat: 'group-avatar.png'
 }

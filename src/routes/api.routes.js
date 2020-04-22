@@ -1,10 +1,19 @@
 import express from "express";
 import passport from 'passport';
-import { authValid, userValid, contactValid, messageValid } from '../validation/index';
-import { home, auth, user, contact, notification, message, group } from "../controllers/index";
-import initPassportLocal    from '../controllers/passportController/local';
+import {
+	authValid,
+	userValid,
+	contactValid,
+	messageValid,
+	groupValid
+} from '../validation/index';
+
+import {
+	home, auth, user, contact, notification, message, group
+} from "../controllers/index";
+import initPassportLocal from '../controllers/passportController/local';
 import initPassportFacebook from '../controllers/passportController/facebook';
-import initPassportGoogle   from '../controllers/passportController/google';
+import initPassportGoogle from '../controllers/passportController/google';
 
 initPassportLocal();
 initPassportFacebook();
@@ -19,22 +28,22 @@ const initRoutes = app => {
 	router.get('/verify/:token', auth.verifyAccount)
 	router.post('/register', auth.checkLoggedOut, authValid.register, auth.postRegister)
 	router.post('/login', auth.checkLoggedOut, passport.authenticate('local', {
-			successRedirect: '/',
-			failureRedirect: '/auth',
-			successFlash: true,
-			failureFlash: true
+		successRedirect: '/',
+		failureRedirect: '/auth',
+		successFlash: true,
+		failureFlash: true
 	}))
 
 	router.get('/auth/facebook', auth.checkLoggedOut, passport.authenticate('facebook', { scope: ['email'] }))
 	router.get('/auth/facebook/callback', auth.checkLoggedOut, passport.authenticate('facebook', {
-			successRedirect: '/',
-			failureRedirect: '/auth'
+		successRedirect: '/',
+		failureRedirect: '/auth'
 	}))
 
-	router.get('/auth/google', auth.checkLoggedOut, passport.authenticate('google', { scope: ['email', 'profile'] } ))
+	router.get('/auth/google', auth.checkLoggedOut, passport.authenticate('google', { scope: ['email', 'profile'] }))
 	router.get('/auth/google/callback', auth.checkLoggedOut, passport.authenticate('google', {
-			successRedirect: '/',
-			failureRedirect: '/auth'
+		successRedirect: '/',
+		failureRedirect: '/auth'
 	}))
 
 	router.patch('/user/update-avatar', auth.checkLoggedIn, user.updateAvatar)
@@ -59,9 +68,9 @@ const initRoutes = app => {
 	router.post('/message/add-new-attachment', auth.checkLoggedIn, message.addNewAttachment)
 
 	router.get('/group/find-user', auth.checkLoggedIn, contactValid.findUsersContact, group.findUsersContact)
-	router.post('/group/add-new-group', auth.checkLoggedIn, group.addNewChatGroup)
+	router.post('/group/add-new-group', auth.checkLoggedIn, groupValid.createGroupChat, group.addNewChatGroup)
 
 	return app.use('/', router)
 }
 
-module.exports = initRoutes
+module.exports = initRoutes;
