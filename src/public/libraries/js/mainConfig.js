@@ -201,7 +201,7 @@ function changeScreenChat() {
 
 		$('.room-chat li').removeClass('active')
 		$(`.person[data-chat=${chatId}]`).addClass('active')
-		$(this).tab('show') 
+		$(this).tab('show')
 
 		// Hiển thị hình ảnh grid slide trong modal tất cả ảnh, tham số truyền vào là số ảnh được hiển thị trên 1 hàng.
 		// Tham số chỉ được phép trong khoảng từ 1 đến 5

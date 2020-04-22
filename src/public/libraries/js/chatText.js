@@ -12,8 +12,6 @@ function chatText(chatId) {
 				isChatGroup: inputChat.hasClass('input-chat-group') ? true : false
 			}
 
-			// var text = html.replace(/<\/?[^>]+>/ig, " ");
-
 			$.post("/message/add-new-message", dataSendMessage, function (data) {
 				const { _id, sender, text, createdAt } = data.message;
 

@@ -26,7 +26,7 @@ const getHome = async (req, res) => {
 
 	// Get All Conversation of current user
 	const allConversationWithMess = await message.getAllConversations(_id)
-	
+
 	res.render('main/home/home', {
 		errors: req.flash('errors'),
 		success: req.flash('success'),

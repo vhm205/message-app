@@ -23,19 +23,17 @@ const findUsersContact = (userId, keyword) => {
 const addNewChatGroup = (userId, name, amount, members) => {
 	return new Promise(async (resolve, reject) => {
 		const checkExists = await ChatGroupModel.checkExists(userId, name)
-		if(checkExists) return reject(transErrors['chatgroup_exists'])
+		if (checkExists) return reject(transErrors.chatgroup_exists)
 
 		// Convert variable
 		const amountMember = +amount
 		const currendUserId = userId.toString()
-	
-		if(amountMember < 2) return reject(transErrors['chatgroup_too_few_human'])
 
 		const items = {
 			name: name,
 			userAmount: amountMember + 1,
 			userId: currendUserId,
-			members: [{ userId: currendUserId } , ...members.map(id => ({ userId: id }))]
+			members: [{ userId: currendUserId }, ...members.map(id => ({ userId: id }))]
 		}
 
 		// Create notify in DB

@@ -1,7 +1,7 @@
-import { 
-	pushSocketIdToArray, 
-	removeSocketIdToArray, 
-	emitNotifyToArray 
+import {
+	pushSocketIdToArray,
+	removeSocketIdToArray,
+	emitNotifyToArray
 } from '../../helpers/socketHelpers';
 
 const chatAttachment = io => {
@@ -9,9 +9,15 @@ const chatAttachment = io => {
 
 	io.on('connection', socket => {
 		const { _id, chatGroupIds } = socket.request.user
+		let groupID = null
 		clients = pushSocketIdToArray(clients, _id, socket)
 		// Add Group id into socket
 		chatGroupIds.map(groupId => clients = pushSocketIdToArray(clients, groupId._id, socket))
+
+		socket.on('push-id-to-socket', data => {
+			groupID = data.id
+			clients = pushSocketIdToArray(clients, data.id, socket)
+		})
 
 		socket.on('add-new-attachment-message', data => {
 			const { conversationType, receiverId } = data.message
@@ -20,9 +26,9 @@ const chatAttachment = io => {
 				conversationType: conversationType === 'group' ? 'group' : 'personal',
 				message: data.message
 			}
-			
+
 			// Check client is online, then send response
-			if(clients[receiverId]){
+			if (clients[receiverId]) {
 				emitNotifyToArray(clients, io, receiverId, 'response-add-new-attachment-message', response)
 			}
 		})
@@ -31,6 +37,9 @@ const chatAttachment = io => {
 			clients = removeSocketIdToArray(clients, _id, socket)
 			// Remove Group id in socket
 			chatGroupIds.map(groupId => clients = removeSocketIdToArray(clients, groupId._id, socket))
+			if (groupID) {
+				clients = removeSocketIdToArray(clients, groupID, socket)
+			}
 		})
 	})
 }

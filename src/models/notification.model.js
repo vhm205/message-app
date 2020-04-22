@@ -49,32 +49,32 @@ NotificationSchema.statics = {
 	}
 }
 
-const NOTIFYCATION_TYPES = {
+const NOTIFICATION_TYPES = {
 	ADD_CONTACT : 'add_contact',
 	ACCEPT_CONTACT : 'accept_contact',
 	ADD_GROUP: 'add_group'
 }
 
 const NOTIFICATION_CONTENTS = {
-	getContent: (notifyType, isReaded, userId, username, avatar, groupname = '') => {
-		if(notifyType === NOTIFYCATION_TYPES.ADD_CONTACT){
+	getContent: (notifyType, isReaded, userId, username, avatar) => {
+		if(notifyType === NOTIFICATION_TYPES.ADD_CONTACT){
 			return `
 				<div data-uid="${userId}" class="${!isReaded ? "notify-readed-false" : ""}">
-					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notifycation"> 
+					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notification"> 
 					<strong>${username}</strong> đã gửi cho bạn 1 lời mời kết bạn
 				</div>`
 		}
-		if(notifyType === NOTIFYCATION_TYPES.ACCEPT_CONTACT){
+		if(notifyType === NOTIFICATION_TYPES.ACCEPT_CONTACT){
 			return `
 				<div class="notify-readed-false" data-uid="${userId}">
-					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notifycation"> 
+					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notification"> 
 					<strong>${username}</strong> đã chấp nhận lời mời kết bạn
 				</div>`
 		}
-		if(notifyType === NOTIFYCATION_TYPES.ADD_GROUP){
+		if(notifyType === NOTIFICATION_TYPES.ADD_GROUP){
 			return `
 				<div class="notify-readed-false" data-uid="${userId}">
-					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notifycation"> 
+					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notification"> 
 					<strong>${username}</strong> đã thêm bạn vào một nhóm chat
 				</div>`
 		}
@@ -84,6 +84,6 @@ const NOTIFICATION_CONTENTS = {
 
 module.exports = {
 	notifyModel: mongoose.model('Notification', NotificationSchema),
-	types: NOTIFYCATION_TYPES,
+	types: NOTIFICATION_TYPES,
 	contents: NOTIFICATION_CONTENTS
 }
