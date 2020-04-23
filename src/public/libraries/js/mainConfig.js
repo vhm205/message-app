@@ -229,7 +229,24 @@ function bufferToBase64(buffer) {
 	return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
 }
 
+function checkUserOnline() {
+	const allContacts = $('#all-chat .person:not(.group-chat)');
+	const listUsersId = Array.from(allContacts).map((value) => $(value).data('chat'));
+	socket.emit('check-online', { listUsersId })
+}
+
+socket.on('response-check-online', response => {
+	response.listUser.map(id => {
+		$(`.person[data-chat=${id}] .dot`).css('background-color', '#0ce6f1')
+	})
+})
+
+socket.on('response-check-offline', response => {
+	$(`.person[data-chat=${response.currentUserId}] .dot`).css('background-color', '#bbbbbb')
+})
+
 $(document).ready(function() {
+	checkUserOnline();
 	// Hide số thông báo trên đầu icon mở modal contact
 	showModalContacts();
 
