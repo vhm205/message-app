@@ -1,8 +1,11 @@
 function talkWithContact() {
-	$('.user-talk').off('click').on('click', function(e) {
+	$('.user-talk').off('click').on('click', function() {
 		const chatId = $(this).data('uid');
-		$('#contactsModal').modal('hide');
-		$(`#all-chat a li[data-chat=${chatId}]`).trigger('click');
+		const modal = $(this).closest('.modal');
+		if(modal.length){
+			$(modal[0]).modal('hide');
+			$(`#all-chat a li[data-chat=${chatId}]`).trigger('click');
+		}
 	})
 }
 
@@ -114,7 +117,7 @@ function templateRightSideChatGroup(conversation) {
 				<a href="javascript:void(0)">&nbsp;</a>
 			</span>
 			<span class="chat-menu-right">
-				<a href="javascript:void(0)" class="show-modal-number-members" data-toggle="modal">
+				<a href="#membersModal_${conversation.id}" class="show-number-members" data-toggle="modal">
 					<span class="number-members">${conversation.userAmount}</span>
 					<i class="fa fa-users"></i>
 				</a>

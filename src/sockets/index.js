@@ -11,7 +11,7 @@ import typingMessage from './chat/typingMessage';
 import createGroupChat from './group/createGroupChat';
 
 const initSockets = io => {
-	io.sockets.setMaxListeners(20);
+	require('events').EventEmitter.defaultMaxListeners = 20
 	addNewContact(io)
 	removeRequestContact(io)
 	removeRequestContactReceived(io)
@@ -23,18 +23,7 @@ const initSockets = io => {
 	chatAttachment(io)
 	createGroupChat(io)
 	checkUserOnline(io)
-	// io.on('connection', socket => {
-	// 	let clients = {}
-	// 	const currentUserId = socket.request.user._id
-	// 	clients = pushSocketIdToArray(clients, currentUserId, socket)
-
-	// 	checkUserOnline(clients, socket, currentUserId)
-
-	// 	socket.on('disconnect', () => {
-	// 		socket.broadcast.emit('response-check-offline', { currentUserId })
-	// 		clients = removeSocketIdToArray(clients, currentUserId, socket)
-	// 	})
-	// })
+	// io.sockets.setMaxListeners(20);
 	// io.sockets.getMaxListeners()
 }
 

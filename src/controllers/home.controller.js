@@ -1,4 +1,4 @@
-import { notify, contact, message } from '../services/index';
+import { notify, contact, message, group } from '../services/index';
 import { bufferToBase64, getLastIndex, convertTimstampToHumanTime } from '../helpers/clientHelpers';
 
 const getHome = async (req, res) => {
@@ -27,12 +27,16 @@ const getHome = async (req, res) => {
 	// Get All Conversation of current user
 	const allConversationWithMess = await message.getAllConversations(_id)
 
+	// Get All Group with members
+	const allGroupWithMembers = await group.getAllGroupWithMembers(_id)
+
 	res.render('main/home/home', {
 		errors: req.flash('errors'),
 		success: req.flash('success'),
 		notifyUnread: countNotifyUnread,
 		notifications: getNotif,
 		allConversationWithMess,
+		allGroupWithMembers,
 		contacts: getContacts,
 		contactsSent: getContactsSent,
 		contactsReceived: getContactsReceived,
