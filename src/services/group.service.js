@@ -4,6 +4,8 @@ import UserModel from '../models/user.model';
 import { types, notifyModel } from '../models/notification.model';
 import { transErrors } from '../../lang/vi';
 
+const LIMIT_CONVERSATION_TAKEN = 10;
+
 const findUsersContact = (userId, keyword) => {
 	return new Promise(async resolve => {
 		let listUserId = []
@@ -49,7 +51,32 @@ const addNewChatGroup = (userId, name, amount, members) => {
 	})
 }
 
+const getAllGroupWithMembers = userId => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			// Get all groups of current user
+			const allGroupOfCurrentUser = await ChatGroupModel.getChatGroup(userId, LIMIT_CONVERSATION_TAKEN);
+
+			// Assign info of members for group.members and return all group
+			const allMemberInGroupPromise = allGroupOfCurrentUser.map(async group => { 
+				group = group.toObject();
+				const members = await Promise.all(group.members.map(async member => {
+					const user = UserModel.findNormalUserById(member.userId);
+					return await user;
+				}))
+				group.members = members;
+				return group;
+			})
+
+			resolve(await Promise.all(allMemberInGroupPromise));
+		} catch (err) {
+			return reject(err);
+		}
+	})
+}
+
 module.exports = {
 	findUsersContact,
-	addNewChatGroup
+	addNewChatGroup,
+	getAllGroupWithMembers
 }

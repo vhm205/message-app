@@ -48,7 +48,7 @@ const initPassportGoogle = () => {
     passport.deserializeUser(async (id, done) => {
 			try {
 				let user = await UserModel.findUserById(id)
-				let getChatGroup = await ChatGroupModel.getGroupByUserId(user._id)
+				let getChatGroup = await ChatGroupModel.getGroupIdByUserId(user._id)
 
 				user = user.toObject()
 				user.chatGroupIds = getChatGroup

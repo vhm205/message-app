@@ -163,7 +163,8 @@ label:focus,
   border-left: solid 1px #ccc;
 }
 
-.contactList>li {
+.contactList>li,
+.list-members>li {
   list-style-type: none;
   position: relative;
   margin: 10px;
@@ -171,6 +172,36 @@ label:focus,
   border: 1px solid #fff;
   border-radius: 3px;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+}
+.list-members{
+	display: flex;
+	flex-flow: row wrap;
+}
+.list-members>._membersList{
+	width: 140px;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+.list-members .user-avatar img{
+	display: block;
+	border-radius: 30px;
+  	width: 50px;
+	height: 50px;
+	margin: 10px 0 10px 0;
+  	border: 1px solid #bdc3c7;
+}
+.list-members .user-name{
+  	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	font-size: 14px;
+	font-weight: 700;
+}
+.list-members .user-admin{
+	color: #ff7675
 }
 
 .contactPanel {
@@ -212,7 +243,8 @@ label:focus,
 .contactPanel .user-remove-request-contact,
 .contactPanel .user-accept-request-contact-received,
 .contactPanel .user-remove-request-contact,
-.contactPanel .user-remove-request-contact-received {
+.contactPanel .user-remove-request-contact-received,
+.list-members .user-talk {
   box-sizing: border-box;
   display: inline-flex;
   flex-shrink: 0;
@@ -240,7 +272,9 @@ label:focus,
   fill: #fff;
   margin: 10px 0px 5px 2px;
 }
-
+.list-members .user-talk{
+	margin-top: 0;
+}
 .contactPanel .user-remove-request-contact {
   display: none;
 }
