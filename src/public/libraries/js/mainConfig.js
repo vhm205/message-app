@@ -101,7 +101,7 @@ function configNotification() {
     $('.noti_counter').fadeOut('slow');
     return false;
   });
-  $('.main-content').click(function() {
+  $('.main-content').off('click').on('click', function() {
     $('#notifications').fadeOut('fast', 'linear');
   });
 }
@@ -177,7 +177,7 @@ function cancelCreateGroup() {
 }
 
 function flashMasterNotify() {
-  let notify = $('.master-success-message').text()
+  const notify = $('.master-success-message').text()
   if(notify.length){
     alertify.notify(notify, 'success', 5)
   }
