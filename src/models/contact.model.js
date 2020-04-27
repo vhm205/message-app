@@ -32,7 +32,6 @@ ContactSchema.statics = {
 				},
 				{ 'status': true }
 			]
-			
 		})
 	},
 	checkExists(currentId, contactId){

@@ -11,14 +11,14 @@ const findUsersContact = (userId, keyword) => {
 		let listUserId = []
 		let contactsByUser = await ContactModel.findContactsHaveBeenFriends(userId)
 
-		// Add user has made friends
+		// Add user id has made friends
 		contactsByUser.forEach(contact => {
 			listUserId = [...listUserId, contact.userId, contact.contactId]
 		})
 		listUserId = [...new Set(listUserId)].filter(id => id != userId)
 
 		// Find All User, who has already made friends
-		resolve(await UserModel.findAllUserForAddGroupChat(listUserId, keyword))
+		resolve(await UserModel.findAllUserInListId(listUserId, keyword))
 	})
 }
 
@@ -57,18 +57,24 @@ const getAllGroupWithMembers = userId => {
 			// Get all groups of current user
 			const allGroupOfCurrentUser = await ChatGroupModel.getChatGroup(userId, LIMIT_CONVERSATION_TAKEN);
 
+			console.time('time')
 			// Assign info of members for group.members and return all group
 			const allMemberInGroupPromise = allGroupOfCurrentUser.map(async group => { 
 				group = group.toObject();
 				const members = await Promise.all(group.members.map(async member => {
-					const user = UserModel.findNormalUserById(member.userId);
-					return await user;
+					let user = await UserModel.findNormalUserById(member.userId);
+					let isMadeFriend = await ContactModel.checkExists(userId, member.userId)
+					// Check current user and member in the group is already made a friend 
+					user = user.toObject();
+					user.status = isMadeFriend ? isMadeFriend.status : false;
+					return user;
 				}))
 				group.members = members;
 				return group;
 			})
 
 			resolve(await Promise.all(allMemberInGroupPromise));
+			console.timeEnd('time')
 		} catch (err) {
 			return reject(err);
 		}

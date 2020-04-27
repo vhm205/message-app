@@ -28,7 +28,7 @@ const getHome = async (req, res) => {
 	const allConversationWithMess = await message.getAllConversations(_id)
 
 	// Get All Group with members
-	const allGroupWithMembers = await group.getAllGroupWithMembers(_id)
+	const allGroupWithMembers = await group.getAllGroupWithMembers(_id)	
 
 	res.render('main/home/home', {
 		errors: req.flash('errors'),

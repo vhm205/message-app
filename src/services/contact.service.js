@@ -234,8 +234,25 @@ const readMoreContactsReceived = (userId, skip) => {
 	})
 }
 
+const searchUserChat = (userId, keyword) => {
+	return new Promise(async (resolve, _) => {
+		let listUserId = [];
+		let contactsByUser = await ContactModel.findContactsHaveBeenFriends(userId)
+
+		// Add user id has made friends
+		contactsByUser.forEach(contact => {
+			listUserId = [...listUserId, contact.userId, contact.contactId]
+		})
+		listUserId = [...new Set(listUserId)].filter(id => id != userId)
+
+		// Find All User, who has already made friends
+		resolve(await UserModel.findAllUserInListId(listUserId, keyword))
+	})
+}
+
 module.exports = {
 	findUsersContact,
+	searchUserChat,
 	addRequestContact,
 	cancelRequestContact,
 	removeContact,

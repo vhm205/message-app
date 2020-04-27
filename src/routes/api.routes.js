@@ -51,6 +51,7 @@ const initRoutes = app => {
 	router.patch('/user/update-password', auth.checkLoggedIn, userValid.updatePassword, user.updatePassword)
 
 	router.get('/contact/find-user', auth.checkLoggedIn, contactValid.findUsersContact, contact.findUsersContact)
+	router.get('/contact/search-user', auth.checkLoggedIn, contactValid.findUsersContact, contact.searchUserChat)
 	router.post('/contact/add-request-contact', auth.checkLoggedIn, contact.addRequestContact)
 	router.delete('/contact/remove-contact', auth.checkLoggedIn, contact.removeContact)
 	router.delete('/contact/remove-request-contact', auth.checkLoggedIn, contact.cancelRequestContact)

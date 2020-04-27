@@ -4,8 +4,8 @@ function talkWithContact() {
 		const modal = $(this).closest('.modal');
 		if(modal.length){
 			$(modal[0]).modal('hide');
-			$(`#all-chat a li[data-chat=${chatId}]`).trigger('click');
 		}
+		$(`#all-chat a li[data-chat=${chatId}]`).trigger('click');
 	})
 }
 

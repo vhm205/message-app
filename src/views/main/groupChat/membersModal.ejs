@@ -14,20 +14,18 @@
 								<div class="user-avatar">
 									<img src="./libraries/images/users/<%= member.avatar %>" alt="Thumb Group">
 								</div>
-								<% if(member._id.toString() === user._id.toString() &&
-											member._id.toString() === group.userId.toString()) { %>
+								<% if(member._id.toString() === user._id.toString() && member._id.toString() === group.userId.toString()) { %>
 									<div class="user-name user-admin">
 										<%= member.username %>
-										<div>(Bạn là admin)</div>
+										<div>(Bạn là Admin)</div>
 									</div>
-								<% } else if(member._id.toString() === user._id.toString() &&
-											member._id.toString() !== group.userId.toString()) { %>
-									<div class="user-name user-admin">
+								<% } else if(member._id.toString() === user._id.toString() && member._id.toString() !== group.userId.toString()) { %>
+									<div class="user-name">
 										<%= member.username %>
 										<div>(Bạn)</div>
 									</div>
 								<% } else if(member._id.toString() === group.userId.toString()) { %>
-									<div class="user-name">
+									<div class="user-name user-admin">
 										<%= member.username %>
 										<div>(Admin)</div>
 									</div>
@@ -36,13 +34,20 @@
 										Trò chuyện
 									</div>
 								<% } else{ %>
-									<div class="user-name">
-										<%= member.username %>
-									</div>
-									<br>
-									<div class="user-talk" data-uid="<%= member._id %>">
-										Trò chuyện
-									</div>
+									<% if(member.status){ %>
+										<div class="user-name">
+											<%= member.username %>
+										</div>
+										<br>
+										<div class="user-talk" data-uid="<%= member._id %>">
+											Trò chuyện
+										</div>
+									<% } else{ %>
+										<div class="user-name" style="color:#b3b0b0">
+											<%= member.username %>
+											<div>(Chưa kết bạn)</div>
+										</div>
+									<% } %>
 								<% } %>
 							</li>
 						<% }); %>					

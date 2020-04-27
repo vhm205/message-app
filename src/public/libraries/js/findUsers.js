@@ -3,7 +3,7 @@ function findUsersToAddContact(e) {
         const keyword = $('#input-find-users').val();
 
         if(!keyword.length){
-            alertify.notify('Bạn cần nhập username hoặc email để tìm kiếm', 'warning');
+            alertify.notify('Bạn cần nhập username hoặc email để tìm kiếm', 'error');
             return;
         }
 

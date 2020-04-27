@@ -127,14 +127,36 @@ const readMoreContactsReceived = async (req, res) => {
 	}
 }
 
+const searchUserChat = async (req, res) => {
+	let errorsArr = []
+	let errorsRes = validationResult(req)
+
+	if(!errorsRes.isEmpty()){
+		Object.values(errorsRes.mapped()).forEach(e => errorsArr.push(e.msg))
+		return res.status(500).send(errorsArr)
+	}
+
+	try {
+		const keyword = req.query.keyword
+		const currentUserId = req.user._id
+
+		const users = await contact.searchUserChat(currentUserId, keyword);
+		
+		return res.status(200).send(users)
+	} catch (err) {
+		return res.status(500).send(err)
+	}
+}
+
 module.exports = {
-    findUsersContact,
-    addRequestContact,
+	findUsersContact,
+	addRequestContact,
 	cancelRequestContact,
 	removeContact,
 	removeRequestContactReceived,
 	acceptRequestContactReceived,
 	readMoreContacts,
 	readMoreContactsSent,
-	readMoreContactsReceived
+	readMoreContactsReceived,
+	searchUserChat
 }
