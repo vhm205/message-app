@@ -4,6 +4,28 @@
 
 const socket = io();
 
+function convertToEmoij() {
+	$(".convert-emoji").each(function() {
+		const original = $(this).html();
+		const converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+}
+
+function bufferToBase64(buffer) {
+	return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+}
+
+function getLastIndex(arr){
+	if(!arr.length) return [];
+	return arr[arr.length - 1];
+}
+
+function convertTimstampToHumanTime(timestamp) {
+	if(!timestamp) return '';
+	return moment(timestamp).locale('vi').startOf('seconds').fromNow();
+}
+
 function nineScrollLeft() {
   $('.left').niceScroll({
     smoothscroll: true,
@@ -215,18 +237,6 @@ function changeScreenChat() {
 		// Chat attachment message
 		chatAttachment(chatId);
 	})
-}
-
-function convertToEmoij() {
-	$(".convert-emoji").each(function() {
-		const original = $(this).html();
-		const converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
-}
-
-function bufferToBase64(buffer) {
-	return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
 }
 
 function checkUserOnline() {

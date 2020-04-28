@@ -188,14 +188,14 @@ const readMoreContacts = (userId, skip) => {
 		try {
 			// Get more contacts and limit (Skip old)
 			const moreContacts = await ContactModel.readMoreContacts(userId, skip, LIMIT_NUMBER_TAKEN);
-			const getContents = moreContacts.map(async contact => {
+			const users = moreContacts.map(async contact => {
 				if(contact.contactId == userId){
 					return await UserModel.findNormalUserById(contact.userId)
 				}
 				return await UserModel.findNormalUserById(contact.contactId)
 			})
-			
-			resolve(await Promise.all(getContents))
+
+			resolve(await Promise.all(users))
 		} catch (err) {
 			reject(err)
 		}

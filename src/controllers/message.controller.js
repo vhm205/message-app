@@ -2,20 +2,20 @@ import multer from 'multer';
 import fsExtra from 'fs-extra';
 import { transErrors } from '../../lang/vi';
 import { validationResult } from 'express-validator';
-import { message } from '../services/index';
+import { message, group } from '../services/index';
 import { app } from '../config/app';
 
 // ------------------- Handle Upload image message ------------------
 const storageImageChat = multer.diskStorage({
 	destination: (req, file, cb) => {
-			cb(null, app.image_message_directory)
+		cb(null, app.image_message_directory)
 	},
 	filename: (_, file, cb) => {
-			if(!app.image_message_type.includes(file.mimetype)){
-					return cb(transErrors.image_message_wrong_type, null)
-			}
+		if(!app.image_message_type.includes(file.mimetype)){
+			return cb(transErrors.image_message_wrong_type, null)
+		}
 
-			cb(null, file.originalname)
+		cb(null, file.originalname)
 	}
 })
 
@@ -27,10 +27,10 @@ const uploadImageMessage = multer({
 // ------------------- Handle Upload attachment message ------------------
 const storageAttachmentChat = multer.diskStorage({
 	destination: (req, file, cb) => {
-			cb(null, app.attachment_message_directory)
+		cb(null, app.attachment_message_directory)
 	},
 	filename: (_, file, cb) => {
-			cb(null, file.originalname)
+		cb(null, file.originalname)
 	}
 })
 
@@ -132,7 +132,27 @@ const addNewAttachment = (req, res) => {
 	})
 }
 
+const readMoreConversations = async (req, res) => {
+	try {
+		// Get skip from query url
+		const skipNumberGroup = +req.query.skip_group;
+		const skipNumberPerson = +req.query.skip_person;
+
+		// Get more conversations
+		const moreConversations = await message.readMoreConversations(req.user._id, skipNumberGroup, skipNumberPerson);
+		const moreGroupWithMembers = await group.readMoreGroupWithMembers(req.user._id, skipNumberGroup);
+
+		return res.status(200).json({
+			moreConversations,
+			moreGroupWithMembers
+		})
+	} catch (err) {
+		return res.status(500).send(err)
+	}
+}
+
 module.exports = {
+	readMoreConversations,
 	addNewMessage,
 	addNewAttachment,
 	addNewImage

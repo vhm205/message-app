@@ -5,7 +5,7 @@ import { messageModel, conversationType, messageType } from '../models/message.m
 import { transErrors } from '../../lang/vi';
 import { app } from '../config/app';
 
-const LIMIT_CONVERSATION_TAKEN = 10;
+const LIMIT_CONVERSATION_TAKEN = 1;
 const LIMIT_MESSAGE_TAKEN = 10;
 
 const getAllConversations = userId => {
@@ -31,25 +31,65 @@ const getAllConversations = userId => {
 			// Merge two arrays above into one
 			const allConversations = [...userConversations, ...groupConversations]
 
-			// Sort it! DESCENDING by updatedAt
-			// allConversations.sort((a, b) => b.updatedAt - a.updatedAt)
-
 			// Get conversation with messages
 			const allConversationsWithMessPromise = allConversations.map(async conversation => {
 				conversation = conversation.toObject()
 				let getMessages = conversation.members ? 
 				await messageModel.getMessagesInGroup(conversation._id, LIMIT_MESSAGE_TAKEN) :
 				await messageModel.getMessagesInPersonal(userId, conversation._id, LIMIT_MESSAGE_TAKEN);
-				
+
 				conversation.messages = getMessages.reverse();
 				return conversation;
 			})
 			const allConversationWithMess = await Promise.all(allConversationsWithMessPromise)
 			allConversationWithMess.sort((a, b) => b.updatedAt - a.updatedAt)
 
-			resolve(allConversationWithMess)
+			return resolve(allConversationWithMess)
 		} catch (err) {
 			return reject(err)
+		}
+	})
+}
+
+const readMoreConversations = (userId, skipNumberGroup, skipNumberPerson) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const contacts = await ContactModel.readMoreContacts(userId, skipNumberPerson, LIMIT_CONVERSATION_TAKEN);			
+			const userConversationsPromise = contacts.map(async contact => {
+				let userInfo = (contact.contactId == userId) ? 
+				await UserModel.findNormalUserById(contact.userId) : 
+				await UserModel.findNormalUserById(contact.contactId);
+
+				// Assign updatedAt field of contact into userInfo
+				userInfo.updatedAt = contact.updatedAt;
+				return userInfo;
+			});
+
+			// Get contact of current user
+			const userConversations = await Promise.all(userConversationsPromise);
+
+			// Read more groups with current user
+			const groupConversations = await ChatGroupModel.readMoreChatGroup(userId, skipNumberGroup, LIMIT_CONVERSATION_TAKEN);
+
+			// Merge two arrays above into one
+			const readMoreConversations = [...userConversations, ...groupConversations];
+
+			// Get conversation with messages
+			const readMoreConversationsWithMessPromise = readMoreConversations.map(async conversation => {
+				conversation = conversation.toObject();
+				let getMessages = conversation.members ? 
+				await messageModel.getMessagesInGroup(conversation._id, LIMIT_MESSAGE_TAKEN) :
+				await messageModel.getMessagesInPersonal(userId, conversation._id, LIMIT_MESSAGE_TAKEN);
+
+				conversation.messages = getMessages.reverse();
+				return conversation;
+			})
+			const readMoreConversationWithMess = await Promise.all(readMoreConversationsWithMessPromise);
+			readMoreConversationWithMess.sort((a, b) => b.updatedAt - a.updatedAt);
+			
+			return resolve(readMoreConversationWithMess);
+		} catch (err) {
+			return reject(err);
 		}
 	})
 }
@@ -261,6 +301,7 @@ const addNewAttachment = (sender, receiverId, attachment, isChatGroup) => {
 
 module.exports = {
 	getAllConversations,
+	readMoreConversations,
 	addNewMessage,
 	addNewAttachment,
 	addNewImage
