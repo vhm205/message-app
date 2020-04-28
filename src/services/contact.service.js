@@ -81,19 +81,19 @@ const acceptRequestContactReceived = (userId, contactId) => {
 }
 
 const findUsersContact = (userId, keyword) => {
-    return new Promise(async (resolve, _) => {
-        let deprecatedUserId = [userId];
-        let contactsByUser = await ContactModel.findAllByUser(userId)
+	return new Promise(async (resolve, _) => {
+		let deprecatedUserId = [userId];
+		let contactsByUser = await ContactModel.findAllByUser(userId)
 
 		// Add user has made friends
-        contactsByUser.forEach(contact => {
-            deprecatedUserId = [...deprecatedUserId, contact.userId, contact.contactId]
-        })
-        deprecatedUserId = [...new Set(deprecatedUserId)]
+		contactsByUser.forEach(contact => {
+			deprecatedUserId = [...deprecatedUserId, contact.userId, contact.contactId]
+		})
+		deprecatedUserId = [...new Set(deprecatedUserId)]
 
-        // Find All User except for those who have already made friends
-        resolve(await UserModel.findAllUserForAddContact(deprecatedUserId, keyword))
-    })
+		// Find All User except for those who have already made friends
+		resolve(await UserModel.findAllUserForAddContact(deprecatedUserId, keyword))
+	})
 }
 
 const getContacts = userId => {

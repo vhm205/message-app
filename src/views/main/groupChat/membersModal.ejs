@@ -25,14 +25,22 @@
 										<div>(Bạn)</div>
 									</div>
 								<% } else if(member._id.toString() === group.userId.toString()) { %>
-									<div class="user-name user-admin">
-										<%= member.username %>
-										<div>(Admin)</div>
-									</div>
-									<br>
-									<div class="user-talk" data-uid="<%= member._id %>">
-										Trò chuyện
-									</div>
+									<% if(member.status){ %>
+										<div class="user-name user-admin">
+											<%= member.username %>
+											<div>(Admin)</div>
+										</div>
+										<br>
+										<div class="user-talk" data-uid="<%= member._id %>">
+											Trò chuyện
+										</div>
+									<% } else{ %>
+										<div class="user-name user-admin">
+											<%= member.username %>
+											<div>(Admin)</div>
+											<div>(Chưa kết bạn)</div>
+										</div>
+									<% } %>
 								<% } else{ %>
 									<% if(member.status){ %>
 										<div class="user-name">

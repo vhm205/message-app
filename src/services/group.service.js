@@ -83,7 +83,7 @@ const getAllGroupWithMembers = userId => {
 const readMoreGroupWithMembers = (userId, skip) => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			// Get groups of current user (limit)
+			// Get groups of current user (skip, limit)
 			const allGroupOfCurrentUser = await ChatGroupModel.readMoreChatGroup(userId, skip, LIMIT_CONVERSATION_TAKEN);
 
 			// Assign info of members for group.members and return all group
