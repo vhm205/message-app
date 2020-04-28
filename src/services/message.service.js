@@ -94,6 +94,28 @@ const readMoreConversations = (userId, skipNumberGroup, skipNumberPerson) => {
 	})
 }
 
+const getConversationByContactId = (userId, contactId) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const contact = await ContactModel.checkExists(userId, contactId);
+
+			// Get info contact of current user
+			let userInfo = (contact.contactId == userId) ? 
+				await UserModel.findNormalUserById(contact.userId) : 
+				await UserModel.findNormalUserById(contact.contactId);
+
+			// Get conversation with messages
+			userInfo = userInfo.toObject();
+			const getMessages = await messageModel.getMessagesInPersonal(userId, userInfo._id, LIMIT_MESSAGE_TAKEN);
+			userInfo.messages = getMessages.reverse();
+
+			return resolve(userInfo);
+		} catch (err) {
+			return reject(err);
+		}
+	})
+}
+
 const addNewMessage = (sender, receiverId, text, isChatGroup) => {
 	return new Promise(async (resolve, reject) => {
 		try {
@@ -300,6 +322,7 @@ const addNewAttachment = (sender, receiverId, attachment, isChatGroup) => {
 }
 
 module.exports = {
+	getConversationByContactId,
 	getAllConversations,
 	readMoreConversations,
 	addNewMessage,

@@ -27,13 +27,16 @@ function convertTimstampToHumanTime(timestamp) {
 }
 
 function nineScrollLeft() {
-  $('.left').niceScroll({
-    smoothscroll: true,
-    horizrailenabled: false,
-    cursorcolor: '#ECECEC',
-    cursorwidth: '7px',
-    scrollspeed: 50
-  });
+	const leftside = $('.left');
+	leftside.niceScroll({
+		smoothscroll: true,
+		horizrailenabled: false,
+		cursorcolor: '#ECECEC',
+		cursorwidth: '7px',
+		scrollspeed: 50
+	});
+	leftside.getNiceScroll().resize();
+	leftside.scrollTop(leftside[0].scrollHeight);
 }
 
 function nineScrollRight(conversationId) {
@@ -203,6 +206,37 @@ function flashMasterNotify() {
   if(notify.length){
     alertify.notify(notify, 'success', 5)
   }
+}
+
+function talkWithContact() {
+	$('.user-talk').off('click').on('click', function() {
+		const chatId = $(this).data('uid');
+		const modal = $(this).closest('.modal');
+		if(modal.length){
+			$(modal[0]).modal('hide');
+		}
+		const userChat = $(`#all-chat a li[data-chat=${chatId}]`);
+		if(userChat.length){
+			userChat.trigger('click');
+		} else{
+			$.get(`/message/get-conversation-by-contact?contact_id=${chatId}`, function (data) {
+				const currentUserId = $('#dropdown-navbar-user').data('uid');
+				const allAttachmentModal = $('.all-attachment-modal');
+				const allImageModal = $('.all-image-modal');
+				const allChat = $('#all-chat ul');
+				const screenChat = $('#screen-chat');
+
+				allChat.prepend(leftSideChatPersonalWithData(data, true));
+				screenChat.prepend(rightSideChatPersonalWithData(data, currentUserId));
+				allAttachmentModal.append(modalAttachmentWithData(data));
+				allImageModal.append(modalImageWithData(data));
+
+				changeScreenChat();
+				checkUserOnline();
+				$(`.person[data-chat=${data._id}]`).addClass('active').trigger('click');
+			});
+		}
+	})
 }
 
 function changeTypeChat() {

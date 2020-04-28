@@ -132,6 +132,18 @@ const addNewAttachment = (req, res) => {
 	})
 }
 
+const getConversationByContactId = async (req, res) => {
+	try {
+		const contactId = req.query.contact_id;
+
+		// Get All Conversation of current user
+		const conversationByContactId = await message.getConversationByContactId(req.user._id, contactId);
+		return res.status(200).send(conversationByContactId);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+}
+
 const readMoreConversations = async (req, res) => {
 	try {
 		// Get skip from query url
@@ -145,13 +157,14 @@ const readMoreConversations = async (req, res) => {
 		return res.status(200).json({
 			moreConversations,
 			moreGroupWithMembers
-		})
+		});
 	} catch (err) {
-		return res.status(500).send(err)
+		return res.status(500).send(err);
 	}
 }
 
 module.exports = {
+	getConversationByContactId,
 	readMoreConversations,
 	addNewMessage,
 	addNewAttachment,

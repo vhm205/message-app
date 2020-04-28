@@ -15,9 +15,12 @@ ContactSchema.statics = {
 	},
 	findAllByUser(currentId){
 		return this.find({
-			$or: [
-				{ 'userId': currentId },
-				{ 'contactId': currentId }
+			$and: [
+				{$or: [
+					{ 'userId': currentId },
+					{ 'contactId': currentId }
+				]},
+				{ 'status': true }
 			]
 		})
 	},
