@@ -7,7 +7,6 @@ function searchUserChat(e) {
 			return;
 		}
 
-		$('#search-results').css('display', 'block')
 		$.get(`/contact/search-user?keyword=${keyword}`, function(data) {
 			if(data.length){
 				let results = '';
@@ -16,7 +15,7 @@ function searchUserChat(e) {
 						<li class="user-talk" data-uid="${user._id}">
 							<img src="./libraries/images/users/${user.avatar}" />
 							<span id="username-search">
-								${user.username}
+							${user.username}
 							</span>
 						</li>
 					`;
@@ -25,11 +24,13 @@ function searchUserChat(e) {
 				talkWithContact();
 			} else{
 				$('#search-results ul').html(`
-					<div class="user-not-found">Không tìm thấy kết quả nào</div>
+				<div class="user-not-found">Không tìm thấy kết quả nào</div>
 				`);
 			}
+			// Show result
+			$('#search-results').css('display', 'block');
 		}).catch(err => {
-			alertify.notify(err.responseJSON[0], 'error')
+			alertify.notify(err.responseJSON[0], 'error');
 		})
 	}
 }
@@ -39,7 +40,7 @@ $(document).ready(function() {
 		keypress: searchUserChat,
 		focus: () => {
 			if($('#search-results ul').html() !== ''){
-				$('#search-results').css('display', 'block')
+				$('#search-results').css('display', 'block');
 			}
 		},
 		focusout: () => {

@@ -18,9 +18,7 @@ const postRegister = async (req, res) => {
     let errorsRes = validationResult(req)
 
     if(!errorsRes.isEmpty()){
-        let errors = Object.values(errorsRes.mapped())
-
-        errors.forEach(e => errorsArr.push(e.msg))
+        Object.values(errorsRes.mapped()).forEach(e => errorsArr.push(e.msg))
 
         req.flash('errors', errorsArr)
         return res.redirect('/auth')

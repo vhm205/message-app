@@ -500,7 +500,7 @@ label:focus,
 .read-more-all-chat,
 .read-more-user-chat,
 .read-more-group-chat {
-    text-align: center;
+   text-align: center;
 	margin-top: 30px;
 	font-size: 16px;
 }

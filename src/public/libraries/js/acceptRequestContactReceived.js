@@ -241,6 +241,7 @@ function acceptRequestContactReceived() {
 				changeScreenChat()
 				removeContact()
 				talkWithContact()
+				checkUserOnline()
 
 				$(`.person[data-chat=${targetId}]`).addClass('active').trigger('click')
 
@@ -326,6 +327,7 @@ socket.on('response-accept-request-contact-received', user => {
 	changeScreenChat()
 	removeContact()
 	talkWithContact()
+	checkUserOnline()
 })
 
 $(document).ready(function() {
