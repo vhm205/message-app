@@ -132,13 +132,20 @@ const addNewAttachment = (req, res) => {
 	})
 }
 
-const getConversationByContactId = async (req, res) => {
+const getAllConversationsRemaining = async (req, res) => {
 	try {
+		// Get skip from query url
+		const skipNumberGroup = +req.query.skip_group;
+		const skipNumberPerson = +req.query.skip_person;
 		const contactId = req.query.contact_id;
 
 		// Get All Conversation of current user
-		const conversationByContactId = await message.getConversationByContactId(req.user._id, contactId);
-		return res.status(200).send(conversationByContactId);
+		const { readMoreConversationWithMess, moreGroupRemainingWithMembers } = await message.getAllConversationsRemaining(req.user._id, contactId, skipNumberGroup, skipNumberPerson, group);
+
+		return res.status(200).json({
+			readMoreConversationWithMess,
+			moreGroupRemainingWithMembers
+		});
 	} catch (err) {
 		return res.status(500).send(err);
 	}
@@ -164,7 +171,7 @@ const readMoreConversations = async (req, res) => {
 }
 
 module.exports = {
-	getConversationByContactId,
+	getAllConversationsRemaining,
 	readMoreConversations,
 	addNewMessage,
 	addNewAttachment,

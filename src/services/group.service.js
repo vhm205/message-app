@@ -3,8 +3,7 @@ import ContactModel from '../models/contact.model';
 import UserModel from '../models/user.model';
 import { types, notifyModel } from '../models/notification.model';
 import { transErrors } from '../../lang/vi';
-
-const LIMIT_CONVERSATION_TAKEN = 1;
+import { LIMIT_CONVERSATION_TAKEN } from '../config/app';
 
 const findUsersContact = (userId, keyword) => {
 	return new Promise(async resolve => {
@@ -109,9 +108,39 @@ const readMoreGroupWithMembers = (userId, skip) => {
 	})
 }
 
+const readMoreGroupRemainingWithMembers = (userId, skip, timestamp) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			// Get groups of current user (skip, limit)
+			const readMoreGroupOfCurrentUser = await ChatGroupModel.readMoreChatGroupRemaning(userId, skip, timestamp);
+
+			// Assign info of members for group.members and return all group
+			const readMoreGroupWithMemberPromise = readMoreGroupOfCurrentUser.map(async group => { 
+				group = group.toObject();
+				const members = await Promise.all(group.members.map(async member => {
+					let user = await UserModel.findNormalUserById(member.userId);
+					let isHaveFriends = await ContactModel.checkExists(userId, member.userId)
+					// Check current user and member in the group is already made a friend 
+					user = user.toObject();
+					user.status = isHaveFriends ? isHaveFriends.status : false;
+					return user;
+				}))
+				group.members = members;
+				return group;
+			})
+
+			const readMoreGroupWithMember = await Promise.all(readMoreGroupWithMemberPromise);
+			return resolve(readMoreGroupWithMember);
+		} catch (err) {
+			return reject(err);
+		}
+	})
+}
+
 module.exports = {
 	findUsersContact,
 	addNewChatGroup,
 	getAllGroupWithMembers,
+	readMoreGroupRemainingWithMembers,
 	readMoreGroupWithMembers
 }

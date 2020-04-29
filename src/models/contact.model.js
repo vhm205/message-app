@@ -178,6 +178,19 @@ ContactSchema.statics = {
 			]
 		})
 	},
+	readMoreContactsRemaining(currentId, skip){
+		return this.find({
+			$and: [
+				{
+					$or: [
+						{ 'userId': currentId },
+						{ 'contactId': currentId }
+					]
+				},
+				{ 'status': true }
+			]
+		}).sort({ 'updatedAt': -1 }).skip(skip)
+	},
 	readMoreContacts(currentId, skip, limit){
 		return this.find({
 			$and: [
