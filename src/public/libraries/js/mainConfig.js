@@ -208,6 +208,47 @@ function flashMasterNotify() {
   }
 }
 
+function loadMoreConversation(moreConversations, moreGroupWithMembers) {
+	// Init variable
+	const currentUserId = $('#dropdown-navbar-user').data('uid');
+	const allAttachmentModal = $('.all-attachment-modal');
+	const allImageModal = $('.all-image-modal');
+	const allMemberModal = $('.all-members-modal');
+	const allChat = $('#all-chat ul');
+	const userChat = $('#user-chat ul');
+	const groupChat = $('#group-chat ul');
+	const screenChat = $('#screen-chat');
+
+	let rightSideChat = '';
+	let imageModal = '';
+	let attachmentModal = '';
+	let memberModal = '';
+
+	// Load more conversation
+	moreConversations.map(conversation => {
+		if(conversation.members){ // Is Chat Group
+			allChat.append(leftSideChatGroupWithData(conversation));
+			groupChat.append(leftSideChatGroupWithData(conversation));
+			rightSideChat += rightSideChatGroupWithData(conversation, currentUserId);
+		} else{ // Is Chat Personal
+			allChat.append(leftSideChatPersonalWithData(conversation));
+			userChat.append(leftSideChatPersonalWithData(conversation));
+			rightSideChat += rightSideChatPersonalWithData(conversation, currentUserId);
+		}
+		imageModal += modalImageWithData(conversation);
+		attachmentModal += modalAttachmentWithData(conversation);
+	})
+	// Load more member modal in chat group
+	moreGroupWithMembers.map(group => {
+		memberModal += modalMemberWithData(group, currentUserId);
+	})
+
+	screenChat.append(rightSideChat);
+	allAttachmentModal.append(attachmentModal);
+	allImageModal.append(imageModal);
+	allMemberModal.append(memberModal);
+}
+
 function talkWithContact() {
 	$('.user-talk').off('click').on('click', function() {
 		const chatId = $(this).data('uid');
@@ -215,26 +256,26 @@ function talkWithContact() {
 		if(modal.length){
 			$(modal[0]).modal('hide');
 		}
+		// Check if conversation exists on leftside, then click it,
+		// Otherwise, Get all conversation (by contact id) and click it.
 		const userChat = $(`#all-chat a li[data-chat=${chatId}]`);
 		if(userChat.length){
 			userChat.trigger('click');
 		} else{
-			$.get(`/message/get-conversation-by-contact?contact_id=${chatId}`, function (data) {
-				const currentUserId = $('#dropdown-navbar-user').data('uid');
-				const allAttachmentModal = $('.all-attachment-modal');
-				const allImageModal = $('.all-image-modal');
-				const allChat = $('#all-chat ul');
-				const screenChat = $('#screen-chat');
-
-				allChat.prepend(leftSideChatPersonalWithData(data, true));
-				screenChat.prepend(rightSideChatPersonalWithData(data, currentUserId));
-				allAttachmentModal.append(modalAttachmentWithData(data));
-				allImageModal.append(modalImageWithData(data));
-
+			const skipNumberGroup = $('#all-chat ul li.group-chat').length;
+			const skipNumberPerson = $('#all-chat ul li:not(.group-chat)').length;
+			$.get(`/message/read-all-conversation-remaining?contact_id=${chatId}&skip_group=${skipNumberGroup}&skip_person=${skipNumberPerson}`, function (data) {
+				const { readMoreConversationWithMess, moreGroupRemainingWithMembers } = data;
+				
+				// Load all conversations remaning
+				loadMoreConversation(readMoreConversationWithMess, moreGroupRemainingWithMembers);
 				changeScreenChat();
+				talkWithContact();
 				checkUserOnline();
-				$(`.person[data-chat=${data._id}]`).addClass('active').trigger('click');
-			});
+
+				// Click It!!!
+				$(`.person[data-chat=${chatId}]`).addClass('active').trigger('click');
+			})
 		}
 	})
 }

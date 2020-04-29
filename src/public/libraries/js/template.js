@@ -292,11 +292,11 @@ function getMembersGroup(members, adminId, currentUserId) {
 	return membersHtml;
 }
 
-function leftSideChatPersonalWithData(data, mark = false) {
+function leftSideChatPersonalWithData(data) {
 	const [lastMessage, preview] = getTimeAndPreviewLeftSide(data);
 	return `
 		<a href="#uid_${data._id}" class="room-chat" data-target="#to_${data._id}">
-			<li class="person ${mark ? "mark" : ""}" data-chat="${data._id}">
+			<li class="person" data-chat="${data._id}">
 				<div class="left-avatar">
 					<div class="dot"></div>
 					<img src="./libraries/images/users/${data.avatar}" alt="Thumb - Contact">

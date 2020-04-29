@@ -3,10 +3,7 @@ import ContactModel from '../models/contact.model';
 import ChatGroupModel from '../models/chatGroup.model';
 import { messageModel, conversationType, messageType } from '../models/message.model';
 import { transErrors } from '../../lang/vi';
-import { app } from '../config/app';
-
-const LIMIT_CONVERSATION_TAKEN = 1;
-const LIMIT_MESSAGE_TAKEN = 10;
+import { app, LIMIT_CONVERSATION_TAKEN, LIMIT_MESSAGE_TAKEN } from '../config/app';
 
 const getAllConversations = userId => {
 	return new Promise(async (resolve, reject) => {
@@ -94,6 +91,68 @@ const readMoreConversations = (userId, skipNumberGroup, skipNumberPerson) => {
 	})
 }
 
+const getAllConversationsRemaining = (userId, contactId, skipNumberGroup, skipNumberPerson, group) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const contacts = await ContactModel.readMoreContactsRemaining(userId, skipNumberPerson);
+
+			// Filter contacts by contact id
+			let listContacts = [];
+			let contactUpdatedAt = 0;
+			for (const index in contacts) {
+				listContacts = [...listContacts, contacts[index]];
+				// if contact id is found in contacts, then break loop
+				if(contacts[index].userId === contactId || contacts[index].contactId === contactId){
+					contactUpdatedAt = contacts[index].updatedAt;
+					break;
+				}
+			}
+
+			const userConversationsPromise = listContacts.map(async contact => {
+				let userInfo = (contact.contactId == userId) ? 
+				await UserModel.findNormalUserById(contact.userId) : 
+				await UserModel.findNormalUserById(contact.contactId);
+
+				// Assign updatedAt field of contact into userInfo
+				userInfo.updatedAt = contact.updatedAt;
+				return userInfo;
+			});
+
+			// Get contact of current user
+			const userConversations = await Promise.all(userConversationsPromise);
+
+			// Read more groups with current user
+			const groupConversations = await ChatGroupModel.readMoreChatGroupRemaning(userId, skipNumberGroup, contactUpdatedAt);
+			// Read more groups with info of members for memberModal
+			const moreGroupRemainingWithMembers = await group.readMoreGroupRemainingWithMembers(userId, skipNumberGroup, contactUpdatedAt);
+
+			// Merge two arrays (userConversations, groupConversations) into one
+			const readMoreConversationsRemaning = [...userConversations, ...groupConversations];
+
+			// Get conversations with messages
+			const readMoreConversationsWithMessPromise = readMoreConversationsRemaning.map(async conversation => {
+				conversation = conversation.toObject();
+				let getMessages = conversation.members ? 
+				await messageModel.getMessagesInGroup(conversation._id, LIMIT_MESSAGE_TAKEN) :
+				await messageModel.getMessagesInPersonal(userId, conversation._id, LIMIT_MESSAGE_TAKEN);
+
+				conversation.messages = getMessages.reverse();
+				return conversation;
+			})
+			const readMoreConversationWithMess = await Promise.all(readMoreConversationsWithMessPromise);
+			readMoreConversationWithMess.sort((a, b) => b.updatedAt - a.updatedAt);
+
+			return resolve({
+				readMoreConversationWithMess,
+				moreGroupRemainingWithMembers
+			});
+		} catch (err) {
+			return reject(err);
+		}
+	})
+}
+
+// You can remove this func
 const getConversationByContactId = (userId, contactId) => {
 	return new Promise(async (resolve, reject) => {
 		try {
@@ -322,7 +381,7 @@ const addNewAttachment = (sender, receiverId, attachment, isChatGroup) => {
 }
 
 module.exports = {
-	getConversationByContactId,
+	getAllConversationsRemaining,
 	getAllConversations,
 	readMoreConversations,
 	addNewMessage,
