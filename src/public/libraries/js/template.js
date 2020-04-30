@@ -65,7 +65,19 @@ function templateRightSideChatPersonal(conversation) {
 			</span>
 		</div>
 		<div class="content-chat">
-			<div class="chat" data-chat="${conversation.id}"></div>
+			<div class="chat" data-chat="${conversation.id}">
+				<!-- Spinner Load more -->
+				<div class="read-more-message">
+					<div class="read-more-message-loader">
+						<div class="sk-wave">
+							<div class="sk-wave-rect"></div>
+							<div class="sk-wave-rect"></div>
+							<div class="sk-wave-rect"></div>
+							<div class="sk-wave-rect"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="write" data-chat="${conversation.id}">
 			<input type="text" class="write-chat" data-chat="${conversation.id}">
@@ -124,7 +136,19 @@ function templateRightSideChatGroup(conversation) {
 			</span>
 		</div>
 		<div class="content-chat">
-			<div class="chat" data-chat="${conversation.id}"></div>
+			<div class="chat" data-chat="${conversation.id}">
+				<!-- Spinner Load more -->
+				<div class="read-more-message">
+					<div class="read-more-message-loader">
+						<div class="sk-wave">
+							<div class="sk-wave-rect"></div>
+							<div class="sk-wave-rect"></div>
+							<div class="sk-wave-rect"></div>
+							<div class="sk-wave-rect"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="write" data-chat="${conversation.id}">
 			<input type="text" class="write-chat input-chat-group" data-chat="${conversation.id}">
@@ -369,6 +393,17 @@ function rightSideChatPersonalWithData(data, currentUserId) {
 			</div>
 			<div class="content-chat">
 				<div class="chat" data-chat="${data._id}">
+					<!-- Spinner Load more -->
+					<div class="read-more-message">
+						<div class="read-more-message-loader">
+							<div class="sk-wave">
+								<div class="sk-wave-rect"></div>
+								<div class="sk-wave-rect"></div>
+								<div class="sk-wave-rect"></div>
+								<div class="sk-wave-rect"></div>
+							</div>
+						</div>
+					</div>
 					${messages}
 				</div>
 			</div>
@@ -438,6 +473,17 @@ function rightSideChatGroupWithData(data, currentUserId) {
 			</div>
 			<div class="content-chat">
 				<div class="chat" data-chat="${data._id}">
+					<!-- Spinner Load more -->
+					<div class="read-more-message">
+						<div class="read-more-message-loader">
+							<div class="sk-wave">
+								<div class="sk-wave-rect"></div>
+								<div class="sk-wave-rect"></div>
+								<div class="sk-wave-rect"></div>
+								<div class="sk-wave-rect"></div>
+							</div>
+						</div>
+					</div>
 					${messages}
 				</div>
 			</div>
@@ -546,4 +592,79 @@ function modalMemberWithData(data, currentUserId) {
 			</div>
 		</div>
 	`;
+}
+
+function rightSideGroupMessages(messages, currentUserId) {
+	let messagesHtml = '';
+	messages.map(message => {
+		switch (message.messageType) {
+			case 'text':
+				messagesHtml += `
+					<div class="bubble convert-emoji ${message.senderId == currentUserId ? "me" : "you"}" data-mess-id="${message._id}">
+						<img src="./libraries/images/users/${message.sender.avatar}" class="avatar-small" title="${message.sender.name}" />
+						<span title="${new Date(message.createdAt).toLocaleString()}">
+							${message.text}
+						</span>
+					</div>
+				`;
+				break;
+			case 'image':
+				messagesHtml += `
+					<div class="bubble bubble-image-file ${message.senderId == currentUserId ? "me" : "you"}" data-mess-id="${message._id}">
+						<img src="./libraries/images/users/${message.sender.avatar}" class="avatar-small" title="${message.sender.name}" />
+						<img src="data:${message.file.contentType}; base64, ${bufferToBase64(message.file.data)}" class="show-image-chat" title="${new Date(message.createdAt).toLocaleString()}">
+					</div>
+				`;
+				break;
+			case 'file':
+				messagesHtml += `
+					<div class="bubble bubble-attach-file ${message.senderId == currentUserId ? "me" : "you"}" data-mess-id="${message._id}">
+						<img src="./libraries/images/users/${message.sender.avatar}" class="avatar-small" title="${message.sender.name}" />
+						<a href="data:${message.file.contentType}; base64, ${bufferToBase64(message.file.data)}"
+							download="${message.file.fileName}"
+							title="${new Date(message.createdAt).toLocaleString()}">
+							${message.file.fileName}
+						</a>
+					</div>
+				`;
+				break;
+		}
+	})
+	return messagesHtml;
+}
+
+function rightSidePersonalMessages(messages, currentUserId) {
+	let messagesHtml = '';
+	messages.map(message => {
+		switch (message.messageType) {
+			case 'text':
+				messagesHtml += `
+					<div class="bubble convert-emoji ${message.senderId == currentUserId ? "me" : "you"}" data-mess-id="${message._id}">
+						<span title="${new Date(message.createdAt).toLocaleString()}">
+							${message.text}
+						</span>
+					</div>
+				`;
+				break;
+			case 'image':
+				messagesHtml += `
+					<div class="bubble bubble-image-file ${message.senderId == currentUserId ? "me" : "you"}" data-mess-id="${message._id}">
+						<img src="data:${message.file.contentType}; base64, ${bufferToBase64(message.file.data)}" class="show-image-chat" title="${new Date(message.createdAt).toLocaleString()}">
+					</div>
+				`;
+				break;
+			case 'file':
+				messagesHtml += `
+					<div class="bubble bubble-attach-file ${message.senderId == currentUserId ? "me" : "you"}" data-mess-id="${message._id}">
+						<a href="data:${message.file.contentType}; base64, ${bufferToBase64(message.file.data)}"
+							download="${message.file.fileName}"
+							title="${new Date(message.createdAt).toLocaleString()}">
+							${message.file.fileName}
+						</a>
+					</div>
+				`;
+				break;
+		}
+	})
+	return messagesHtml;
 }

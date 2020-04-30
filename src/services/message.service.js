@@ -48,6 +48,20 @@ const getAllConversations = userId => {
 	})
 }
 
+const readMoreMessages = (userId, contactId, skipMessage, isChatGroup) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const readMoreMessages = isChatGroup === 'true' ? 
+			await messageModel.readMoreMessagesInGroup(contactId, +skipMessage, LIMIT_MESSAGE_TAKEN) :
+			await messageModel.readMoreMessagesInPersonal(userId, contactId, +skipMessage, LIMIT_MESSAGE_TAKEN);
+
+			return resolve(readMoreMessages.reverse());
+		} catch (err) {
+			return reject(err);
+		}
+	})
+}
+
 const readMoreConversations = (userId, skipNumberGroup, skipNumberPerson) => {
 	return new Promise(async (resolve, reject) => {
 		try {
@@ -384,6 +398,7 @@ module.exports = {
 	getAllConversationsRemaining,
 	getAllConversations,
 	readMoreConversations,
+	readMoreMessages,
 	addNewMessage,
 	addNewAttachment,
 	addNewImage

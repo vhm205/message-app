@@ -25,14 +25,30 @@
 	</div>
     
 	<% if(success != '') { %>
-			<div class="master-success-message alert alert-success"> 
-				<%- success %> 
-			</div>
+		<div class="master-success-message alert alert-success"> 
+			<%- success %> 
+		</div>
 	<% } %>
 	
 	<%- include('navbar/navbar') %>
 
 	<%- content %>
+
+	<%- include('contact/contactModal') %>
+
+	<%- include('stream/streamModal') %>
+
+	<%- include('image/imageModal') %>
+
+	<%- include('attach/attachModal') %>
+
+	<%- include('profile/profileModal') %>
+
+	<%- include('groupChat/groupChatModal') %>
+
+	<%- include('groupChat/membersModal') %>
+
+	<%- include('notification/notificationModal') %>
 
 	<!--Libraries-->
 	<script src="./libraries/bower_components/jquery/dist/jquery.min.js"></script>
@@ -60,6 +76,7 @@
 	<script src="./libraries/js/findUsers.js"></script>
 	<script src="./libraries/js/acceptRequestContactReceived.js"></script>
 	<script src="./libraries/js/removeContact.js"></script>
+	<script src="./libraries/js/talkWithContact.js"></script>
 
 	<script src="./libraries/js/readMoreNotif.js"></script>
 	<script src="./libraries/js/markAllAsRead.js"></script>
@@ -73,26 +90,10 @@
 	<script src="./libraries/js/chatText.js"></script>
 	<script src="./libraries/js/typingMessage.js"></script>
 	<script src="./libraries/js/readMoreConversations.js"></script>
+	<script src="./libraries/js/readMoreMessage.js"></script>
 
 	<script src="./libraries/js/findUsersToAddGroupChat.js"></script>
 	<script src="./libraries/js/createGroupChat.js"></script>
 	<script src="./libraries/js/searchUserChat.js"></script>
-
-	<%- include('contact/contactModal') %>
-
-	<%- include('stream/streamModal') %>
-
-	<%- include('image/imageModal') %>
-
-	<%- include('attach/attachModal') %>
-
-	<%- include('profile/profileModal') %>
-
-	<%- include('groupChat/groupChatModal') %>
-
-	<%- include('groupChat/membersModal') %>
-
-	<%- include('notification/notificationModal') %>
-
 </body>
 </html>

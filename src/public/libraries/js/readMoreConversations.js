@@ -16,10 +16,10 @@ $(document).ready(function() {
 
 			// Load more conversations
 			loadMoreConversation(moreConversations, moreGroupWithMembers);
-			// nineScrollLeft();
 			changeScreenChat();
 			talkWithContact();
 			checkUserOnline();
+			nineScrollLeft();
 
 			$('.read-more-all-chat-loader').css('display', 'none');
 			$(this).css('display', 'block');
