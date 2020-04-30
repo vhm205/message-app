@@ -170,9 +170,23 @@ const readMoreConversations = async (req, res) => {
 	}
 }
 
+const readMoreMessages = async (req, res) => {
+	try {
+		const isChatGroup = req.query.chat_group;
+		const skipMessage = req.query.skip_message;
+		const chatId = req.query.chat_id;
+		const getMoreMessages = await message.readMoreMessages(req.user._id, chatId, skipMessage, isChatGroup);
+
+		return res.status(200).send(getMoreMessages);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+}
+
 module.exports = {
 	getAllConversationsRemaining,
 	readMoreConversations,
+	readMoreMessages,
 	addNewMessage,
 	addNewAttachment,
 	addNewImage

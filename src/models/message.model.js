@@ -1,29 +1,29 @@
 const mongoose = require('mongoose')
 
 const MessageSchema = new mongoose.Schema({
-		senderId: String,
-		receiverId: String,
-		messageType: String,
-		conversationType: String,
-    sender: {
-			id: String,
-			name: String,
-			avatar: String
-    },
-    receiver: {
-			id: String,
-			name: String,
-			avatar: String
-    },
-    text: String,
-    file: {
-			data: Buffer,
-			contentType: String,
-			fileName: String
-    },
-    createdAt: { type: Number, default: Date.now() },
-    updatedAt: { type: Number, default: null },
-    deletedAt: { type: Number, default: null }
+	senderId: String,
+	receiverId: String,
+	messageType: String,
+	conversationType: String,
+	sender: {
+		id: String,
+		name: String,
+		avatar: String
+	},
+	receiver: {
+		id: String,
+		name: String,
+		avatar: String
+	},
+	text: String,
+	file: {
+		data: Buffer,
+		contentType: String,
+		fileName: String
+	},
+	createdAt: { type: Number, default: Date.now() },
+	updatedAt: { type: Number, default: null },
+	deletedAt: { type: Number, default: null }
 })
 
 MessageSchema.statics = {
@@ -48,8 +48,31 @@ MessageSchema.statics = {
 			]
 		}).sort({ 'createdAt': -1 }).limit(limit)
 	},
+	readMoreMessagesInPersonal(senderId, receiverId, skip, limit){
+		return this.find({
+			$or: [
+				{
+					$and: [
+						{'senderId': senderId},
+						{'receiverId': receiverId},
+					]
+				},
+				{
+					$and: [
+						{'senderId': receiverId},
+						{'receiverId': senderId},
+					]
+				}
+			]
+		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit)
+	},
 	getMessagesInGroup(receiverId, limit){
 		return this.find({'receiverId': receiverId}).sort({ 'createdAt': -1 }).limit(limit)
+	},
+	readMoreMessagesInGroup(receiverId, skip, limit){
+		return this.find({
+			'receiverId': receiverId
+		}).sort({ 'createdAt': -1 }).skip(skip).limit(limit)
 	}
 }
 

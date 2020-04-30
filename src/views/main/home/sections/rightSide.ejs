@@ -2,8 +2,7 @@
 	<div class="tab-content" id="screen-chat">
 		<% allConversationWithMess.forEach(function(conversation, index){ %>
 			<% if(conversation.members){ %>
-				<div class="right tab-pane <% if(index === 0){ %> active <% } %>" data-chat="<%= conversation._id %>"
-					id="to_<%= conversation._id %>">
+				<div class="right tab-pane <% if(index === 0){ %> active <% } %>" data-chat="<%= conversation._id %>" id="to_<%= conversation._id %>">
 					<div class="top">
 						<span>To: <span class="name"><%= conversation.name %></span></span>
 						<span class="chat-menu-right">
@@ -42,6 +41,17 @@
 					</div>
 					<div class="content-chat">
 						<div class="chat" data-chat="<%= conversation._id %>">
+							<!-- Spinner Load more -->
+							<div class="read-more-message">
+								<div class="read-more-message-loader">
+									<div class="sk-wave">
+										<div class="sk-wave-rect"></div>
+										<div class="sk-wave-rect"></div>
+										<div class="sk-wave-rect"></div>
+										<div class="sk-wave-rect"></div>
+									</div>
+								</div>
+							</div>
 							<% conversation.messages.forEach(function(message){ %>
 								<% if(message.messageType === 'text') { %>
 								<div class="convert-emoji bubble <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
@@ -54,8 +64,7 @@
 								</div>
 								<% } %>
 								<% if(message.messageType === 'image') { %>
-								<div
-									class="bubble bubble-image-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
+								<div class="bubble bubble-image-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
 									<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small"
 										title="<%= message.sender.name %>" />
@@ -64,8 +73,7 @@
 								</div>
 								<% } %>
 								<% if(message.messageType === 'file') { %>
-								<div
-									class="bubble bubble-attach-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
+								<div class="bubble bubble-attach-file <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"
 									data-mess-id="<%= message._id %>">
 									<img src="./libraries/images/users/<%= message.sender.avatar %>" class="avatar-small"
 										title="<%= message.sender.name %>" />
@@ -124,6 +132,17 @@
 					</div>
 					<div class="content-chat">
 						<div class="chat" data-chat="<%= conversation._id %>">
+							<!-- Spinner Load more -->
+							<div class="read-more-message">
+								<div class="read-more-message-loader">
+									<div class="sk-wave">
+										<div class="sk-wave-rect"></div>
+										<div class="sk-wave-rect"></div>
+										<div class="sk-wave-rect"></div>
+										<div class="sk-wave-rect"></div>
+									</div>
+								</div>
+							</div>
 							<% conversation.messages.forEach(function(message){ %>
 								<% if(message.messageType === 'text') { %>
 								<div class="convert-emoji bubble <% if(message.senderId == user._id){ %> me <% } else{ %> you <% } %>"

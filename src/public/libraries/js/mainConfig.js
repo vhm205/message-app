@@ -32,24 +32,24 @@ function nineScrollLeft() {
 		smoothscroll: true,
 		horizrailenabled: false,
 		cursorcolor: '#ECECEC',
-		cursorwidth: '7px',
+		cursorwidth: '10px',
 		scrollspeed: 50
 	});
 	leftside.getNiceScroll().resize();
 	leftside.scrollTop(leftside[0].scrollHeight);
 }
 
-function nineScrollRight(conversationId) {
-	const chatContent = $(`.right .chat[data-chat=${conversationId}]`)
+function nineScrollRight(chatId) {
+	const chatContent = $(`.right .chat[data-chat=${chatId}]`)
 	chatContent.niceScroll({
 		smoothscroll: true,
 		horizrailenabled: false,
 		cursorcolor: '#ECECEC',
-		cursorwidth: '7px',
+		cursorwidth: '10px',
 		scrollspeed: 50
 	});
 	chatContent.getNiceScroll().resize();
-	chatContent.scrollTop(chatContent[0].scrollHeight);
+	chatContent.scrollTop(chatContent[0].scrollHeight);	
 }
 
 function enableEmojioneArea(chatId) {
@@ -105,7 +105,7 @@ function spinLoading() {
 }
 
 function ajaxLoading() {
-  $(document)
+  $('body, html')
     .ajaxStart(function() {
 		spinLoading();
     })
@@ -249,37 +249,6 @@ function loadMoreConversation(moreConversations, moreGroupWithMembers) {
 	allMemberModal.append(memberModal);
 }
 
-function talkWithContact() {
-	$('.user-talk').off('click').on('click', function() {
-		const chatId = $(this).data('uid');
-		const modal = $(this).closest('.modal');
-		if(modal.length){
-			$(modal[0]).modal('hide');
-		}
-		// Check if conversation exists on leftside, then click it,
-		// Otherwise, Get all conversation (by contact id) and click it.
-		const userChat = $(`#all-chat a li[data-chat=${chatId}]`);
-		if(userChat.length){
-			userChat.trigger('click');
-		} else{
-			const skipNumberGroup = $('#all-chat ul li.group-chat').length;
-			const skipNumberPerson = $('#all-chat ul li:not(.group-chat)').length;
-			$.get(`/message/read-all-conversation-remaining?contact_id=${chatId}&skip_group=${skipNumberGroup}&skip_person=${skipNumberPerson}`, function (data) {
-				const { readMoreConversationWithMess, moreGroupRemainingWithMembers } = data;
-				
-				// Load all conversations remaning
-				loadMoreConversation(readMoreConversationWithMess, moreGroupRemainingWithMembers);
-				changeScreenChat();
-				talkWithContact();
-				checkUserOnline();
-
-				// Click It!!!
-				$(`.person[data-chat=${chatId}]`).addClass('active').trigger('click');
-			})
-		}
-	})
-}
-
 function changeTypeChat() {
 	$('#select-type-chat').change(function() {
 		$(this).children(':selected').tab('show')
@@ -311,6 +280,8 @@ function changeScreenChat() {
 		chatImage(chatId);
 		// Chat attachment message
 		chatAttachment(chatId);
+		// Read more message
+		readMoreMessage(chatId);
 	})
 }
 
@@ -358,4 +329,6 @@ $(document).ready(function() {
 
 	// Active first contact
 	$('#all-chat a:first-child li').trigger('click')
+
+	// $(`.right .chat[data-chat=${conversationId}]`)
 });

@@ -69,6 +69,7 @@ const initRoutes = app => {
 	router.post('/message/add-new-attachment', auth.checkLoggedIn, message.addNewAttachment)
 	router.get('/message/read-all-conversation-remaining', auth.checkLoggedIn, message.getAllConversationsRemaining)
 	router.get('/message/read-more-conversations', auth.checkLoggedIn, message.readMoreConversations)
+	router.get('/message/read-more-messages', auth.checkLoggedIn, message.readMoreMessages)
 
 	router.get('/group/find-user', auth.checkLoggedIn, contactValid.findUsersContact, group.findUsersContact)
 	router.post('/group/add-new-group', auth.checkLoggedIn, groupValid.createGroupChat, group.addNewChatGroup)
