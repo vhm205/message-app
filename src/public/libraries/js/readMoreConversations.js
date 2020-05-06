@@ -8,7 +8,7 @@ $(document).ready(function() {
 
 		$.get(`/message/read-more-conversations?skip_group=${skipNumberGroup}&skip_person=${skipNumberPerson}`, function(data){
 			const { moreConversations, moreGroupWithMembers } = data;
-
+			
 			if(!moreConversations.length){
 				$('.read-more-all-chat').html('');
 				return;

@@ -30,6 +30,7 @@ export const transErrors = {
 	group_not_found: 'Group chat không tồn tại',
 	personal_not_found: 'Người dùng không tồn tại',
 	chatgroup_exists: 'Group chat đã tồn tại',
+	user_not_in_group: 'Ngừơi dùng không ở trong nhóm chat'
 }
 
 export const transSuccesses = {

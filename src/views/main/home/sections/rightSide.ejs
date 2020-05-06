@@ -5,6 +5,17 @@
 				<div class="right tab-pane <% if(index === 0){ %> active <% } %>" data-chat="<%= conversation._id %>" id="to_<%= conversation._id %>">
 					<div class="top">
 						<span>To: <span class="name"><%= conversation.name %></span></span>
+						<% if(conversation.userId != user._id){ %>
+							<span class="chat-menu-right">
+								<a href="javascript:void(0)" class="user-leave-group" data-group="<%= conversation._id %>">
+									Rời khỏi nhóm
+									<i class="fa fa-times"></i>
+								</a>
+							</span>
+							<span class="chat-menu-right">
+								<a href="javascript:void(0)">&nbsp;</a>
+							</span>
+						<% } %>
 						<span class="chat-menu-right">
 							<a href="#attachsModal_<%= conversation._id %>" class="show-attachs" data-toggle="modal">
 								Tệp đính kèm

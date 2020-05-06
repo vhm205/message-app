@@ -1,25 +1,31 @@
 function ajaxCreateGroupChat(data) {
 	$.post("/group/add-new-group", data, function (data) {
-		const { _id, name, messageAmount, userAmount } = data
+		const { _id, name, userId, messageAmount, userAmount } = data
 		const conversation = {
 			id: _id,
+			adminId: userId,
 			groupname: name,
 			messageAmount: messageAmount,
 			userAmount: userAmount,
 			avatar: './libraries/images/users/group-avatar.png'
 		}
+		
+		const currentUserId = $('#dropdown-navbar-user').data('uid')
 		const leftSideChatHtml = templateLeftSideChatGroup(conversation)
-		const rightSideChatHtml = templateRightSideChatGroup(conversation)
+		const rightSideChatHtml = templateRightSideChatGroup(conversation, currentUserId)
 		const modalImageHtml = templateModalImage(_id)
 		const modalAttachmentHtml = templateModalAttachment(_id)
+		const modalMemberHtml = modalMemberWithData(data, currentUserId)
 		// Append contact into left side chat & right side chat
 		$('#all-chat .people').prepend(leftSideChatHtml)
 		$('#group-chat .people').prepend(leftSideChatHtml)
 		$('#screen-chat').prepend(rightSideChatHtml)
 		$('.all-image-modal').append(modalImageHtml)
 		$('.all-attachment-modal').append(modalAttachmentHtml)
+		$('.all-members-modal').append(modalMemberHtml)
 
 		changeScreenChat()
+		talkWithContact()
 		socket.emit('create-new-group-chat', { data: data })
 		socket.emit('push-id-to-socket', { id: _id })
 		$(`.group-chat[data-chat=${_id}]`).addClass('active').trigger('click')
@@ -42,10 +48,10 @@ function ajaxCreateGroupChat(data) {
 function createGroupChat() {
 	$('#create-group-chat').off('click').on('click', function () {
 		const listUser = $('#friends-added li')
-		const nameGroupChat = $('#name-group-chat').val()
+		const nameGroupChat = $('#name-group-chat').val().trim()
 		const amountUser = listUser.length
 
-		if (!nameGroupChat) {
+		if (!nameGroupChat.length) {
 			alertify.notify('Bạn chưa nhập tên group chat', 'error', 5)
 			return
 		}
@@ -99,16 +105,19 @@ socket.on('response-create-new-group-chat', response => {
 		userAmount: userAmount,
 		avatar: './libraries/images/users/group-avatar.png'
 	}
+	const currentUserId = $('#dropdown-navbar-user').data('uid')
 	const leftSideChatHtml = templateLeftSideChatGroup(conversation)
-	const rightSideChatHtml = templateRightSideChatGroup(conversation)
+	const rightSideChatHtml = templateRightSideChatGroup(conversation, currentUserId)
 	const modalImageHtml = templateModalImage(_id)
 	const modalAttachmentHtml = templateModalAttachment(_id)
+	const modalMemberHtml = modalMemberWithData(response, currentUserId)
 	// Append contact into left side chat & right side chat
 	$('#all-chat .people').prepend(leftSideChatHtml)
 	$('#group-chat .people').prepend(leftSideChatHtml)
 	$('#screen-chat').prepend(rightSideChatHtml)
 	$('.all-image-modal').append(modalImageHtml)
 	$('.all-attachment-modal').append(modalAttachmentHtml)
+	$('.all-members-modal').append(modalMemberHtml)
 
 	socket.emit('push-id-to-socket', { id: _id })
 	changeScreenChat()

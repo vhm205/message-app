@@ -73,6 +73,7 @@ const initRoutes = app => {
 
 	router.get('/group/find-user', auth.checkLoggedIn, contactValid.findUsersContact, group.findUsersContact)
 	router.post('/group/add-new-group', auth.checkLoggedIn, groupValid.createGroupChat, group.addNewChatGroup)
+	router.delete('/group/user-leave-group', auth.checkLoggedIn, group.leaveGroupChat)
 
 	return app.use('/', router)
 }

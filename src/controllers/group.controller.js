@@ -42,7 +42,20 @@ const addNewChatGroup = async (req, res) => {
 	}
 }
 
+const leaveGroupChat = async (req, res) => {
+	try {
+		const currentUserId = req.user._id;
+		const groupId = req.body.groupId;
+		const leaveGroup = await group.leaveGroupChat(currentUserId, groupId);
+
+		return res.status(200).send(leaveGroup);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+}
+
 module.exports = {
 	addNewChatGroup,
-	findUsersContact
+	findUsersContact,
+	leaveGroupChat
 }

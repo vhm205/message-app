@@ -37,16 +37,43 @@ const addNewChatGroup = (userId, name, amount, members) => {
 			members: [{ userId: currendUserId }, ...members.map(id => ({ userId: id }))]
 		};
 
-		// Create notify in DB
-		members.map(async id => {
-			await notifyModel.createNew({
-				senderId: currendUserId,
-				receiverId: id,
-				type: types.ADD_GROUP
-			})
-		});
+		let newChatGroup = await ChatGroupModel.createNew(items);
+		newChatGroup = newChatGroup.toObject();
+		const infoMember = await Promise.all(newChatGroup.members.map(async member => {
+			let user = await UserModel.findNormalUserById(member.userId);
+			let isMadeFriend = await ContactModel.checkExists(userId, member.userId)
+			// Check current user and member in the group is already made a friend 
+			user = user.toObject();
+			user.status = isMadeFriend ? isMadeFriend.status : false;
+			return user;
+		}))
+		newChatGroup.members = infoMember;
 
-		resolve(await ChatGroupModel.createNew(items));
+		// Create notify in DB
+		// members.map(async id => {
+		// 	await notifyModel.createNew({
+		// 		senderId: currendUserId,
+		// 		receiverId: id,
+		// 		type: types.ADD_GROUP
+		// 	})
+		// });
+		
+		resolve(newChatGroup);
+	})
+}
+
+const leaveGroupChat = (userId, groupId) => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const group = await ChatGroupModel.checkUserInGroup(userId, groupId);
+			if (!group) return reject(transErrors.user_not_in_group);
+
+			// Remove userId in members[]
+			const leaveGroupChat = await ChatGroupModel.leaveGroupChat(userId, groupId, group.userAmount - 1);
+			return resolve(leaveGroupChat);
+		} catch (err) {
+			return reject(err);
+		}
 	})
 }
 
@@ -140,6 +167,7 @@ const readMoreGroupRemainingWithMembers = (userId, skip, timestamp) => {
 module.exports = {
 	findUsersContact,
 	addNewChatGroup,
+	leaveGroupChat,
 	getAllGroupWithMembers,
 	readMoreGroupRemainingWithMembers,
 	readMoreGroupWithMembers
