@@ -9,6 +9,7 @@ import chatImage from './chat/chatImage';
 import chatAttachment from './chat/chatAttachment';
 import typingMessage from './chat/typingMessage';
 import createGroupChat from './group/createGroupChat';
+import leaveGroupChat from './group/leaveGroupChat';
 
 const initSockets = io => {
 	require('events').EventEmitter.defaultMaxListeners = 20
@@ -23,6 +24,7 @@ const initSockets = io => {
 	chatAttachment(io)
 	createGroupChat(io)
 	checkUserOnline(io)
+	leaveGroupChat(io)
 	// io.sockets.setMaxListeners(20);
 	// io.sockets.getMaxListeners()
 }

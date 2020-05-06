@@ -503,7 +503,7 @@ label:focus,
 .read-more-message {
    text-align: center;
 	margin-top: 30px;
-	margin-bottom: 20px;
+	margin-bottom: 100px;
 	font-size: 16px;
 }
 .navbar-brand>img {
@@ -1530,7 +1530,6 @@ label:focus,
 	color: black !important;
 	background-color: transparent !important;
 }
-
 .user-not-found{
 	width: 100%;
 	height: 200px;

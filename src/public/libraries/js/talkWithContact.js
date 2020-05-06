@@ -17,12 +17,13 @@ function talkWithContact() {
 		const skipNumberPerson = $('#all-chat ul li:not(.group-chat)').length;
 		$.get(`/message/read-all-conversation-remaining?contact_id=${chatId}&skip_group=${skipNumberGroup}&skip_person=${skipNumberPerson}`, function (data) {
 			const { readMoreConversationWithMess, moreGroupRemainingWithMembers } = data;
-			
+
 			// Load more conversations
 			loadMoreConversation(readMoreConversationWithMess, moreGroupRemainingWithMembers);
 			changeScreenChat();
 			talkWithContact();
 			checkUserOnline();
+			nineScrollLeft();
 
 			// Click It!!!
 			$(`.person[data-chat=${chatId}]`).addClass('active').trigger('click');

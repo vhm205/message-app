@@ -10,7 +10,7 @@
 				<div class="modal-body">
 					<ul class="list-members">
 						<% group.members.forEach(function(member, index) { %>
-							<li class="_membersList">
+							<li class="_membersList" data-uid="<%= member._id %>">
 								<div class="user-avatar">
 									<img src="./libraries/images/users/<%= member.avatar %>" alt="Thumb Group">
 								</div>

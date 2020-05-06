@@ -170,7 +170,7 @@ function addFriendsToGroup() {
 	const uid = $(this).data('uid');
 	let isExists = false;
 
-	// Check is exists
+	// Check exists
 	$('#friends-added li').each((_, value) => {
 		if(uid === $(value).data('uid')) isExists = true;
 	})	
@@ -282,6 +282,8 @@ function changeScreenChat() {
 		chatAttachment(chatId);
 		// Read more message
 		readMoreMessage(chatId);
+		// Current user leave group chat
+		leaveGroupChat();
 	})
 }
 
@@ -328,7 +330,5 @@ $(document).ready(function() {
 	changeScreenChat();
 
 	// Active first contact
-	$('#all-chat a:first-child li').trigger('click')
-
-	// $(`.right .chat[data-chat=${conversationId}]`)
+	$('#all-chat a:first-child li').trigger('click');
 });

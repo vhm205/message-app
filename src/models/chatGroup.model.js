@@ -29,6 +29,25 @@ ChatGroupSchema.statics = {
 			'userId': currentId
 		}, { _id: 1 })
 	},
+	checkUserInGroup(currentId, groupId){
+		return this.findOne({
+			'_id': groupId,
+			'members': {
+				$elemMatch: { 'userId': currentId }
+			}
+		}, { _id: 1, userAmount: 1 })
+	},
+	leaveGroupChat(currentId, groupId, userAmount){
+		return this.updateOne(
+			{ '_id': groupId },
+			{
+				$pull: {
+					'members': { 'userId': currentId }
+				},
+				'userAmount': userAmount
+			}
+		)
+	},
 	getChatGroupById(id){
 		return this.findById(id)
 	},

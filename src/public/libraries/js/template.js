@@ -101,11 +101,22 @@ function templateRightSideChatPersonal(conversation) {
 	`;
 }
 
-function templateRightSideChatGroup(conversation) {
+function templateRightSideChatGroup(conversation, currentUserId) {
 	return `
 	<div class="right tab-pane" data-chat="${conversation.id}" id="to_${conversation.id}">
 		<div class="top">
 			<span>To: <span class="name">${conversation.groupname}</span></span>
+			${(conversation.adminId !== currentUserId) ? (
+				`<span class="chat-menu-right">
+					<a href="javascript:void(0)" class="user-leave-group" data-group="${conversation.id}">
+						Rời khỏi nhóm
+						<i class="fa fa-times"></i>
+					</a>
+				</span>
+				<span class="chat-menu-right">
+					<a href="javascript:void(0)">&nbsp;</a>
+				</span>`
+			) : ''}
 			<span class="chat-menu-right">
 				<a href="#attachsModal_${conversation.id}" class="show-attachs" data-toggle="modal"> Tệp đính kèm <i class="fa fa-paperclip"></i>
 				</a>
@@ -264,7 +275,7 @@ function getMembersGroup(members, adminId, currentUserId) {
 	let membersHtml = '';
 	members.map(member => {		
 		membersHtml += `
-			<li class="_membersList">
+			<li class="_membersList" data-uid="${member._id}">
 				<div class="user-avatar">
 					<img src="./libraries/images/users/${member.avatar}" alt="Thumb Group">
 				</div>
@@ -439,6 +450,17 @@ function rightSideChatGroupWithData(data, currentUserId) {
 		id="to_${data._id}">
 			<div class="top">
 				<span>To: <span class="name">${data.name}</span></span>
+				${(data.userId !== currentUserId) ? (
+					`<span class="chat-menu-right">
+						<a href="javascript:void(0)" class="user-leave-group" data-group="${data._id}">
+							Rời khỏi nhóm
+							<i class="fa fa-times"></i>
+						</a>
+					</span>
+					<span class="chat-menu-right">
+						<a href="javascript:void(0)">&nbsp;</a>
+					</span>`
+				) : ''}
 				<span class="chat-menu-right">
 					<a href="#attachsModal_${data._id}" class="show-attachs" data-toggle="modal">
 						Tệp đính kèm <i class="fa fa-paperclip"></i>
