@@ -327,6 +327,35 @@ function getMembersGroup(members, adminId, currentUserId) {
 	return membersHtml;
 }
 
+/// For response real-time create new group chat (Only one-time use)
+function getMembersGroupFake(members, adminId, currentUserId) {
+	let membersHtml = '';
+	members.map(member => {		
+		membersHtml += `
+			<li class="_membersList" data-uid="${member._id}">
+				<div class="user-avatar">
+					<img src="./libraries/images/users/${member.avatar}" alt="Thumb Group">
+				</div>
+				${((member._id === currentUserId && member._id !== adminId) ? (
+					`<div class="user-name">
+						${member.username}
+						<div>(Bạn)</div>
+					</div>`
+				) : (member._id === adminId) ? (
+					`<div class="user-name user-admin">
+						${member.username}
+						<div>(Admin)</div>
+					</div>`
+				) : (
+					`<div class="user-name">
+						${member.username}
+					</div>`
+				))}
+			</li>`;
+	});
+	return membersHtml;
+}
+
 function leftSideChatPersonalWithData(data) {
 	const [lastMessage, preview] = getTimeAndPreviewLeftSide(data);
 	return `
@@ -597,6 +626,28 @@ function modalAttachmentWithData(data) {
 
 function modalMemberWithData(data, currentUserId) {
 	const members = getMembersGroup(data.members, data.userId, currentUserId);
+	return `
+		<div class="modal fade" id="membersModal_${data._id}" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Danh sách các thành viên trong nhóm.</h4>
+					</div>
+					<div class="modal-body">
+						<ul class="list-members">
+							${members}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	`;
+}
+
+/// For response real-time create new group chat (Only one-time use)
+function modalMemberWithDataFake(data, currentUserId) {
+	const members = getMembersGroupFake(data.members, data.userId, currentUserId);
 	return `
 		<div class="modal fade" id="membersModal_${data._id}" role="dialog">
 			<div class="modal-dialog modal-lg">

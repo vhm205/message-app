@@ -5,7 +5,7 @@ const NotificationSchema = new mongoose.Schema({
     receiverId: String,
     type: String,
     isReaded: { type: Boolean, default: false },
-    createdAt: { type: Number, default: Date.now() }
+    createdAt: { type: Number, default: Date.now }
 })
 
 NotificationSchema.statics = {
@@ -57,28 +57,30 @@ const NOTIFICATION_TYPES = {
 
 const NOTIFICATION_CONTENTS = {
 	getContent: (notifyType, isReaded, userId, username, avatar) => {
+		const readed = !isReaded ? "notify-readed-false" : "";
+
 		if(notifyType === NOTIFICATION_TYPES.ADD_CONTACT){
 			return `
-				<div data-uid="${userId}" class="${!isReaded ? "notify-readed-false" : ""}">
+				<div data-uid="${userId}" class="${readed}">
 					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notification"> 
 					<strong>${username}</strong> đã gửi cho bạn 1 lời mời kết bạn
-				</div>`
+				</div>`;
 		}
 		if(notifyType === NOTIFICATION_TYPES.ACCEPT_CONTACT){
 			return `
-				<div class="notify-readed-false" data-uid="${userId}">
+				<div data-uid="${userId}" class="${readed}">
 					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notification"> 
 					<strong>${username}</strong> đã chấp nhận lời mời kết bạn
-				</div>`
+				</div>`;
 		}
 		if(notifyType === NOTIFICATION_TYPES.ADD_GROUP){
 			return `
-				<div class="notify-readed-false" data-uid="${userId}">
+				<div data-uid="${userId}" class="${readed}">
 					<img class="avatar-small" src="./libraries/images/users/${avatar}" alt="Notification"> 
 					<strong>${username}</strong> đã thêm bạn vào một nhóm chat
-				</div>`
+				</div>`;
 		}
-		return "Doesn't match with any notify type"
+		return "Doesn't match with any notify type";
 	}
 }
 

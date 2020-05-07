@@ -8,8 +8,8 @@ const ChatGroupSchema = new mongoose.Schema({
     members: [
 		{ _id: false, userId: String }
     ],
-    createdAt: { type: Number, default: Date.now() },
-    updatedAt: { type: Number, default: Date.now() },
+    createdAt: { type: Number, default: Date.now },
+    updatedAt: { type: Number, default: Date.now },
     deletedAt: { type: Number, default: null }
 })
 
@@ -56,7 +56,7 @@ ChatGroupSchema.statics = {
 			'members': {
 				$elemMatch: { 'userId': currentId }
 			}
-		}).limit(limit)
+		}).sort({ 'updatedAt': -1 }).limit(limit)
 	},
 	readMoreChatGroupRemaning(currentId, skip, timestamp){
 		return this.find({
@@ -66,14 +66,14 @@ ChatGroupSchema.statics = {
 				}},
 				{ 'updatedAt': { $gt: timestamp } }
 			]
-		}).skip(skip)
+		}).sort({ 'updatedAt': -1 }).skip(skip)
 	},
 	readMoreChatGroup(currentId, skip, limit){
 		return this.find({
 			'members': {
 				$elemMatch: { 'userId': currentId }
 			}
-		}).skip(skip).limit(limit)
+		}).sort({ 'updatedAt': -1 }).skip(skip).limit(limit)
 	},
 	getGroupIdByUserId(currentId){
 		return this.find({

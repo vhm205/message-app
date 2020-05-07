@@ -1,5 +1,9 @@
 import { notify, contact, message, group } from '../services/index';
-import { bufferToBase64, getLastIndex, convertTimstampToHumanTime } from '../helpers/clientHelpers';
+import { 
+	bufferToBase64, 
+	getLastIndex, 
+	convertTimstampToHumanTime 
+} from '../helpers/clientHelpers';
 
 const getHome = async (req, res) => {
 	const { _id } = req.user
