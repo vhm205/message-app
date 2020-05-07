@@ -237,7 +237,7 @@ const readMoreContactsReceived = (userId, skip) => {
 const searchUserChat = (userId, keyword) => {
 	return new Promise(async (resolve, _) => {
 		let listUserId = [];
-		let contactsByUser = await ContactModel.findContactsHaveBeenFriends(userId)
+		let contactsByUser = await ContactModel.findAllByUser(userId)
 
 		// Add user id has made friends
 		contactsByUser.forEach(contact => {

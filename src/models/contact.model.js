@@ -4,7 +4,7 @@ const ContactSchema = new mongoose.Schema({
     userId: String,
     contactId: String,
     status: { type: Boolean, default: false },
-    createdAt: { type: Number, default: Date.now() },
+    createdAt: { type: Number, default: Date.now },
     updatedAt: { type: Number, default: null },
     deletedAt: { type: Number, default: null }
 })
@@ -20,19 +20,6 @@ ContactSchema.statics = {
 					{ 'userId': currentId },
 					{ 'contactId': currentId }
 				]},
-				{ 'status': true }
-			]
-		})
-	},
-	findContactsHaveBeenFriends(currentId){
-		return this.find({
-			$and: [
-				{
-					$or: [
-						{ 'userId': currentId },
-						{ 'contactId': currentId }
-					]
-				},
 				{ 'status': true }
 			]
 		})

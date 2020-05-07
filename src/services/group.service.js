@@ -8,7 +8,7 @@ import { LIMIT_CONVERSATION_TAKEN } from '../config/app';
 const findUsersContact = (userId, keyword) => {
 	return new Promise(async resolve => {
 		let listUserId = [];
-		let contactsByUser = await ContactModel.findContactsHaveBeenFriends(userId);
+		let contactsByUser = await ContactModel.findAllByUser(userId);
 
 		// Add user id has made friends
 		contactsByUser.forEach(contact => {
@@ -50,13 +50,13 @@ const addNewChatGroup = (userId, name, amount, members) => {
 		newChatGroup.members = infoMember;
 
 		// Create notify in DB
-		// members.map(async id => {
-		// 	await notifyModel.createNew({
-		// 		senderId: currendUserId,
-		// 		receiverId: id,
-		// 		type: types.ADD_GROUP
-		// 	})
-		// });
+		members.map(async id => {
+			await notifyModel.createNew({
+				senderId: currendUserId,
+				receiverId: id,
+				type: types.ADD_GROUP
+			})
+		});
 		
 		resolve(newChatGroup);
 	})

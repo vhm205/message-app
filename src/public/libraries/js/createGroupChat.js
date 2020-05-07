@@ -110,7 +110,7 @@ socket.on('response-create-new-group-chat', response => {
 	const rightSideChatHtml = templateRightSideChatGroup(conversation, currentUserId)
 	const modalImageHtml = templateModalImage(_id)
 	const modalAttachmentHtml = templateModalAttachment(_id)
-	const modalMemberHtml = modalMemberWithData(response, currentUserId)
+	const modalMemberHtml = modalMemberWithDataFake(response, currentUserId)
 	// Append contact into left side chat & right side chat
 	$('#all-chat .people').prepend(leftSideChatHtml)
 	$('#group-chat .people').prepend(leftSideChatHtml)
