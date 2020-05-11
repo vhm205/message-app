@@ -4,6 +4,7 @@ import removeRequestContactReceived from './contacts/removeRequestContactReceive
 import acceptRequestContactReceived from './contacts/acceptRequestContactReceived';
 import removeContact from './contacts/removeContact';
 import checkUserOnline from './contacts/checkUserOnline';
+import callVideo from './chat/callVideo';
 import chatText from './chat/chatText';
 import chatImage from './chat/chatImage';
 import chatAttachment from './chat/chatAttachment';
@@ -19,6 +20,7 @@ const initSockets = io => {
 	acceptRequestContactReceived(io)
 	removeContact(io)
 	typingMessage(io)
+	callVideo(io)
 	chatText(io)
 	chatImage(io)
 	chatAttachment(io)

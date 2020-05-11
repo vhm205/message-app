@@ -71,7 +71,7 @@ const addNewImage = (req, res) => {
 		if(err){
 			// A Multer error occurred when uploading.
 			if(err instanceof multer.MulterError){
-					return res.status(500).send(transErrors.image_message_size_limit)
+				return res.status(500).send(transErrors.image_message_size_limit)
 			}
 			return res.status(500).send(err)
 		}
