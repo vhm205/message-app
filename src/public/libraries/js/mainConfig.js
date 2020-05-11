@@ -280,6 +280,8 @@ function changeScreenChat() {
 		chatImage(chatId);
 		// Chat attachment message
 		chatAttachment(chatId);
+		// Call video
+		callVideo(chatId);
 		// Read more message
 		readMoreMessage(chatId);
 		// Current user leave group chat

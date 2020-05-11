@@ -27,7 +27,7 @@ function callLogout() {
 		}
 	}).fire({
 		icon: 'success',
-		html: '<h5>Change password successfully<br />Time left: <strong></strong></h5>'
+		html: '<h5>Thay đổi mật khẩu thành công<br />Time left: <strong></strong></h5>'
 	}).then(_ => {
 		$.get('/logout', () => location.reload())
 	})

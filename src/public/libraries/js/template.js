@@ -91,10 +91,9 @@ function templateRightSideChatPersonal(conversation) {
 					<input type="file" id="attach-chat-${conversation.id}" name="my-attach-chat" class="attach-chat" data-chat="${conversation.id}">
 					<i class="fa fa-paperclip"></i>
 				</label>
-				<a href="#streamModal" id="video-chat-${conversation.id}" class="video-chat" data-chat="${conversation.id}" data-toggle="modal">
+				<a href="javascript:void(0)" id="video-chat-${conversation.id}" class="video-chat" data-chat="${conversation.id}">
 					<i class="fa fa-video-camera"></i>
 				</a>
-				<input type="hidden" id="peer-id" value="">
 			</div>
 		</div>
 	</div>
@@ -173,10 +172,6 @@ function templateRightSideChatGroup(conversation, currentUserId) {
 					<input type="file" id="attach-chat-${conversation.id}" name="my-attach-chat" class="attach-chat input-chat-group" data-chat="${conversation.id}">
 					<i class="fa fa-paperclip"></i>
 				</label>
-				<a href="#streamModal" id="video-chat" class="video-chat input-chat-group" data-chat="${conversation.id}" data-toggle="modal">
-					<i class="fa fa-video-camera"></i>
-				</a>
-				<input type="hidden" id="peer-id" value="">
 			</div>
 		</div>
 	</div>
@@ -461,11 +456,9 @@ function rightSideChatPersonalWithData(data, currentUserId) {
 						<input type="file" id="attach-chat-${data._id}" name="my-attach-chat" class="attach-chat" data-chat="${data._id}">
 						<i class="fa fa-paperclip"></i>
 					</label>
-					<a href="#streamModal_${data._id}" id="video-chat-${data._id}" class="video-chat" data-chat="${data._id}"
-						data-toggle="modal">
+					<a href="javascript:void(0)" id="video-chat-${data._id}" class="video-chat" data-chat="${data._id}">
 						<i class="fa fa-video-camera"></i>
 					</a>
-					<input type="hidden" id="peer-id" value="">
 				</div>
 			</div>
 		</div>
@@ -552,11 +545,6 @@ function rightSideChatGroupWithData(data, currentUserId) {
 							class="attach-chat input-chat-group" data-chat="${data._id}">
 						<i class="fa fa-paperclip"></i>
 					</label>
-					<a href="#streamModal_${data._id}" id="video-chat-${data._id}" class="video-chat input-chat-group"
-						data-chat="${data._id}" data-toggle="modal">
-						<i class="fa fa-video-camera"></i>
-					</a>
-					<input type="hidden" id="peer-id" value="">
 				</div>
 			</div>
 		</div>
