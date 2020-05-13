@@ -10,15 +10,34 @@ function callVideo(chatId) {
     })
 }
 
+function playVideoStream(videoId, stream) {
+    const video = document.getElementById(videoId);
+    video.srcObject = stream;
+    video.onloadeddata = function () {
+        video.play();
+    }
+}
+
+function closeVideoStream(stream) {
+    return stream.getTracks().map(track => track.stop());
+}
+
 $(document).ready(function(){
     let peerId = "";
-    const peer = new Peer();
+    const peer = new Peer({
+        key: 'peerjs',
+        host: 'peerjs-server-trungquandev.herokuapp.com',
+        secure: true,
+        port: 443,
+        debug: 3
+    });
+
     peer.on('open', function(id){
         peerId = id;
     })
 
     socket.on('listener-is-offline', () => {
-        alertify('Người dùng hiện đang offline', 'error', 3);
+        alertify.notify('Người dùng hiện đang offline', 'error', 3);
     })
 
     socket.on('response-peer-id-listener', response => {
@@ -81,10 +100,6 @@ $(document).ready(function(){
                         confirmButtonText: 'OK',
                     })
                 });
-                socket.on('response-accept-call-to-caller', response => {
-                    Swal.close();
-                    console.log('Caller OK');
-                })
             },
             onClose: () => {
                 clearInterval(timerInterval);
@@ -137,14 +152,60 @@ $(document).ready(function(){
                 socket.on('response-cancel-call-to-listener', response => {
                     Swal.close();
                 });
-                socket.on('response-accept-call-to-listener', response => {
-                    Swal.close();
-                    console.log('Listener ok');
-                })
             },
             onClose: () => {
                 clearInterval(timerInterval);
             }
         })
+    })
+
+    socket.on('response-accept-call-to-caller', response => {
+        Swal.close();
+
+        const getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
+        console.log(getUserMedia);
+        
+        getUserMedia({video: true, audio: false}, function(stream) {
+            $('#streamModal').modal('show');
+            playVideoStream('local-stream', stream);
+
+            const call = peer.call(response.listenerPeerId, stream);
+            call.on('stream', function(remoteStream) {
+                // Show stream in some video/canvas element.
+                playVideoStream('remote-stream', remoteStream);
+            });
+
+            $('#streamModal').on('hidden.bs.modal', () => {
+                closeVideoStream(stream);
+            });
+        }, function(err) {
+            console.error('Failed to get local stream' ,err);
+        });
+    })
+
+    socket.on('response-accept-call-to-listener', response => {
+        Swal.close();
+
+        const getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
+
+        peer.on('call', function(call) {
+            getUserMedia({video: true, audio: false}, function(stream) {
+                $('#streamModal').modal('show');
+
+                const call = peer.call(response.listenerPeerId, stream);
+                playVideoStream('local-stream', stream);
+                call.answer(stream); // Answer the call with an A/V stream.
+                call.on('stream', function(remoteStream) {
+                    // Show stream in some video/canvas element.
+                    playVideoStream('remote-stream', remoteStream);
+                });
+
+                $('#streamModal').on('hidden.bs.modal', () => {
+                    closeVideoStream(stream);
+                });
+            }, function(err) {
+                console.error('Failed to get local stream' ,err);
+            });
+        });
     })
 })
