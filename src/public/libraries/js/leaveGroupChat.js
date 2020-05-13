@@ -15,7 +15,6 @@ function ajaxLeaveGroupChat(groupId) {
 			$(`.all-attachment-modal #attachsModal_${groupId}`).remove();
 			$(`.all-image-modal #imagesModal_${groupId}`).remove();
 			$(`.all-members-modal #membersModal_${groupId}`).remove();
-			$(`.all-stream-modal #streamModal_${groupId}`).remove();
 		}
 	}).fail(err => {
 		alertify.notify(err.responseText, 'error', 5);
