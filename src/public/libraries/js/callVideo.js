@@ -24,12 +24,18 @@ function closeVideoStream(stream) {
 
 $(document).ready(function(){
     let peerId = "";
+
+    const iceServerListStr = $('#input-ice-server').val();
+    const iceServerList = JSON.parse(iceServerListStr);
+
     const peer = new Peer({
         key: 'peerjs',
         host: 'peerjs-server-trungquandev.herokuapp.com',
         secure: true,
         port: 443,
-        debug: 3
+        config: {
+            'iceServers': iceServerList.v.iceServers
+        }
     });
 
     peer.on('open', function(id){
@@ -104,12 +110,7 @@ $(document).ready(function(){
             onClose: () => {
                 clearInterval(timerInterval);
             }
-        }).then((result) => {
-            /* Read more about handling dismissals below */
-            if (result.dismiss === Swal.DismissReason.timer) {
-                console.log('I was closed by the timer');
-            }
-        })
+        });
     })
 
     socket.on('response-request-call-to-listener', response => {
@@ -163,12 +164,11 @@ $(document).ready(function(){
         Swal.close();
 
         const getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
-        console.log(getUserMedia);
-        
+
         getUserMedia({video: true, audio: false}, function(stream) {
             $('#streamModal').modal('show');
-            playVideoStream('local-stream', stream);
-
+            playVideoStream('local-stream', stream);          
+            
             const call = peer.call(response.listenerPeerId, stream);
             call.on('stream', function(remoteStream) {
                 // Show stream in some video/canvas element.
@@ -177,6 +177,16 @@ $(document).ready(function(){
 
             $('#streamModal').on('hidden.bs.modal', () => {
                 closeVideoStream(stream);
+                socket.emit('caller-end-call-video', response);
+                Swal.fire({
+                    title: `<h3>Kết thúc cuộc trò chuyện với <span style="color: #2ECC71">${response.listenerName}</span> </h3>`,
+                    icon: 'info',
+                    backdrop: 'rgba(85,85,85, .6)',
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#2ECC71',
+                    cancelButtonColor: '#ff7675',
+                    confirmButtonText: 'OK',
+                })
             });
         }, function(err) {
             console.error('Failed to get local stream' ,err);
@@ -191,9 +201,8 @@ $(document).ready(function(){
         peer.on('call', function(call) {
             getUserMedia({video: true, audio: false}, function(stream) {
                 $('#streamModal').modal('show');
-
-                const call = peer.call(response.listenerPeerId, stream);
                 playVideoStream('local-stream', stream);
+
                 call.answer(stream); // Answer the call with an A/V stream.
                 call.on('stream', function(remoteStream) {
                     // Show stream in some video/canvas element.
@@ -202,10 +211,28 @@ $(document).ready(function(){
 
                 $('#streamModal').on('hidden.bs.modal', () => {
                     closeVideoStream(stream);
+                    socket.emit('listener-end-call-video', response);
+                    Swal.fire({
+                        title: `<h3>Kết thúc cuộc trò chuyện với <span style="color: #2ECC71">${response.callerName}</span> </h3>`,
+                        icon: 'info',
+                        backdrop: 'rgba(85,85,85, .6)',
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#2ECC71',
+                        cancelButtonColor: '#ff7675',
+                        confirmButtonText: 'OK',
+                    })
                 });
             }, function(err) {
                 console.error('Failed to get local stream' ,err);
             });
         });
+    })
+
+    socket.on('response-caller-end-call-video', response => {
+        alertify.notify(`${response.listenerName} đã kết thúc cuộc trò chuyện`, 'error', 5);
+    })
+
+    socket.on('response-listener-end-call-video', response => {
+        alertify.notify(`${response.callerName} đã kết thúc cuộc trò chuyện`, 'error', 5);
     })
 })

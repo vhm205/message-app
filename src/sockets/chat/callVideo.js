@@ -5,10 +5,10 @@ import {
 } from '../../helpers/socketHelpers';
 
 const callVideo = io => {
-	let clients = {};
+    let clients = {};
 
 	io.on('connection', socket => {
-		const { _id } = socket.request.user;
+        const { _id } = socket.request.user;
 		clients = pushSocketIdToArray(clients, _id, socket);
 
 		socket.on('check-listener-online-offline', data => {
@@ -109,6 +109,18 @@ const callVideo = io => {
             if (clients[listenerId]) {
 				emitNotifyToArray(clients, io, listenerId, 'response-accept-call-to-listener', response);
 			}
+        })
+
+        socket.on('caller-end-call-video', data => {
+            if(clients[data.listenerId]){
+                emitNotifyToArray(clients, io, data.listenerId, 'response-listener-end-call-video', data);
+            }
+        })
+
+        socket.on('listener-end-call-video', data => {
+            if(clients[data.callerId]){
+                emitNotifyToArray(clients, io, data.callerId, 'response-caller-end-call-video', data);
+            }
         })
 
 		socket.on('disconnect', () => {
