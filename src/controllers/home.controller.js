@@ -1,9 +1,32 @@
 import { notify, contact, message, group } from '../services/index';
+import request from 'request';
 import { 
 	bufferToBase64, 
 	getLastIndex, 
 	convertTimstampToHumanTime 
 } from '../helpers/clientHelpers';
+
+const getICETurnServer = () => {
+	return new Promise((resolve, reject) => {
+		const o = {
+			format: 'urls'
+		}
+		const bodyString = JSON.stringify(o);
+		const options = {
+			url: 'https://global.xirsys.net/_turn/message-app',
+			method: 'PUT',
+			headers: {
+				'Authorization': 'Basic ' + Buffer.from('taolaolataom:ad5f0f52-95b0-11ea-9683-0242ac150003').toString('base64'),
+				'Content-Type': 'application/json',
+				'Content-Length': bodyString.length
+			}
+		};
+		request(options, (error, _, body) => {
+			if(error) return reject(error);
+			return resolve(body);
+		})
+	})
+}
 
 const getHome = async (req, res) => {
 	const { _id } = req.user
@@ -32,7 +55,10 @@ const getHome = async (req, res) => {
 	const allConversationWithMess = await message.getAllConversations(_id)
 
 	// Get All Group with members
-	const allGroupWithMembers = await group.getAllGroupWithMembers(_id)	
+	const allGroupWithMembers = await group.getAllGroupWithMembers(_id)
+
+	//  Get ice turn server
+	const iceTurnServerList = await getICETurnServer()
 
 	res.render('main/home/home', {
 		errors: req.flash('errors'),
@@ -48,6 +74,7 @@ const getHome = async (req, res) => {
 		countAllContactsSend: countAllContactsSend,
 		countAllContactsReceived: countAllContactsReceived,
 		totalContactSendAndReceived: countAllContactsSend + countAllContactsReceived,
+		iceTurnServerList: iceTurnServerList,
 		convertTimstampToHumanTime,
 		bufferToBase64: bufferToBase64,
 		getLastIndex: getLastIndex,
