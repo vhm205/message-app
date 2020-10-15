@@ -3,5 +3,8 @@ node_modules/
 _config.yml
 .swp
 
+sh/env.sh
+sh/env_win.sh
+
 src/public/libraries/bower_components
 src/public/libraries/emojione
