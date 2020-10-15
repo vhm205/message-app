@@ -1,19 +1,33 @@
 <nav class="navbar navbar-inverse no-margin-bottom">
 	<div class="container-fluid">
 		<div class="navbar-header col-sm-3 navbar-left">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			<button
+				type="button"
+				class="navbar-toggle"
+				data-toggle="collapse"
+				data-target="#myNavbar"
+			>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="https://vhmblog102.000webhostapp.com/" target="_blank">
-				<img src="./libraries/images/logo_favicon/logo-trungquandev.png" alt="logo - VHM">
+			<a
+				class="navbar-brand"
+				href="https://vhmblog102.000webhostapp.com/"
+				target="_blank"
+			>
+				<img src="./libraries/images/logo_favicon/logo.jpg" alt="logo - VHM" />
 			</a>
 		</div>
 		<div class="col-sm-3 no-padding">
 			<ul class="nav navbar-nav navbar-left no-padding-start">
 				<li>
-					<input type="text" id="input-search-user-chat" class="searchBox" placeholder="Tìm kiếm tên cuộc trò chuyện">
+					<input
+						type="text"
+						id="input-search-user-chat"
+						class="searchBox"
+						placeholder="Tìm kiếm tên cuộc trò chuyện"
+					/>
 					<div id="search-results">
 						<h3>Kết quả</h3>
 						<div class="search_content">
@@ -31,14 +45,19 @@
 					</a>
 				</li>
 				<li>
-					<a href="#contactsModal" data-toggle="modal" title="Quản lý liên lạc" id="show-modal-contacts">
+					<a
+						href="#contactsModal"
+						data-toggle="modal"
+						title="Quản lý liên lạc"
+						id="show-modal-contacts"
+					>
 						<i class="fa fa-user-plus"></i>
 						<% if(totalContactSendAndReceived > 0){ %>
-							<div class="noti_contact_counter">
-								<b><%= totalContactSendAndReceived %></b>
-							</div>
+						<div class="noti_contact_counter">
+							<b><%= totalContactSendAndReceived %></b>
+						</div>
 						<% } else{ %>
-							<div class="noti_contact_counter d-none"><b></b></div>
+						<div class="noti_contact_counter d-none"><b></b></div>
 						<% } %>
 					</a>
 				</li>
@@ -46,28 +65,42 @@
 					<a href="#" id="noti_Button" data-toggle="modal" title="Thông báo">
 						<i class="fa fa-globe"></i>
 						<% if(notifyUnread > 0){ %>
-							<div class="noti_counter">
-								<b><%= notifyUnread %></b>
-							</div>
+						<div class="noti_counter">
+							<b><%= notifyUnread %></b>
+						</div>
 						<% } else{ %>
-							<div class="noti_counter d-none"><b></b></div>
+						<div class="noti_counter d-none"><b></b></div>
 						<% } %>
 						<div id="noti_Container">
 							<div id="notifications">
-								<a href="javascript: void(0)" id="popup-mark-all-as-read">Đánh dấu tất cả đã đọc</a>
+								<a href="javascript: void(0)" id="popup-mark-all-as-read"
+									>Đánh dấu tất cả đã đọc</a
+								>
 								<div class="noti_content">
-									<% notifications.forEach(function(notify){ %>
-										<%- notify %>
-									<% }) %>
+									<% notifications.forEach(function(notify){ %> <%- notify %> <%
+									}) %>
 								</div>
-								<div class="seeAll"><a href="#notificationModal" data-toggle="modal">Xem tất cả</a></div>
+								<div class="seeAll">
+									<a href="#notificationModal" data-toggle="modal"
+										>Xem tất cả</a
+									>
+								</div>
 							</div>
 						</div>
 					</a>
 				</li>
-				<li class="dropdown" id="dropdown-navbar-user" data-uid="<%= user._id %>">
+				<li
+					class="dropdown"
+					id="dropdown-navbar-user"
+					data-uid="<%= user._id %>"
+				>
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<img id="avatar-navbar" class="avatar-small" src="./libraries/images/users/<%= user.avatar %>" alt="">
+						<img
+							id="avatar-navbar"
+							class="avatar-small"
+							src="./libraries/images/users/<%= user.avatar %>"
+							alt=""
+						/>
 						<span id="navbar-username"><%= user.username %></span>
 						<span class="caret"></span>
 					</a>

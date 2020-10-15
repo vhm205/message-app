@@ -1,17 +1,21 @@
-import mongoose from 'mongoose'
-import bluebird from 'bluebird'
+import mongoose from 'mongoose';
+import bluebird from 'bluebird';
 
 const connectDB = () => {
-    mongoose.Promise = bluebird
+	mongoose.Promise = bluebird;
 
-    const URI = `${process.env.DB_CONNECTION}://${process.env.DB_HOSTNAME}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+	const URI = `${process.env.DB_CONNECTION}://${process.env.DB_HOSTNAME}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 
-    return mongoose.connect(URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-        useFindAndModify: false
-    })
-}
+	return mongoose
+		.connect(URI, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useCreateIndex: true,
+			useFindAndModify: false,
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+};
 
-module.exports = connectDB
+module.exports = connectDB;
