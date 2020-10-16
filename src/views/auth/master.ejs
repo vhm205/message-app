@@ -1,132 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>Message Chat</title>
-		
-    <link rel="shortcut icon" href="./libraries/images/logo_favicon/favicon-trungquandev.png" />
 
-    <link rel="stylesheet" href="./libraries/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./libraries/bower_components/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./libraries/bower_components/AlertifyJS/build/css/alertify.css">
-    
-    <link href="./libraries/css/auth.css" rel="stylesheet" />
+		<link rel="shortcut icon" href="./libraries/images/logo_favicon/icon.png" />
 
-    <script src="./libraries/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="./libraries/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="./libraries/bower_components/AlertifyJS/build/alertify.js"></script>
+		<link
+			rel="stylesheet"
+			href="./libraries/bower_components/bootstrap/dist/css/bootstrap.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="./libraries/bower_components/font-awesome/css/font-awesome.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="./libraries/bower_components/AlertifyJS/build/css/alertify.css"
+		/>
 
-    <script src="./libraries/js/authConfig.js"></script>
-</head>
-<body>
-    <div class="container">
-		<div class="bg-video">
-			<video class="bg-video-content" autoplay muted loop>
-				<source src="./libraries/images/background/Boulevard.mp4" type="video/mp4" />
-				<source src="./libraries/images/background/Boulevard.webm" type="video/webm" />
-				Your browser is not supported
-			</video>
+		<link href="./libraries/css/auth.css" rel="stylesheet" />
+
+		<script src="./libraries/bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="./libraries/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="./libraries/bower_components/AlertifyJS/build/alertify.js"></script>
+
+		<script src="./libraries/js/authConfig.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="bg-video">
+				<video class="bg-video-content" autoplay muted loop>
+					<source
+						src="./libraries/images/background/Boulevard.mp4"
+						type="video/mp4"
+					/>
+					<source
+						src="./libraries/images/background/Boulevard.webm"
+						type="video/webm"
+					/>
+					Your browser is not supported
+				</video>
+			</div>
+			<div class="col-sm-2"></div>
+			<div class="col-md-8 my-content">
+				<div class="row">
+					<div class="col-sm-12">
+						<h1 class="login-title text-center">Welcome, Something...</h1>
+						<hr />
+						<div class="col-sm-3"></div>
+						<div class="col-sm-6 table-responsive">
+							<table class="table my-table">
+								<tbody>
+									<tr>
+										<td>Author:</td>
+										<td>VHM - 102</td>
+									</tr>
+									<tr>
+										<td>Blog:</td>
+										<td>
+											<a
+												href="https://vhmblog102.000webhostapp.com/"
+												target="_blank"
+											>
+												vhmblog102.com
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<td>CV:</td>
+										<td>
+											<a
+												href="https://linkedin.com/in/minh-vũ-huỳnh-753653165"
+												target="_blank"
+											>
+												linkedin.com/vhm205
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<td>Facebook:</td>
+										<td>
+											<a href="https://facebook.com/vhm205" target="_blank">
+												facebook.com/vhm205
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<td>Youtube:</td>
+										<td>
+											<a
+												href="https://www.youtube.com/channel/UCvyNvzDyeuInsjojzW7E1aA"
+												target="_blank"
+											>
+												youtube.com/channel/vhm205
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-sm-3"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-2"></div>
+					<div class="col-sm-7 text-center">
+						<a
+							class="btn big-login btn-green"
+							data-toggle="modal"
+							href="javascript:void(0)"
+							onclick="openLoginModal();"
+							>Đăng nhập</a
+						>
+						<a
+							class="btn big-register"
+							data-toggle="modal"
+							href="javascript:void(0)"
+							onclick="openRegisterModal();"
+							>Đăng ký</a
+						>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12 text-center bottom-description">
+						<span>
+							<q>
+								First, Solve The Problem, <br />
+								Then, Write The Code!
+							</q>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2"></div>
+			<div class="modal fade login" id="loginModal">
+				<div class="modal-dialog login animated">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button
+								type="button"
+								class="close"
+								data-dismiss="modal"
+								aria-hidden="true"
+							>
+								&times;
+							</button>
+							<h4 class="modal-title">Đăng nhập</h4>
+						</div>
+						<div class="modal-body">
+							<%- include('alert/alert') %> <%- include('login/login') %> <%-
+							include('register/register') %>
+						</div>
+						<div class="modal-footer">
+							<div class="forgot login-footer">
+								<span
+									>Bạn chưa có tài khoản?
+									<a href="javascript: showRegisterForm();"
+										>Tạo một tài khoản mới</a
+									>
+								</span>
+							</div>
+							<div class="forgot register-footer" style="display: none">
+								<span>Bạn đã có tài khoản?</span>
+								<a href="javascript: showLoginForm();">Đăng nhập</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-        <div class="col-sm-2"></div>
-        <div class="col-md-8 my-content">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h1 class="login-title text-center">Welcome, Something...</h1>
-                    <hr>
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-6 table-responsive">
-                        <table class="table my-table">
-                            <tbody>
-                                <tr>
-                                    <td>Author:</td>
-                                    <td>VHM - 102</td>
-                                </tr>
-                                <tr>
-                                    <td>Blog:</td>
-                                    <td>
-                                        <a href="https://vhmblog102.000webhostapp.com/" target="_blank">
-                                            vhmblog102.com
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>CV:</td>
-                                    <td>
-                                        <a href="https://linkedin.com/in/minh-vũ-huỳnh-753653165" target="_blank">
-                                            linkedin.com/vhm205
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Facebook:</td>
-                                    <td>
-                                        <a href="https://facebook.com/vhm205" target="_blank">
-                                            facebook.com/vhm205
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Youtube:</td>
-                                    <td>
-                                        <a href="https://www.youtube.com/channel/UCvyNvzDyeuInsjojzW7E1aA" target="_blank">
-                                            youtube.com/channel/vhm205
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-sm-3"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-7 text-center">
-                    <a class="btn big-login btn-green" data-toggle="modal" href="javascript:void(0)" onclick="openLoginModal();">Đăng nhập</a>
-                    <a class="btn big-register" data-toggle="modal" href="javascript:void(0)" onclick="openRegisterModal();">Đăng ký</a>
-                </div>
-                <div class="col-sm-3"></div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 text-center bottom-description">
-                    <span>
-						<q> 
-							First, Solve The Problem, <br />
-							Then, Write The Code!
-						</q>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2"></div>
-        <div class="modal fade login" id="loginModal">
-            <div class="modal-dialog login animated">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Đăng nhập</h4>
-                    </div>
-                    <div class="modal-body">
-                        <%- include('alert/alert') %>
-                        <%- include('login/login') %>
-                        <%- include('register/register') %>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="forgot login-footer">
-                            <span>Bạn chưa có tài khoản?
-                            <a href="javascript: showRegisterForm();">Tạo một tài khoản mới</a>
-                            </span>
-                        </div>
-                        <div class="forgot register-footer" style="display:none">
-                            <span>Bạn đã có tài khoản?</span>
-                            <a href="javascript: showLoginForm();">Đăng nhập</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
+	</body>
 </html>
