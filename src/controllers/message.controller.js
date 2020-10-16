@@ -8,129 +8,144 @@ import { app } from '../config/app';
 // ------------------- Handle Upload image message ------------------
 const storageImageChat = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, app.image_message_directory)
+		cb(null, app.image_message_directory);
 	},
 	filename: (_, file, cb) => {
-		if(!app.image_message_type.includes(file.mimetype)){
-			return cb(transErrors.image_message_wrong_type, null)
+		if (!app.image_message_type.includes(file.mimetype)) {
+			return cb(transErrors.image_message_wrong_type, null);
 		}
 
-		cb(null, file.originalname)
-	}
-})
+		cb(null, file.originalname);
+	},
+});
 
 const uploadImageMessage = multer({
 	storage: storageImageChat,
-	limits: { fileSize: app.image_message_size }
-}).single('image')
+	limits: { fileSize: app.image_message_size },
+}).single('image');
 
 // ------------------- Handle Upload attachment message ------------------
 const storageAttachmentChat = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, app.attachment_message_directory)
+		cb(null, app.attachment_message_directory);
 	},
 	filename: (_, file, cb) => {
-		cb(null, file.originalname)
-	}
-})
+		cb(null, file.originalname);
+	},
+});
 
 const uploadAttachmentMessage = multer({
 	storage: storageAttachmentChat,
-	limits: { fileSize: app.attachment_message_size }
-}).single('attachment')
+	limits: { fileSize: app.attachment_message_size },
+}).single('attachment');
 
 // ---------------------------  Controller -----------------------------------
 
 const addNewMessage = async (req, res) => {
-	let errorsRes = validationResult(req)
+	let errorsRes = validationResult(req);
 
-	if(!errorsRes.isEmpty()){
-		let errorsArr = []
-		Object.values(errorsRes.mapped()).forEach(e => errorsArr.push(e.msg))
-		return res.status(500).send(errorsArr)
+	if (!errorsRes.isEmpty()) {
+		let errorsArr = [];
+		Object.values(errorsRes.mapped()).forEach((e) => errorsArr.push(e.msg));
+		return res.status(500).send(errorsArr);
 	}
 
 	try {
 		const sender = {
 			id: req.user._id,
 			name: req.user.username,
-			avatar: req.user.avatar
-		}
+			avatar: req.user.avatar,
+		};
 
-		const { receiverId, text, isChatGroup } = req.body		
-		const newMessage = await message.addNewMessage(sender, receiverId, text, isChatGroup)
+		const { receiverId, text, isChatGroup } = req.body;
+		const newMessage = await message.addNewMessage(
+			sender,
+			receiverId,
+			text,
+			isChatGroup
+		);
 
-		return res.status(200).send({ message: newMessage })
+		return res.status(200).send({ message: newMessage });
 	} catch (error) {
-		return res.status(500).send(error)
+		return res.status(500).send(error);
 	}
-}
+};
 
 const addNewImage = (req, res) => {
-	uploadImageMessage(req, res, async err => {
-		if(err){
+	uploadImageMessage(req, res, async (err) => {
+		if (err) {
 			// A Multer error occurred when uploading.
-			if(err instanceof multer.MulterError){
-				return res.status(500).send(transErrors.image_message_size_limit)
+			if (err instanceof multer.MulterError) {
+				return res.status(500).send(transErrors.image_message_size_limit);
 			}
-			return res.status(500).send(err)
+			return res.status(500).send(err);
 		}
 
 		try {
 			const sender = {
 				id: req.user._id,
 				name: req.user.username,
-				avatar: req.user.avatar
-			}
-	
-			const { receiverId, isChatGroup } = req.body
+				avatar: req.user.avatar,
+			};
+
+			const { receiverId, isChatGroup } = req.body;
 			const image = {
 				imageBuff: fsExtra.readFileSync(req.file.path),
 				contentType: req.file.mimetype,
-				fileName: req.file.originalname
-			}
-			const newMessage = await message.addNewImage(sender, receiverId, image, isChatGroup)
-			await fsExtra.remove(req.file.path)
-	
-			return res.status(200).send({ message: newMessage })
+				fileName: req.file.originalname,
+			};
+			const newMessage = await message.addNewImage(
+				sender,
+				receiverId,
+				image,
+				isChatGroup
+			);
+			await fsExtra.remove(req.file.path);
+
+			return res.status(200).send({ message: newMessage });
 		} catch (error) {
-			return res.status(500).send(error)
+			return res.status(500).send(error);
 		}
-	})
-}
+	});
+};
 
 const addNewAttachment = (req, res) => {
-	uploadAttachmentMessage(req, res, async err => {
-		if(err){
+	uploadAttachmentMessage(req, res, async (err) => {
+		if (err) {
 			// A Multer error occurred when uploading.
-			if(err instanceof multer.MulterError){
-					return res.status(500).send(transErrors.attachment_message_size_limit)
+			if (err instanceof multer.MulterError) {
+				return res.status(500).send(transErrors.attachment_message_size_limit);
 			}
-			return res.status(500).send(err)
+			return res.status(500).send(err);
 		}
 
 		try {
 			const sender = {
 				id: req.user._id,
 				name: req.user.username,
-				avatar: req.user.avatar
-			}
-	
-			const { receiverId, isChatGroup } = req.body
+				avatar: req.user.avatar,
+			};
+
+			const { receiverId, isChatGroup } = req.body;
 			const attachment = {
 				attachmentBuff: fsExtra.readFileSync(req.file.path),
 				contentType: req.file.mimetype,
-				fileName: req.file.originalname
-			}
-			const newMessage = await message.addNewAttachment(sender, receiverId, attachment, isChatGroup)
-			await fsExtra.remove(req.file.path)
-	
-			return res.status(200).send({ message: newMessage })
+				fileName: req.file.originalname,
+			};
+			const newMessage = await message.addNewAttachment(
+				sender,
+				receiverId,
+				attachment,
+				isChatGroup
+			);
+			await fsExtra.remove(req.file.path);
+
+			return res.status(200).send({ message: newMessage });
 		} catch (error) {
-			return res.status(500).send(error)
+			return res.status(500).send(error);
 		}
-	})
-}
+	});
+};
 
 const getAllConversationsRemaining = async (req, res) => {
 	try {
@@ -140,16 +155,25 @@ const getAllConversationsRemaining = async (req, res) => {
 		const contactId = req.query.contact_id;
 
 		// Get All Conversation of current user
-		const { readMoreConversationWithMess, moreGroupRemainingWithMembers } = await message.getAllConversationsRemaining(req.user._id, contactId, skipNumberGroup, skipNumberPerson, group);
+		const {
+			readMoreConversationWithMess,
+			moreGroupRemainingWithMembers,
+		} = await message.getAllConversationsRemaining(
+			req.user._id,
+			contactId,
+			skipNumberGroup,
+			skipNumberPerson,
+			group
+		);
 
 		return res.status(200).json({
 			readMoreConversationWithMess,
-			moreGroupRemainingWithMembers
+			moreGroupRemainingWithMembers,
 		});
 	} catch (err) {
 		return res.status(500).send(err);
 	}
-}
+};
 
 const readMoreConversations = async (req, res) => {
 	try {
@@ -158,30 +182,42 @@ const readMoreConversations = async (req, res) => {
 		const skipNumberPerson = +req.query.skip_person;
 
 		// Get more conversations
-		const moreConversations = await message.readMoreConversations(req.user._id, skipNumberGroup, skipNumberPerson);
-		const moreGroupWithMembers = await group.readMoreGroupWithMembers(req.user._id, skipNumberGroup);
+		const moreConversations = await message.readMoreConversations(
+			req.user._id,
+			skipNumberGroup,
+			skipNumberPerson
+		);
+		const moreGroupWithMembers = await group.readMoreGroupWithMembers(
+			req.user._id,
+			skipNumberGroup
+		);
 
 		return res.status(200).json({
 			moreConversations,
-			moreGroupWithMembers
+			moreGroupWithMembers,
 		});
 	} catch (err) {
 		return res.status(500).send(err);
 	}
-}
+};
 
 const readMoreMessages = async (req, res) => {
 	try {
 		const isChatGroup = req.query.chat_group;
 		const skipMessage = req.query.skip_message;
 		const chatId = req.query.chat_id;
-		const getMoreMessages = await message.readMoreMessages(req.user._id, chatId, skipMessage, isChatGroup);
+		const getMoreMessages = await message.readMoreMessages(
+			req.user._id,
+			chatId,
+			skipMessage,
+			isChatGroup
+		);
 
 		return res.status(200).send(getMoreMessages);
 	} catch (err) {
 		return res.status(500).send(err);
 	}
-}
+};
 
 module.exports = {
 	getAllConversationsRemaining,
@@ -189,5 +225,5 @@ module.exports = {
 	readMoreMessages,
 	addNewMessage,
 	addNewAttachment,
-	addNewImage
-}
+	addNewImage,
+};

@@ -322,7 +322,6 @@ const addNewMessage = (sender, receiverId, text, isChatGroup) => {
 
 			return resolve(newMessage);
 		} catch (err) {
-			console.error(err);
 			return reject(err);
 		}
 	});
