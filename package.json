@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/vhm205/message-app#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "bcrypt": "^3.0.7",
     "bluebird": "^3.7.2",
     "connect-flash": "^0.1.1",
