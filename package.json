@@ -7,7 +7,9 @@
     "start": "babel-node ./src/server.js",
     "dev": "babel ./src/server.js -w -o app-complied.js",
     "debug": "babel-node --inspect ./src/server.js",
-    "build": "babel index.js -d ES5"
+    "build": "babel index.js -d ES5",
+    "prepare": "yarn run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,7 @@
   },
   "homepage": "https://github.com/vhm205/message-app#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "bcrypt": "^3.0.7",
     "bluebird": "^3.7.2",
     "connect-flash": "^0.1.1",
@@ -31,11 +33,11 @@
     "express": "^4.17.1",
     "express-ejs-extend": "^0.0.1",
     "express-session": "^1.17.0",
-    "express-validator": "^6.3.1",
+    "express-validator": "^6.5.0",
     "fs-extra": "^8.1.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "mongoose": "^5.8.4",
+    "mongoose": "^5.13.9",
     "multer": "^1.4.2",
     "nodemailer": "^6.4.2",
     "passport": "^0.4.1",
@@ -44,13 +46,15 @@
     "passport-local": "^1.0.0",
     "passport.socketio": "^3.7.0",
     "request": "^2.88.2",
-    "socket.io": "^2.3.0",
-    "uuid": "3.3.2"
+    "socket.io": "^3.0.0",
+    "uuid": "3.3.2",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "1.7.0",
     "dotenv": "^8.2.0",
     "pem": "^1.14.4"
-  }
+  },
+  "snyk": true
 }
