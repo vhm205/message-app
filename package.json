@@ -30,7 +30,7 @@
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-ejs-extend": "^0.0.1",
-    "express-session": "^1.17.0",
+    "express-session": "^1.18.2",
     "express-validator": "^6.3.1",
     "fs-extra": "^8.1.0",
     "lodash": "^4.17.15",
